@@ -1,0 +1,7 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# No Namespace object: the account that applies this may only change objects
+# inside podinfo-staging, so the namespace is created on the remote cluster.
+resources:
+  - deployment.yaml
+  - service.yaml

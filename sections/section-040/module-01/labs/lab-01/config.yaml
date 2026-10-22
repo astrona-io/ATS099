@@ -1,0 +1,56 @@
+# Reinstall Flux Without Touching The Workloads
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-lab-040-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, seeds the repositories and bootstraps Flux from gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-099-lab-040-01-setup"
+      description: "Records the podinfo Deployment UID, then uninstalls Flux and keeps the flux-system namespace"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea, the tester pod and the webhook receiver"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers that exist"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-flux-check"
+      description: "Passes when flux check reports the controllers and the CRDs as healthy"
+      type: "file"
+      source: "validation/validate-flux-check.sh"
+    - name: "validate-podinfo-adopted"
+      description: "Passes when the podinfo Deployment has the UID it had before Flux was removed and is in podinfo's inventory"
+      type: "file"
+      source: "validation/validate-podinfo-adopted.sh"
+    - name: "validate-sync-restored"
+      description: "Passes when flux-system syncs gitops/fleet at ./clusters/kind again and both flux-system and podinfo are Ready"
+      type: "file"
+      source: "validation/validate-sync-restored.sh"
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,56 @@
+# Alert A Webhook When podinfo Fails
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-lab-020-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, seeds the repositories and bootstraps Flux from gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-099-lab-020-01-setup"
+      description: "Checks the starting state: no Provider and no Alert"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea, the tester pod and the webhook receiver"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers that exist"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-alert-spec"
+      description: "Passes when Provider webhook posts to the receiver and Alert podinfo-errors forwards only errors from Kustomization podinfo"
+      type: "file"
+      source: "validation/validate-alert-spec.sh"
+    - name: "validate-alerting-in-git"
+      description: "Passes when a Provider and an Alert are committed under clusters/kind in gitops/fleet"
+      type: "file"
+      source: "validation/validate-alerting-in-git.sh"
+    - name: "validate-only-errors-delivered"
+      description: "Passes when a podinfo failure reaches the webhook receiver as an error and the recovery sends no info event"
+      type: "file"
+      source: "validation/validate-only-errors-delivered.sh"
+
+teardown:
+  keepCluster: false

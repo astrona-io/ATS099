@@ -1,0 +1,24 @@
+# Send Flux Events To Webhooks And Chat (PLAYGROUND) — Playground environment
+# A clean sandbox: it spins up, runs OS prep, then stays running for free
+# exploration. No task, no grading, no `astrona submit`.
+# Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-playground-020-01"
+  docs:
+    guide: "docs/overview.md"
+
+bootstrap:
+  init:
+    - name: "prepare"
+      description: "Install the Flux CLI, start Gitea and the webhook receiver, seed the repositories and bootstrap Flux. Flux bootstrapped from gitops/fleet with podinfo, and the webhook receiver in the namespace monitoring. No Provider or Alert exists."
+      type: "file"
+      source: "bootstrap/prepare.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea (Service gitea-http on port 3000), the tester client and the webhook receiver."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+teardown:
+  keepCluster: false

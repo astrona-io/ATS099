@@ -1,0 +1,60 @@
+# Repair A Broken Remote Cluster Connection
+# Astrona graded capstone. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-capstone-030"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, seeds the repositories and bootstraps Flux from gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-099-capstone-030-setup"
+      description: "Creates the remote side and a kubeconfig delivery with three faults"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea, the tester pod and the webhook receiver"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers that exist"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-account-scoped"
+      description: "Passes when flux-deployer still has no rights outside podinfo-staging"
+      type: "file"
+      source: "validation/validate-account-scoped.sh"
+    - name: "validate-kubeconfig-secret"
+      description: "Passes when Secret staging-kubeconfig holds a kubeconfig for https://kubernetes.default.svc that signs in as flux-deployer"
+      type: "file"
+      source: "validation/validate-kubeconfig-secret.sh"
+    - name: "validate-podinfo-staging"
+      description: "Passes when podinfo runs in podinfo-staging and its Deployment and Service are in the Kustomization's inventory"
+      type: "file"
+      source: "validation/validate-podinfo-staging.sh"
+    - name: "validate-staging-kustomization"
+      description: "Passes when Kustomization podinfo-staging is in Git, applies ./apps/podinfo-staging through staging-kubeconfig, and is Ready"
+      type: "file"
+      source: "validation/validate-staging-kustomization.sh"
+
+teardown:
+  keepCluster: false

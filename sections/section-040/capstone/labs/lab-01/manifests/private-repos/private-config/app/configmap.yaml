@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: private-settings
+  namespace: podinfo
+data:
+  feature-flags: "beta-dashboard=on"

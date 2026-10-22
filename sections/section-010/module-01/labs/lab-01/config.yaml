@@ -1,0 +1,60 @@
+# Onboard A Locked-Down Tenant
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-lab-010-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, seeds the repositories and bootstraps Flux from gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-099-lab-010-01-setup"
+      description: "Checks the starting state: no tenant, no lockdown"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea, the tester pod and the webhook receiver"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers that exist"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-impersonation-refused"
+      description: "Passes when a Flux Kustomization that impersonates team-a cannot create a ClusterRole"
+      type: "file"
+      source: "validation/validate-impersonation-refused.sh"
+    - name: "validate-lockdown-in-git"
+      description: "Passes when the lockdown patches are in clusters/kind/flux-system/kustomization.yaml in Git"
+      type: "file"
+      source: "validation/validate-lockdown-in-git.sh"
+    - name: "validate-lockdown-live"
+      description: "Passes when the controllers run with the lockdown flags and flux-system runs as kustomize-controller"
+      type: "file"
+      source: "validation/validate-lockdown-live.sh"
+    - name: "validate-tenant-sync"
+      description: "Passes when team-a's Flux Kustomization impersonates team-a, is Ready, and podinfo runs in team-a"
+      type: "file"
+      source: "validation/validate-tenant-sync.sh"
+
+teardown:
+  keepCluster: false

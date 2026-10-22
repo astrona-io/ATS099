@@ -1,0 +1,338 @@
+# Course manifest for ATS099 - Multi-Tenancy, Enterprise Operations & Cluster Management (FluxCD).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS099
+  title: "FluxCD: Multi-Tenancy, Enterprise Operations & Cluster Management"
+  maturity: draft
+  description: >
+    Training material covering the Multi-Tenancy, Enterprise Operations &
+    Cluster Management domain of the FluxCD training path: tenants with their
+    own namespaces and repositories, impersonation with service accounts and
+    the multi-tenancy lockdown flags, Flux events sent to webhooks and chat
+    with Providers and Alerts, controller metrics, cross-namespace references,
+    applying to another cluster through a kubeconfig Secret and Cluster API,
+    and disaster recovery: what Git does not hold, uninstalling and
+    reinstalling Flux without touching the workloads, and rebuilding a lost
+    cluster. Each module pairs a layered reader with an ungraded hands-on
+    playground and a graded practice lab. Each section closes with an
+    integration capstone.
+    Written for Flux v2.9.6.
+
+  certification:
+    name: FluxCD
+    code: FLUX
+    provider: Astrona
+    domain: Multi-Tenancy, Enterprise Operations & Cluster Management
+    weight: 15
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "Multi-Tenancy With Impersonation"
+    description: >
+      Platform administrators and tenants, tenant namespaces and repositories,
+      impersonation with spec.serviceAccountName, and the lockdown flags that
+      keep one tenant out of another tenant's namespace and out of the
+      cluster-wide objects.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Onboard Tenants With Impersonation"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "Platform Administrators, Tenants And Their Repositories"
+        path: sections/section-010/module-01/course-01-platform-and-tenant-repositories.md
+      - type: reading
+        title: "Impersonation With spec.serviceAccountName"
+        path: sections/section-010/module-01/course-02-impersonation-with-service-accounts.md
+      - type: reading
+        title: "Locking Down The Cluster For Tenants"
+        path: sections/section-010/module-01/course-03-locking-down-the-cluster.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Onboard A Locked-Down Tenant Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: multi-tenancy
+        task_kind: build
+        tags: [tenant, impersonation, service-account, rbac, lockdown, default-service-account]
+        learning_goals:
+          - Add the multi-tenancy lockdown flags to the controllers through the flux-system Kustomize file in Git
+          - Onboard the tenant team-a with its own namespace, ServiceAccount, RoleBinding, GitRepository and Flux Kustomization
+          - Prove that the tenant can deploy into its namespace and cannot create cluster-wide objects
+        resources:
+          - name: "Flux multi-tenancy lockdown"
+            url: https://fluxcd.io/flux/installation/configuration/multitenancy/
+          - name: "flux create tenant"
+            url: https://fluxcd.io/flux/cmd/flux_create_tenant/
+          - name: "Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Tenant That Cannot Deploy Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: multi-tenancy
+        task_kind: troubleshooting
+        tags: [tenant, impersonation, rbac, cross-namespace-refs, default-service-account, kustomization]
+        learning_goals:
+          - Read why a tenant's Flux Kustomization is refused from its status and events
+          - Fix the tenant's objects in Git without weakening the lockdown or granting cluster-wide rights
+          - Prove that the tenant deploys again and still cannot create cluster-wide objects
+        resources:
+          - name: "Flux multi-tenancy lockdown"
+            url: https://fluxcd.io/flux/installation/configuration/multitenancy/
+          - name: "Kustomization API: role-based access control"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+
+  - id: module-020
+    title: "Alerting And Monitoring"
+    description: >
+      The events Flux records, Providers and Alerts that send them to Slack,
+      Microsoft Teams or a webhook, choosing which events become alerts, and
+      the Prometheus metrics the controllers export.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Send Flux Events To Webhooks And Chat"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "Events, Providers And Alerts"
+        path: sections/section-020/module-01/course-01-events-providers-and-alerts.md
+      - type: reading
+        title: "Choosing Which Events Become Alerts"
+        path: sections/section-020/module-01/course-02-filtering-alerts.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Alert A Webhook When podinfo Fails Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: alerting
+        task_kind: build
+        tags: [provider, alert, generic-webhook, event-severity, event-sources, flux-events]
+        learning_goals:
+          - Write a generic Provider and an Alert in Git that forward only error events for one Flux Kustomization
+          - Trigger a failure and find the event in the webhook receiver's log
+          - Explain why info events do not reach the receiver
+        resources:
+          - name: "Providers"
+            url: https://fluxcd.io/flux/components/notification/providers/
+          - name: "Alerts"
+            url: https://fluxcd.io/flux/components/notification/alerts/
+      - type: reading
+        title: "Metrics And flux stats"
+        path: sections/section-020/module-01/course-03-metrics-and-flux-stats.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Find Why No Alert Arrives Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: alerting
+        task_kind: troubleshooting
+        tags: [provider, alert, event-sources, exclusion-list, event-severity, generic-webhook]
+        learning_goals:
+          - Find why a Provider and an Alert deliver nothing, from their configuration and the receiver's log
+          - Fix the address, the event sources and the filters in Git
+          - Prove that a source failure and a Kustomization failure both reach the receiver
+        resources:
+          - name: "Alerts"
+            url: https://fluxcd.io/flux/components/notification/alerts/
+          - name: "Providers"
+            url: https://fluxcd.io/flux/components/notification/providers/
+
+  - id: module-030
+    title: "Cross-Namespace References And Remote Clusters"
+    description: >
+      Flux objects that reference sources in another namespace, applying to
+      another cluster with a kubeconfig stored in a Secret and a ServiceAccount
+      with narrow rights, and how Cluster API hands Flux the kubeconfig of every
+      cluster it creates.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Deliver To Other Namespaces And Clusters"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "Cross-Namespace References"
+        path: sections/section-030/module-01/course-01-cross-namespace-references.md
+      - type: reading
+        title: "Applying To Another Cluster With kubeConfig"
+        path: sections/section-030/module-01/course-02-applying-to-a-remote-cluster.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Deliver podinfo Through A Scoped kubeconfig Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: remote-clusters
+        task_kind: build
+        tags: [kubeconfig, remote-cluster, service-account, rbac, kustomization]
+        learning_goals:
+          - Build a kubeconfig for a ServiceAccount that may only change one namespace
+          - Store it in a Secret and point a Flux Kustomization at it with spec.kubeConfig
+          - Prove that podinfo is applied through the kubeconfig and that the account cannot do more
+        resources:
+          - name: "Kustomization API: remote clusters"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+      - type: reading
+        title: "Cluster API And Fleets Of Clusters"
+        path: sections/section-030/module-01/course-03-cluster-api-and-fleets.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair A Broken Remote Cluster Connection Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: remote-clusters
+        task_kind: troubleshooting
+        tags: [kubeconfig, remote-cluster, rbac, service-account, kustomization, flux-events]
+        learning_goals:
+          - Find why a Flux Kustomization cannot apply to the remote cluster from its status
+          - Fix the kubeconfig Secret and the remote account's rights without granting cluster-wide access
+          - Prove that every podinfo object is applied through the kubeconfig
+        resources:
+          - name: "Kustomization API: remote clusters"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+
+  - id: module-040
+    title: "Disaster Recovery"
+    description: >
+      What Git holds and what it does not, pausing Flux for maintenance,
+      uninstalling and reinstalling Flux without touching the workloads, and
+      rebuilding a lost cluster from Git in the right order.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: "Recover A Cluster From Git"
+        path: sections/section-040/module-01/course.md
+      - type: reading
+        title: "What Git Holds And What It Does Not"
+        path: sections/section-040/module-01/course-01-what-git-does-not-hold.md
+      - type: reading
+        title: "Suspend, Uninstall And Reinstall Flux"
+        path: sections/section-040/module-01/course-02-suspend-uninstall-and-reinstall.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Reinstall Flux Without Touching The Workloads Lab"
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: disaster-recovery
+        task_kind: migration
+        tags: [flux-bootstrap, flux-uninstall, adoption, flux-system, kustomization]
+        learning_goals:
+          - Reinstall Flux on a cluster where it was uninstalled, from the same repository and path
+          - Prove that the workloads were adopted, not deleted and recreated
+          - Explain what flux uninstall removes and what it leaves
+        resources:
+          - name: "Uninstall Flux"
+            url: https://fluxcd.io/flux/installation/uninstall/
+          - name: "Bootstrap a generic Git server"
+            url: https://fluxcd.io/flux/installation/bootstrap/generic-git-server/
+      - type: reading
+        title: "Rebuilding A Lost Cluster"
+        path: sections/section-040/module-01/course-03-rebuilding-a-lost-cluster.md
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Bring Flux Back After A Lost flux-system Namespace Capstone"
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: disaster-recovery
+        task_kind: troubleshooting
+        tags: [flux-bootstrap, flux-uninstall, git-credentials, flux-suspend, adoption, flux-system]
+        learning_goals:
+          - Restore the Secrets Git does not hold before Flux needs them
+          - Reinstall Flux from Git and resume what a forgotten maintenance window left suspended
+          - Prove that every workload runs again with the same UID
+        resources:
+          - name: "Uninstall Flux"
+            url: https://fluxcd.io/flux/installation/uninstall/
+          - name: "flux create secret git"
+            url: https://fluxcd.io/flux/cmd/flux_create_secret_git/
+          - name: "flux suspend kustomization"
+            url: https://fluxcd.io/flux/cmd/flux_suspend_kustomization/
