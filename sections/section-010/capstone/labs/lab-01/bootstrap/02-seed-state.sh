@@ -79,8 +79,10 @@ start_port_forward() {
   kubectl -n gitea port-forward svc/gitea-http 3000:3000 >/dev/null 2>&1 &
   PORT_FORWARD_PID=$!
   trap 'kill "$PORT_FORWARD_PID" 2>/dev/null || true' EXIT
+  # Only Gitea's own health answer counts: another program on port 3000
+  # (a dev server, Grafana) answers too, and Flux would then talk to it.
   for _ in $(seq 1 30); do
-    curl -fsS "http://${GIT_HOST}:3000/api/healthz" >/dev/null 2>&1 && return 0
+    case "$(curl -fsS "http://${GIT_HOST}:3000/api/healthz" 2>/dev/null)" in *'"status"'*pass*) true ;; *) false ;; esac && return 0
     sleep 1
   done
   echo "ERROR: Gitea does not answer at http://${GIT_HOST}:3000. Check the port-forward and /etc/hosts (127.0.0.1 ${GIT_HOST})." >&2

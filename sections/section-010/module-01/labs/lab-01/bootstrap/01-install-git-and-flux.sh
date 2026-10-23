@@ -149,8 +149,10 @@ if ! kubectl -n flux-system get kustomization flux-system >/dev/null 2>&1; then
   PORT_FORWARD_PID=$!
   trap 'kill "$PORT_FORWARD_PID" 2>/dev/null || true' EXIT
   reachable=false
+  # Only Gitea's own health answer counts: another program on port 3000
+  # (a dev server, Grafana) answers too, and Flux would then talk to it.
   for _ in $(seq 1 30); do
-    curl -fsS "http://${GIT_HOST}:3000/api/healthz" >/dev/null 2>&1 && { reachable=true; break; }
+    case "$(curl -fsS "http://${GIT_HOST}:3000/api/healthz" 2>/dev/null)" in *'"status"'*pass*) true ;; *) false ;; esac && { reachable=true; break; }
     sleep 1
   done
   if [ "$reachable" != true ]; then
