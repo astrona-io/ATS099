@@ -121,9 +121,18 @@ seed_repository() {
 }
 
 echo "[lab] Creating the Gitea user ${GIT_USER} and the repositories..."
-kubectl -n gitea exec deploy/gitea -- gitea admin user create \
-  --username "$GIT_USER" --password "$GIT_PASSWORD" --email gitops@example.com \
-  --admin --must-change-password=false >/dev/null 2>&1 || true
+# Gitea can refuse the first commands while it finishes starting, so retry
+# until the user exists; fail here rather than later at the first clone.
+gitea_user_ready=false
+for _ in $(seq 1 30); do
+  kubectl -n gitea exec deploy/gitea -- gitea admin user create \
+    --username "$GIT_USER" --password "$GIT_PASSWORD" --email gitops@example.com \
+    --admin --must-change-password=false >/dev/null 2>&1 && { gitea_user_ready=true; break; }
+  kubectl -n gitea exec deploy/gitea -- gitea admin user list 2>/dev/null \
+    | awk 'NR > 1 {print $2}' | grep -x "$GIT_USER" >/dev/null && { gitea_user_ready=true; break; }
+  sleep 2
+done
+[ "$gitea_user_ready" = true ] || { echo "ERROR: could not create the Gitea user $GIT_USER." >&2; exit 1; }
 seed_repository "$REPO" true "$MANIFEST_DIR/repo"
 for dir in "$MANIFEST_DIR"/repos/*/; do
   [ -d "$dir" ] && seed_repository "$(basename "$dir")" false "$dir"
