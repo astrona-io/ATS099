@@ -32,8 +32,6 @@ training:
     name: FluxCD
     code: FLUX
     provider: Astrona
-    domain: Multi-Tenancy, Enterprise Operations & Cluster Management
-    weight: 15
 
 modules:
 
