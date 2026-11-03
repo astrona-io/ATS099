@@ -1,0 +1,249 @@
+# Knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats099-040
+course_id: ATS099
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-040
+  title: Disaster Recovery
+placement:
+  position: after
+  reading: sections/section-040/capstone/labs/lab-01/question.md
+questions:
+- id: ats099-040-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name what Git does not hold
+  source_readings:
+  - sections/section-040/module-01/course-01-what-git-does-not-hold.md
+  prompt: Which item is not in Git and must be restored before Flux needs it?
+  options:
+  - id: a
+    text: gotk-components.yaml.
+    explanation: Not correct. It is in Git.
+  - id: b
+    text: A Flux Kustomization under clusters/kind.
+    explanation: Not correct. Flux objects are in Git.
+  - id: c
+    text: gotk-sync.yaml.
+    explanation: Not correct. It is in Git.
+  - id: d
+    text: The private key that decrypts SOPS-encrypted files.
+    explanation: Correct. Flux can only apply what it can read and decrypt.
+  correct_option: d
+  explanation: Correct. Flux can only apply what it can read and decrypt.
+- id: ats099-040-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Judge flux export as a backup
+  source_readings:
+  - sections/section-040/module-01/course-01-what-git-does-not-hold.md
+  prompt: Is flux export a backup of the cluster?
+  options:
+  - id: a
+    text: No. It exports Flux objects that are already in Git, never Secret values
+      or data.
+    explanation: Correct. Credentials and data need their own home.
+  - id: b
+    text: Yes. It exports Secrets and volumes.
+    explanation: Not correct. It prints no Secret values.
+  - id: c
+    text: Yes, but only for Helm releases.
+    explanation: Not correct. It covers Flux objects, not just Helm.
+  - id: d
+    text: No. It deletes the objects it exports.
+    explanation: Not correct. It only prints YAML.
+  correct_option: a
+  explanation: Correct. Credentials and data need their own home.
+- id: ats099-040-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know what a recreated volume holds
+  source_readings:
+  - sections/section-040/module-01/course-01-what-git-does-not-hold.md
+  prompt: Flux recreates a PersistentVolumeClaim from Git. What does the new volume
+    hold?
+  options:
+  - id: a
+    text: The data of the old volume.
+    explanation: Not correct. Git holds no data.
+  - id: b
+    text: Nothing. Data comes back only from a backup tool.
+    explanation: Correct. Flux never holds data.
+  - id: c
+    text: The last snapshot Flux made.
+    explanation: Not correct. Flux makes no snapshots.
+  - id: d
+    text: A copy of the data in the Secret flux-system.
+    explanation: Not correct. That Secret holds a Git credential.
+  correct_option: b
+  explanation: Correct. Flux never holds data.
+- id: ats099-040-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the keys of the Git credential
+  source_readings:
+  - sections/section-040/module-01/course-01-what-git-does-not-hold.md
+  prompt: A cluster was bootstrapped with token authentication. Which keys does the
+    Secret flux-system hold?
+  options:
+  - id: a
+    text: identity, identity.pub and known_hosts.
+    explanation: Not correct. Those are the SSH keys.
+  - id: b
+    text: address and token.
+    explanation: Not correct. Those are notification Provider keys.
+  - id: c
+    text: username and password.
+    explanation: Correct. An SSH bootstrap holds identity, identity.pub and known_hosts
+      instead.
+  - id: d
+    text: value and value.yaml.
+    explanation: Not correct. Those are kubeconfig keys.
+  correct_option: c
+  explanation: Correct. An SSH bootstrap holds identity, identity.pub and known_hosts
+    instead.
+- id: ats099-040-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know what suspend does
+  source_readings:
+  - sections/section-040/module-01/course-02-suspend-uninstall-and-reinstall.md
+  prompt: What does flux suspend kustomization --all do?
+  options:
+  - id: a
+    text: It stops reconciliation of every Kustomization in the namespace until it
+      is resumed.
+    explanation: Correct. The cluster stops following Git for them.
+  - id: b
+    text: It deletes every Kustomization.
+    explanation: Not correct. The objects stay.
+  - id: c
+    text: It deletes everything they applied.
+    explanation: Not correct. Nothing is pruned.
+  - id: d
+    text: It uninstalls the Flux controllers.
+    explanation: Not correct. The controllers keep running.
+  correct_option: a
+  explanation: Correct. The cluster stops following Git for them.
+- id: ats099-040-q06
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain a suspend that survives resume
+  source_readings:
+  - sections/section-040/module-01/course-02-suspend-uninstall-and-reinstall.md
+  prompt: 'suspend: true is committed in Git. Why does flux resume not end it for
+    long?'
+  options:
+  - id: a
+    text: flux resume only works on HelmReleases.
+    explanation: Not correct. It works on Kustomizations too.
+  - id: b
+    text: 'The next reconcile of flux-system applies suspend: true again.'
+    explanation: Correct. Remove the line in Git.
+  - id: c
+    text: Kubernetes blocks resume for 24 hours.
+    explanation: Not correct. There is no such delay.
+  - id: d
+    text: The Git credential has expired.
+    explanation: Not correct. The cause is the file in Git.
+  correct_option: b
+  explanation: Correct. Remove the line in Git.
+- id: ats099-040-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain why uninstall keeps workloads
+  source_readings:
+  - sections/section-040/module-01/course-02-suspend-uninstall-and-reinstall.md
+  prompt: Why does flux uninstall leave the workloads running?
+  options:
+  - id: a
+    text: It copies the workloads to another namespace.
+    explanation: Not correct. It does not copy anything.
+  - id: b
+    text: It only removes the Flux namespace.
+    explanation: Not correct. It removes the controllers, the CRDs and the Flux objects.
+  - id: c
+    text: It removes the finalizers from Flux objects first, so no Kustomization prunes
+      what it applied.
+    explanation: 'Correct. Deleting a Kustomization with prune: true would delete
+      them.'
+  - id: d
+    text: Workloads are never managed by Flux.
+    explanation: Not correct. Flux applied and owned them.
+  correct_option: c
+  explanation: 'Correct. Deleting a Kustomization with prune: true would delete them.'
+- id: ats099-040-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Prove adoption
+  source_readings:
+  - sections/section-040/module-01/course-02-suspend-uninstall-and-reinstall.md
+  prompt: After reinstalling Flux, how do you prove podinfo was adopted and not recreated?
+  options:
+  - id: a
+    text: The Deployment looks the same in kubectl get.
+    explanation: Not correct. A recreated object looks the same.
+  - id: b
+    text: flux get shows Ready.
+    explanation: Not correct. It does not tell adoption from recreation.
+  - id: c
+    text: The Git commit has a new revision.
+    explanation: Not correct. The revision says nothing about the UID.
+  - id: d
+    text: The Deployment has the same UID as before the uninstall.
+    explanation: Correct. A recreated object has a new UID.
+  correct_option: d
+  explanation: Correct. A recreated object has a new UID.
+- id: ats099-040-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Order a rebuild
+  source_readings:
+  - sections/section-040/module-01/course-03-rebuilding-a-lost-cluster.md
+  prompt: What comes right before flux bootstrap on a new cluster?
+  options:
+  - id: a
+    text: Restoring data from backups.
+    explanation: Not correct. Data comes after the applications.
+  - id: b
+    text: Verifying that every object is Ready.
+    explanation: Not correct. Verification is last.
+  - id: c
+    text: Restoring the keys and credentials Flux needs.
+    explanation: Correct. Flux retries forever, but objects behind a missing credential
+      wait.
+  - id: d
+    text: Deleting the Git repository history.
+    explanation: Not correct. Git is the source and stays.
+  correct_option: c
+  explanation: Correct. Flux retries forever, but objects behind a missing credential
+    wait.
+- id: ats099-040-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find where application order lives
+  source_readings:
+  - sections/section-040/module-01/course-03-rebuilding-a-lost-cluster.md
+  prompt: On a rebuilt cluster, what makes infrastructure apply before the applications
+    that need it?
+  options:
+  - id: a
+    text: The alphabetical order of the file names.
+    explanation: Not correct. File names do not set the order.
+  - id: b
+    text: The order of the commands you type.
+    explanation: Not correct. Flux applies by dependsOn.
+  - id: c
+    text: The age of each Kustomization.
+    explanation: Not correct. Age has no effect.
+  - id: d
+    text: The dependsOn fields in Git.
+    explanation: Correct. Nobody has to remember the order during the outage.
+  correct_option: d
+  explanation: Correct. Nobody has to remember the order during the outage.

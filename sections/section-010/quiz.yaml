@@ -1,0 +1,261 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats099-010
+course_id: ATS099
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-010
+  title: Multi-Tenancy With Impersonation
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+- id: ats099-010-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say where tenant objects live
+  source_readings:
+  - sections/section-010/module-01/course-01-platform-and-tenant-repositories.md
+  prompt: Which repository holds the Namespace, ServiceAccount and RoleBinding of
+    a tenant?
+  options:
+  - id: a
+    text: The platform repository.
+    explanation: Correct. Whoever controls the RoleBinding controls the rights, so
+      the platform owns it.
+  - id: b
+    text: The tenant's own repository.
+    explanation: Not correct. A tenant that controls its own RoleBinding controls
+      its own rights.
+  - id: c
+    text: Both repositories, with a copy in each.
+    explanation: Not correct. One copy in the platform repository is enough and is
+      the one that counts.
+  - id: d
+    text: None. Flux creates them without Git.
+    explanation: Not correct. Flux only applies what its sources hold.
+  correct_option: a
+  explanation: Correct. Whoever controls the RoleBinding controls the rights, so the
+    platform owns it.
+- id: ats099-010-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain the scope of a RoleBinding
+  source_readings:
+  - sections/section-010/module-01/course-01-platform-and-tenant-repositories.md
+  prompt: A RoleBinding in the namespace team-a binds the ClusterRole cluster-admin
+    to the ServiceAccount team-a. What rights does the account get?
+  options:
+  - id: a
+    text: Every right in the whole cluster.
+    explanation: Not correct. That needs a ClusterRoleBinding.
+  - id: b
+    text: Every right inside the namespace team-a and none outside it.
+    explanation: Correct. A RoleBinding limits the rules of a ClusterRole to its own
+      namespace.
+  - id: c
+    text: Read-only rights inside team-a.
+    explanation: Not correct. cluster-admin is not read-only.
+  - id: d
+    text: No rights, because a RoleBinding cannot name cluster-admin.
+    explanation: Not correct. A RoleBinding may reference a ClusterRole.
+  correct_option: b
+  explanation: Correct. A RoleBinding limits the rules of a ClusterRole to its own
+    namespace.
+- id: ats099-010-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain targetNamespace on a tenant Kustomization
+  source_readings:
+  - sections/section-010/module-01/course-01-platform-and-tenant-repositories.md
+  prompt: 'Why does the tenant''s Flux Kustomization set targetNamespace: team-a?'
+  options:
+  - id: a
+    text: To make the Kustomization reconcile faster.
+    explanation: Not correct. Speed is set by interval.
+  - id: b
+    text: To choose which ServiceAccount Flux impersonates.
+    explanation: Not correct. spec.serviceAccountName does that.
+  - id: c
+    text: So the platform, not the tenant's files, decides which namespace the objects
+      land in.
+    explanation: Correct. Flux sets the namespace before it applies, whatever the
+      files say.
+  - id: d
+    text: To create the Namespace object when it is missing.
+    explanation: Not correct. The Namespace has its own object in the platform repository.
+  correct_option: c
+  explanation: Correct. Flux sets the namespace before it applies, whatever the files
+    say.
+- id: ats099-010-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe impersonation
+  source_readings:
+  - sections/section-010/module-01/course-02-impersonation-with-service-accounts.md
+  prompt: What happens when a Flux Kustomization sets spec.serviceAccountName?
+  options:
+  - id: a
+    text: Flux copies the ServiceAccount token into the tenant's repository.
+    explanation: Not correct. Flux never writes tokens to Git.
+  - id: b
+    text: The API server checks the controller's permissions and only logs the account
+      name.
+    explanation: Not correct. The check uses the account, not the controller.
+  - id: c
+    text: Flux starts a separate pod under that ServiceAccount for each file.
+    explanation: Not correct. kustomize-controller itself sends the requests.
+  - id: d
+    text: kustomize-controller sends every object to the API server as that ServiceAccount,
+      so RBAC checks the account's permissions.
+    explanation: Correct. The API server judges the request by the named account.
+  correct_option: d
+  explanation: Correct. The API server judges the request by the named account.
+- id: ats099-010-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find the ServiceAccount namespace
+  source_readings:
+  - sections/section-010/module-01/course-02-impersonation-with-service-accounts.md
+  prompt: 'A Flux Kustomization in the namespace flux-system sets serviceAccountName:
+    team-a. Which ServiceAccount does Flux look up?'
+  options:
+  - id: a
+    text: team-a/team-a.
+    explanation: Not correct. Flux does not look in a namespace that is not the Kustomization's
+      own.
+  - id: b
+    text: flux-system/team-a.
+    explanation: Correct. Flux looks in the namespace of the Flux Kustomization.
+  - id: c
+    text: flux-system/default.
+    explanation: Not correct. default is used only when no name is set and the lockdown
+      flag is on.
+  - id: d
+    text: kube-system/team-a.
+    explanation: Not correct. Flux never uses kube-system for this lookup.
+  correct_option: b
+  explanation: Correct. Flux looks in the namespace of the Flux Kustomization.
+- id: ats099-010-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read a refusal from RBAC
+  source_readings:
+  - sections/section-010/module-01/course-02-impersonation-with-service-accounts.md
+  prompt: The Kustomization team-a-escalate shows Ready False with a forbidden message
+    for a ClusterRole. What produced the refusal?
+  options:
+  - id: a
+    text: A bug in kustomize-controller.
+    explanation: Not correct. The controller reported what it was told.
+  - id: b
+    text: The GitRepository, which rejected the file.
+    explanation: Not correct. A source only stores files.
+  - id: c
+    text: Kubernetes RBAC in the API server; kustomize-controller only reported it.
+    explanation: Correct. The refusal came from the API server.
+  - id: d
+    text: notification-controller, which blocks cluster-wide objects.
+    explanation: Not correct. It only sends events.
+  correct_option: c
+  explanation: Correct. The refusal came from the API server.
+- id: ats099-010-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Check a tenant's rights
+  source_readings:
+  - sections/section-010/module-01/course-02-impersonation-with-service-accounts.md
+  prompt: Which command checks whether the tenant's account may create ClusterRoles?
+  options:
+  - id: a
+    text: kubectl auth can-i create clusterroles --as=team-a
+    explanation: Not correct. That names a user called team-a, not the ServiceAccount.
+  - id: b
+    text: kubectl apply -f escalate/ with your own user
+    explanation: Not correct. Your own user is not the tenant.
+  - id: c
+    text: flux get kustomization team-a -n team-a --can-i
+    explanation: Not correct. flux get has no such option.
+  - id: d
+    text: kubectl auth can-i create clusterroles --as=system:serviceaccount:team-a:team-a
+    explanation: Correct. The --as value names the ServiceAccount with its namespace.
+  correct_option: d
+  explanation: Correct. The --as value names the ServiceAccount with its namespace.
+- id: ats099-010-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the default ServiceAccount flag
+  source_readings:
+  - sections/section-010/module-01/course-03-locking-down-the-cluster.md
+  prompt: A tenant writes a Kustomization with no serviceAccountName. Which flag makes
+    it run with no rights instead of cluster-admin?
+  options:
+  - id: a
+    text: "--default-service-account=default"
+    explanation: Correct. The object impersonates the empty default account in its
+      namespace.
+  - id: b
+    text: "--no-remote-bases=true"
+    explanation: Not correct. It stops Kustomize from pulling remote bases.
+  - id: c
+    text: "--no-cross-namespace-refs=true"
+    explanation: Not correct. It limits references to the object's own namespace.
+  - id: d
+    text: "--log-level=error"
+    explanation: Not correct. It only changes the log output.
+  correct_option: a
+  explanation: Correct. The object impersonates the empty default account in its namespace.
+- id: ats099-010-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain the effect on platform objects
+  source_readings:
+  - sections/section-010/module-01/course-03-locking-down-the-cluster.md
+  prompt: The flag --default-service-account=default is on, and a platform Kustomization
+    in flux-system has no serviceAccountName. What happens?
+  options:
+  - id: a
+    text: It keeps running as cluster-admin.
+    explanation: Not correct. The flag applies to every object without a name.
+  - id: b
+    text: Flux skips the flag for objects in flux-system.
+    explanation: Not correct. There is no such exception.
+  - id: c
+    text: Flux deletes the Kustomization.
+    explanation: Not correct. It stays and reports an error.
+  - id: d
+    text: It runs as flux-system/default, which has no rights, and fails.
+    explanation: Correct. Platform Kustomizations must name kustomize-controller.
+  correct_option: d
+  explanation: Correct. Platform Kustomizations must name kustomize-controller.
+- id: ats099-010-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Place the lockdown patches
+  source_readings:
+  - sections/section-010/module-01/course-03-locking-down-the-cluster.md
+  prompt: Why do you add the flag patches in clusters/kind/flux-system/kustomization.yaml
+    and not in gotk-components.yaml?
+  options:
+  - id: a
+    text: flux bootstrap rewrites gotk-components.yaml on every upgrade, so the change
+      would be lost.
+    explanation: Correct. The Kustomize file next to it is left alone after the first
+      bootstrap.
+  - id: b
+    text: gotk-components.yaml is read-only in Git.
+    explanation: Not correct. It is an ordinary file.
+  - id: c
+    text: The controllers ignore flags in gotk-components.yaml.
+    explanation: Not correct. The file only holds the Deployments.
+  - id: d
+    text: Kustomize cannot read gotk-components.yaml.
+    explanation: Not correct. It is listed as a resource.
+  correct_option: a
+  explanation: Correct. The Kustomize file next to it is left alone after the first
+    bootstrap.

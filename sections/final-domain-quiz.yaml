@@ -1,0 +1,294 @@
+# Final domain knowledge check across all four sections.
+schema_version: 1
+kind: question_bank
+id: ats099-final
+course_id: ATS099
+exam_code: FLUX
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: domain
+  id: multi-tenancy-enterprise-operations
+  title: Multi-Tenancy, Enterprise Operations & Cluster Management
+questions:
+- id: ats099-final-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say where tenant objects live
+  source_readings:
+  - sections/section-010/module-01/course-01-platform-and-tenant-repositories.md
+  prompt: Which repository holds the Namespace, ServiceAccount and RoleBinding of
+    a tenant?
+  options:
+  - id: a
+    text: The platform repository.
+    explanation: Correct. Whoever controls the RoleBinding controls the rights, so
+      the platform owns it.
+  - id: b
+    text: The tenant's own repository.
+    explanation: Not correct. A tenant that controls its own RoleBinding controls
+      its own rights.
+  - id: c
+    text: Both repositories, with a copy in each.
+    explanation: Not correct. One copy in the platform repository is enough and is
+      the one that counts.
+  - id: d
+    text: None. Flux creates them without Git.
+    explanation: Not correct. Flux only applies what its sources hold.
+  correct_option: a
+  explanation: Correct. Whoever controls the RoleBinding controls the rights, so the
+    platform owns it.
+- id: ats099-final-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe impersonation
+  source_readings:
+  - sections/section-010/module-01/course-02-impersonation-with-service-accounts.md
+  prompt: What happens when a Flux Kustomization sets spec.serviceAccountName?
+  options:
+  - id: a
+    text: Flux copies the ServiceAccount token into the tenant's repository.
+    explanation: Not correct. Flux never writes tokens to Git.
+  - id: b
+    text: kustomize-controller sends every object to the API server as that ServiceAccount,
+      so RBAC checks the account's permissions.
+    explanation: Correct. The API server judges the request by the named account.
+  - id: c
+    text: The API server checks the controller's permissions and only logs the account
+      name.
+    explanation: Not correct. The check uses the account, not the controller.
+  - id: d
+    text: Flux starts a separate pod under that ServiceAccount for each file.
+    explanation: Not correct. kustomize-controller itself sends the requests.
+  correct_option: b
+  explanation: Correct. The API server judges the request by the named account.
+- id: ats099-final-q03
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain the effect on platform objects
+  source_readings:
+  - sections/section-010/module-01/course-03-locking-down-the-cluster.md
+  prompt: The flag --default-service-account=default is on, and a platform Kustomization
+    in flux-system has no serviceAccountName. What happens?
+  options:
+  - id: a
+    text: It keeps running as cluster-admin.
+    explanation: Not correct. The flag applies to every object without a name.
+  - id: b
+    text: Flux skips the flag for objects in flux-system.
+    explanation: Not correct. There is no such exception.
+  - id: c
+    text: It runs as flux-system/default, which has no rights, and fails.
+    explanation: Correct. Platform Kustomizations must name kustomize-controller.
+  - id: d
+    text: Flux deletes the Kustomization.
+    explanation: Not correct. It stays and reports an error.
+  correct_option: c
+  explanation: Correct. Platform Kustomizations must name kustomize-controller.
+- id: ats099-final-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Tell Provider from Alert
+  source_readings:
+  - sections/section-020/module-01/course-01-events-providers-and-alerts.md
+  prompt: Which object says where Flux events are sent?
+  options:
+  - id: a
+    text: An Alert.
+    explanation: Not correct. An Alert says which events to send.
+  - id: b
+    text: A GitRepository.
+    explanation: Not correct. It fetches a repository.
+  - id: c
+    text: A Kustomization.
+    explanation: Not correct. It applies files.
+  - id: d
+    text: A Provider.
+    explanation: Correct. A Provider holds the type and the address.
+  correct_option: d
+  explanation: Correct. A Provider holds the type and the address.
+- id: ats099-final-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know the filter precedence
+  source_readings:
+  - sections/section-020/module-01/course-02-filtering-alerts.md
+  prompt: An event message matches a pattern in inclusionList and a pattern in exclusionList.
+    What happens?
+  options:
+  - id: a
+    text: The event is sent, because inclusionList wins.
+    explanation: Not correct. The order is the other way round.
+  - id: b
+    text: The event is sent twice.
+    explanation: Not correct. An Alert sends an event once.
+  - id: c
+    text: The event is dropped, because exclusionList wins.
+    explanation: Correct. A match in exclusionList always drops the event.
+  - id: d
+    text: The Alert reports an error.
+    explanation: Not correct. No error is raised.
+  correct_option: c
+  explanation: Correct. A match in exclusionList always drops the event.
+- id: ats099-final-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Locate gotk_resource_info
+  source_readings:
+  - sections/section-020/module-01/course-03-metrics-and-flux-stats.md
+  prompt: The metric gotk_resource_info is missing in Prometheus. Where do you look
+    first?
+  options:
+  - id: a
+    text: At the Flux controllers' metrics port.
+    explanation: Not correct. They do not export it.
+  - id: b
+    text: At the notification-controller Alert.
+    explanation: Not correct. Alerts do not create metrics.
+  - id: c
+    text: At the GitRepository interval.
+    explanation: Not correct. The interval does not affect it.
+  - id: d
+    text: At kube-state-metrics and its custom resource state configuration.
+    explanation: Correct. The Flux controllers do not export this metric.
+  correct_option: d
+  explanation: Correct. The Flux controllers do not export this metric.
+- id: ats099-final-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe sourceRef.namespace
+  source_readings:
+  - sections/section-030/module-01/course-01-cross-namespace-references.md
+  prompt: What does sourceRef.namespace do on a Flux Kustomization?
+  options:
+  - id: a
+    text: It makes Flux look for the source in that namespace instead of the Kustomization's
+      own.
+    explanation: Correct. Without it, Flux uses the object's own namespace.
+  - id: b
+    text: It creates the source in that namespace.
+    explanation: Not correct. It only points at an existing source.
+  - id: c
+    text: It sets the namespace the objects are applied to.
+    explanation: Not correct. targetNamespace does that.
+  - id: d
+    text: It copies the source to every namespace.
+    explanation: Not correct. Nothing is copied.
+  correct_option: a
+  explanation: Correct. Without it, Flux uses the object's own namespace.
+- id: ats099-final-q08
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the remote cluster field
+  source_readings:
+  - sections/section-030/module-01/course-02-applying-to-a-remote-cluster.md
+  prompt: Which field makes a Flux Kustomization apply to another cluster?
+  options:
+  - id: a
+    text: spec.serviceAccountName
+    explanation: Not correct. It selects the account to impersonate in the same cluster.
+  - id: b
+    text: spec.kubeConfig.secretRef
+    explanation: Correct. It names the Secret that holds the kubeconfig.
+  - id: c
+    text: spec.targetNamespace
+    explanation: Not correct. It sets a namespace.
+  - id: d
+    text: spec.sourceRef
+    explanation: Not correct. It selects the source.
+  correct_option: b
+  explanation: Correct. It names the Secret that holds the kubeconfig.
+- id: ats099-final-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the Cluster API Secret
+  source_readings:
+  - sections/section-030/module-01/course-03-cluster-api-and-fleets.md
+  prompt: Cluster API creates a cluster named staging in the namespace clusters. Which
+    Secret does it write for Flux?
+  options:
+  - id: a
+    text: staging-token in flux-system.
+    explanation: Not correct. Cluster API writes into the Cluster's namespace.
+  - id: b
+    text: staging-kubeconfig in the namespace clusters, with the kubeconfig under
+      the key value.
+    explanation: Correct. Put the Flux Kustomization in the same namespace.
+  - id: c
+    text: kubeconfig-staging in kube-system.
+    explanation: Not correct. The name is <cluster>-kubeconfig.
+  - id: d
+    text: No Secret. Flux reads the Cluster object directly.
+    explanation: Not correct. Flux needs the Secret.
+  correct_option: b
+  explanation: Correct. Put the Flux Kustomization in the same namespace.
+- id: ats099-final-q10
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name what Git does not hold
+  source_readings:
+  - sections/section-040/module-01/course-01-what-git-does-not-hold.md
+  prompt: Which item is not in Git and must be restored before Flux needs it?
+  options:
+  - id: a
+    text: The private key that decrypts SOPS-encrypted files.
+    explanation: Correct. Flux can only apply what it can read and decrypt.
+  - id: b
+    text: gotk-components.yaml.
+    explanation: Not correct. It is in Git.
+  - id: c
+    text: A Flux Kustomization under clusters/kind.
+    explanation: Not correct. Flux objects are in Git.
+  - id: d
+    text: gotk-sync.yaml.
+    explanation: Not correct. It is in Git.
+  correct_option: a
+  explanation: Correct. Flux can only apply what it can read and decrypt.
+- id: ats099-final-q11
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Explain a suspend that survives resume
+  source_readings:
+  - sections/section-040/module-01/course-02-suspend-uninstall-and-reinstall.md
+  prompt: 'suspend: true is committed in Git. Why does flux resume not end it for
+    long?'
+  options:
+  - id: a
+    text: flux resume only works on HelmReleases.
+    explanation: Not correct. It works on Kustomizations too.
+  - id: b
+    text: Kubernetes blocks resume for 24 hours.
+    explanation: Not correct. There is no such delay.
+  - id: c
+    text: The Git credential has expired.
+    explanation: Not correct. The cause is the file in Git.
+  - id: d
+    text: 'The next reconcile of flux-system applies suspend: true again.'
+    explanation: Correct. Remove the line in Git.
+  correct_option: d
+  explanation: Correct. Remove the line in Git.
+- id: ats099-final-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Order a rebuild
+  source_readings:
+  - sections/section-040/module-01/course-03-rebuilding-a-lost-cluster.md
+  prompt: What comes right before flux bootstrap on a new cluster?
+  options:
+  - id: a
+    text: Restoring data from backups.
+    explanation: Not correct. Data comes after the applications.
+  - id: b
+    text: Verifying that every object is Ready.
+    explanation: Not correct. Verification is last.
+  - id: c
+    text: Restoring the keys and credentials Flux needs.
+    explanation: Correct. Flux retries forever, but objects behind a missing credential
+      wait.
+  - id: d
+    text: Deleting the Git repository history.
+    explanation: Not correct. Git is the source and stays.
+  correct_option: c
+  explanation: Correct. Flux retries forever, but objects behind a missing credential
+    wait.
