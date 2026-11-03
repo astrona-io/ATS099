@@ -1,0 +1,59 @@
+# Restore Secrets From An Exported Backup Lab
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-lab-040-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, seeds the repositories and bootstraps Flux from gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-099-lab-040-02-setup"
+      description: "Creates two Secrets in podinfo, stores hashes of their values, exports them into a ConfigMap, and deletes the Secrets"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea, the tester pod and the webhook receiver"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers that exist"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-secrets-restored"
+      description: "Passes when app-credentials and registry-auth exist in podinfo with the backed-up values"
+      type: "file"
+      source: "validation/validate-secrets-restored.sh"
+    - name: "validate-labels-and-ownership"
+      description: "Passes when both Secrets keep the label dr-backup=critical and no Flux ownership label"
+      type: "file"
+      source: "validation/validate-labels-and-ownership.sh"
+    - name: "validate-nothing-in-git"
+      description: "Passes when no Secret manifest is in gitops/fleet and Flux is Ready"
+      type: "file"
+      source: "validation/validate-nothing-in-git.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - mendhak/http-https-echo:42
+      - nicolaka/netshoot:v0.13

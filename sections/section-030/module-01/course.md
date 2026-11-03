@@ -4,7 +4,7 @@ A Flux `Kustomization` has two hidden defaults: it reads a source in its own nam
 
 Flux can change both defaults. `sourceRef.namespace` points at a source in another namespace. `spec.kubeConfig.secretRef` points at a Secret that holds a **kubeconfig**, the file that tells a Kubernetes client which API server to call and with which credentials, so kustomize-controller applies to that other cluster instead. Keep one sentence in mind: **the kubeconfig decides where Flux applies, and the account in it decides what Flux may change there.**
 
-The module has three parts. **Cross-Namespace References** shows a `Kustomization` using a source from another namespace, and when a platform should forbid it. **Applying To Another Cluster With kubeConfig** builds a kubeconfig for an account with narrow rights and delivers podinfo through it; a graded lab follows it. **Cluster API And Fleets Of Clusters** shows how the same mechanism scales to clusters created on demand.
+The module has five parts. **Cross-Namespace References** shows a `Kustomization` using a source from another namespace, and when a platform should forbid it. **Applying To Another Cluster With kubeConfig** builds a kubeconfig for an account with narrow rights and delivers podinfo through it; a graded lab follows it. **Cluster API And Fleets Of Clusters** shows how the same mechanism scales to clusters created on demand. **Reading A Failing Remote Apply** walks through the stages where a kubeconfig delivery can fail, and **Cross-Namespace Rules For Other Kinds** lists which fields accept another namespace.
 
 ## Learning objectives
 
@@ -15,6 +15,8 @@ After this module you can:
 - Build a kubeconfig for a ServiceAccount token and store it in a Secret under the key `value`.
 - Make a Flux `Kustomization` apply through `spec.kubeConfig.secretRef`.
 - Prove that objects were applied through the kubeconfig, and that the remote account cannot do more than it should.
+- Find the failing stage of a remote apply from the status of the `Kustomization`.
+- List the fields that accept another namespace and the references that never do.
 - Explain how Cluster API's `<cluster>-kubeconfig` Secrets fit a Flux fleet.
 
 ## Before you start

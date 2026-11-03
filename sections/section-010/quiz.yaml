@@ -1,4 +1,5 @@
 # Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
 schema_version: 1
 kind: question_bank
 id: ats099-010
@@ -259,3 +260,671 @@ questions:
   correct_option: a
   explanation: Correct. The Kustomize file next to it is left alone after the first
     bootstrap.
+- id: ats099-010-q11
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the controllers that need the default ServiceAccount flag
+  source_readings:
+  - sections/section-010/module-01/course-04-impersonation-in-helm-and-other-controllers.md
+  prompt: On which controllers must `--default-service-account=default` be set so
+    that no tenant object runs with controller rights?
+  options:
+  - id: a
+    text: kustomize-controller only
+    explanation: Not correct. Both kustomize-controller and helm-controller apply
+      tenant objects, so both need the flag. Setting only one leaves the other running
+      objects without a ServiceAccount as itself.
+  - id: b
+    text: source-controller and notification-controller
+    explanation: Not correct. Both kustomize-controller and helm-controller apply
+      tenant objects, so both need the flag. Setting only one leaves the other running
+      objects without a ServiceAccount as itself.
+  - id: c
+    text: kustomize-controller and helm-controller
+    explanation: Correct. Both kustomize-controller and helm-controller apply tenant
+      objects, so both need the flag. Setting only one leaves the other running objects
+      without a ServiceAccount as itself.
+  - id: d
+    text: helm-controller only
+    explanation: Not correct. Both kustomize-controller and helm-controller apply
+      tenant objects, so both need the flag. Setting only one leaves the other running
+      objects without a ServiceAccount as itself.
+  correct_option: c
+  explanation: Correct. Both kustomize-controller and helm-controller apply tenant
+    objects, so both need the flag. Setting only one leaves the other running objects
+    without a ServiceAccount as itself.
+- id: ats099-010-q12
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Find the cause of a refusal with kubectl auth can-i
+  source_readings:
+  - sections/section-010/module-01/course-05-reading-and-fixing-refusals.md
+  prompt: Which command shows whether the ServiceAccount `team-a` in `team-a` may
+    create Deployments in its namespace?
+  options:
+  - id: a
+    text: "`kubectl get rolebinding -A --as=team-a`"
+    explanation: Not correct. `kubectl auth can-i` with `--as` evaluates the request
+      as the named account, which is the account Flux impersonates.
+  - id: b
+    text: "`kubectl auth can-i create deployments -n team-a --as=system:serviceaccount:team-a:team-a`"
+    explanation: Correct. `kubectl auth can-i` with `--as` evaluates the request as
+      the named account, which is the account Flux impersonates.
+  - id: c
+    text: "`flux get kustomizations -n team-a --as=team-a`"
+    explanation: Not correct. `kubectl auth can-i` with `--as` evaluates the request
+      as the named account, which is the account Flux impersonates.
+  - id: d
+    text: "`kubectl describe serviceaccount team-a -n team-a --as=cluster-admin`"
+    explanation: Not correct. `kubectl auth can-i` with `--as` evaluates the request
+      as the named account, which is the account Flux impersonates.
+  correct_option: b
+  explanation: Correct. `kubectl auth can-i` with `--as` evaluates the request as
+    the named account, which is the account Flux impersonates.
+- id: ats099-010-q13
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say what a RoleBinding to cluster-admin allows
+  source_readings:
+  - sections/section-010/module-02/course-01-choosing-the-tenant-role.md
+  prompt: A RoleBinding in `team-a` names the ClusterRole `cluster-admin`. Which statement
+    is correct?
+  options:
+  - id: a
+    text: The account may do everything to namespaced objects in `team-a`, and nothing
+      in other namespaces.
+    explanation: Correct. A RoleBinding scopes the rules of any ClusterRole to its
+      own namespace, so the rules of `cluster-admin` apply only in `team-a`.
+  - id: b
+    text: The account may do everything in every namespace.
+    explanation: Not correct. A RoleBinding scopes the rules of any ClusterRole to
+      its own namespace, so the rules of `cluster-admin` apply only in `team-a`.
+  - id: c
+    text: The account may only read objects in `team-a`.
+    explanation: Not correct. A RoleBinding scopes the rules of any ClusterRole to
+      its own namespace, so the rules of `cluster-admin` apply only in `team-a`.
+  - id: d
+    text: The binding has no effect because `cluster-admin` is a cluster role.
+    explanation: Not correct. A RoleBinding scopes the rules of any ClusterRole to
+      its own namespace, so the rules of `cluster-admin` apply only in `team-a`.
+  correct_option: a
+  explanation: Correct. A RoleBinding scopes the rules of any ClusterRole to its own
+    namespace, so the rules of `cluster-admin` apply only in `team-a`.
+- id: ats099-010-q14
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say why the admin ClusterRole protects a quota
+  source_readings:
+  - sections/section-010/module-02/course-01-choosing-the-tenant-role.md
+  prompt: Why is the ClusterRole `admin` a better tenant role than `cluster-admin`
+    when the platform sets a ResourceQuota?
+  options:
+  - id: a
+    text: "`admin` hides the ResourceQuota from the tenant."
+    explanation: Not correct. The built-in `admin` role has only get, list and watch
+      on resource quotas, while `cluster-admin` allows every verb.
+  - id: b
+    text: "`admin` blocks Deployments above the quota."
+    explanation: Not correct. The built-in `admin` role has only get, list and watch
+      on resource quotas, while `cluster-admin` allows every verb.
+  - id: c
+    text: "`admin` cannot be bound with a RoleBinding."
+    explanation: Not correct. The built-in `admin` role has only get, list and watch
+      on resource quotas, while `cluster-admin` allows every verb.
+  - id: d
+    text: "`admin` allows only reading a ResourceQuota, so the tenant cannot change
+      or delete it."
+    explanation: Correct. The built-in `admin` role has only get, list and watch on
+      resource quotas, while `cluster-admin` allows every verb.
+  correct_option: d
+  explanation: Correct. The built-in `admin` role has only get, list and watch on
+    resource quotas, while `cluster-admin` allows every verb.
+- id: ats099-010-q15
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Change a RoleBinding through Git
+  source_readings:
+  - sections/section-010/module-02/course-01-choosing-the-tenant-role.md
+  prompt: A RoleBinding in Git points at `cluster-admin`. How do you switch it to
+    `admin` through Flux?
+  options:
+  - id: a
+    text: Change `roleRef.name` in the same object and push.
+    explanation: Not correct. The `roleRef` field of a RoleBinding is immutable, so
+      an update in place is refused. A new name creates a new object, and pruning
+      removes the old one.
+  - id: b
+    text: Patch the RoleBinding with `kubectl edit`.
+    explanation: Not correct. The `roleRef` field of a RoleBinding is immutable, so
+      an update in place is refused. A new name creates a new object, and pruning
+      removes the old one.
+  - id: c
+    text: Give the new RoleBinding a new name with `roleRef` set to `admin`, remove
+      the old one, and let pruning delete the old one.
+    explanation: Correct. The `roleRef` field of a RoleBinding is immutable, so an
+      update in place is refused. A new name creates a new object, and pruning removes
+      the old one.
+  - id: d
+    text: 'Add `spec.suspend: true` to the RoleBinding.'
+    explanation: Not correct. The `roleRef` field of a RoleBinding is immutable, so
+      an update in place is refused. A new name creates a new object, and pruning
+      removes the old one.
+  correct_option: c
+  explanation: Correct. The `roleRef` field of a RoleBinding is immutable, so an update
+    in place is refused. A new name creates a new object, and pruning removes the
+    old one.
+- id: ats099-010-q16
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say what a ResourceQuota limits
+  source_readings:
+  - sections/section-010/module-02/course-02-quotas-and-limits.md
+  prompt: 'What does a ResourceQuota with `pods: "10"` in the namespace `team-a` do?'
+  options:
+  - id: a
+    text: It limits each Deployment to 10 replicas in all namespaces.
+    explanation: Not correct. A ResourceQuota is a hard cap on the total for one namespace,
+      and the API server refuses requests that exceed it.
+  - id: b
+    text: It makes the API server refuse the creation of an 11th pod in `team-a`.
+    explanation: Correct. A ResourceQuota is a hard cap on the total for one namespace,
+      and the API server refuses requests that exceed it.
+  - id: c
+    text: It limits `team-a` to 10 nodes.
+    explanation: Not correct. A ResourceQuota is a hard cap on the total for one namespace,
+      and the API server refuses requests that exceed it.
+  - id: d
+    text: It deletes pods that run longer than 10 minutes.
+    explanation: Not correct. A ResourceQuota is a hard cap on the total for one namespace,
+      and the API server refuses requests that exceed it.
+  correct_option: b
+  explanation: Correct. A ResourceQuota is a hard cap on the total for one namespace,
+    and the API server refuses requests that exceed it.
+- id: ats099-010-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say why a LimitRange goes with a compute quota
+  source_readings:
+  - sections/section-010/module-02/course-02-quotas-and-limits.md
+  prompt: A ResourceQuota sets `requests.cpu`. Why add a LimitRange with default requests?
+  options:
+  - id: a
+    text: Pods that declare no CPU request are rejected under that quota, and the
+      defaults give them one.
+    explanation: Correct. When a quota counts a compute resource, every pod must declare
+      it. The LimitRange fills in a default so pods are accepted.
+  - id: b
+    text: The LimitRange makes the quota apply to other namespaces.
+    explanation: Not correct. When a quota counts a compute resource, every pod must
+      declare it. The LimitRange fills in a default so pods are accepted.
+  - id: c
+    text: The LimitRange raises the quota when it is full.
+    explanation: Not correct. When a quota counts a compute resource, every pod must
+      declare it. The LimitRange fills in a default so pods are accepted.
+  - id: d
+    text: The LimitRange deletes pods that exceed the quota.
+    explanation: Not correct. When a quota counts a compute resource, every pod must
+      declare it. The LimitRange fills in a default so pods are accepted.
+  correct_option: a
+  explanation: Correct. When a quota counts a compute resource, every pod must declare
+    it. The LimitRange fills in a default so pods are accepted.
+- id: ats099-010-q18
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Describe a default-deny NetworkPolicy
+  source_readings:
+  - sections/section-010/module-02/course-03-network-isolation-and-tenant-secrets.md
+  prompt: Which NetworkPolicy blocks all incoming traffic to every pod in `team-a`?
+  options:
+  - id: a
+    text: 'A policy with a `podSelector` that names no labels and `policyTypes: [Egress]`.'
+    explanation: Not correct. An empty podSelector selects every pod. Listing Ingress
+      with no ingress rules allows no incoming traffic.
+  - id: b
+    text: 'A policy with `ingress: [{}]` and no `policyTypes`.'
+    explanation: Not correct. An empty podSelector selects every pod. Listing Ingress
+      with no ingress rules allows no incoming traffic.
+  - id: c
+    text: 'A ResourceQuota with `networkpolicies: 0`.'
+    explanation: Not correct. An empty podSelector selects every pod. Listing Ingress
+      with no ingress rules allows no incoming traffic.
+  - id: d
+    text: 'A policy with `podSelector: {}`, `policyTypes: [Ingress]` and no `ingress`
+      rules.'
+    explanation: Correct. An empty podSelector selects every pod. Listing Ingress
+      with no ingress rules allows no incoming traffic.
+  correct_option: d
+  explanation: Correct. An empty podSelector selects every pod. Listing Ingress with
+    no ingress rules allows no incoming traffic.
+- id: ats099-010-q19
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Place a SOPS decryption Secret
+  source_readings:
+  - sections/section-010/module-02/course-03-network-isolation-and-tenant-secrets.md
+  prompt: Where must the Secret named in `spec.decryption.secretRef` of a tenant Flux
+    `Kustomization` be?
+  options:
+  - id: a
+    text: In `flux-system`.
+    explanation: Not correct. The Flux object looks the Secret up in its own namespace,
+      which also keeps one tenant from using another tenant's key.
+  - id: b
+    text: In the `default` namespace.
+    explanation: Not correct. The Flux object looks the Secret up in its own namespace,
+      which also keeps one tenant from using another tenant's key.
+  - id: c
+    text: In the same namespace as the Flux `Kustomization`.
+    explanation: Correct. The Flux object looks the Secret up in its own namespace,
+      which also keeps one tenant from using another tenant's key.
+  - id: d
+    text: In the tenant's Git repository.
+    explanation: Not correct. The Flux object looks the Secret up in its own namespace,
+      which also keeps one tenant from using another tenant's key.
+  correct_option: c
+  explanation: Correct. The Flux object looks the Secret up in its own namespace,
+    which also keeps one tenant from using another tenant's key.
+- id: ats099-010-q20
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say why each tenant has its own decryption key
+  source_readings:
+  - sections/section-010/module-02/course-03-network-isolation-and-tenant-secrets.md
+  prompt: Why does each tenant get its own SOPS key?
+  options:
+  - id: a
+    text: Because SOPS can only encrypt for one file per key.
+    explanation: Not correct. With a shared key, any tenant allowed to reference it
+      could read every tenant's secrets. A separate key in each namespace prevents
+      that.
+  - id: b
+    text: So one tenant cannot decrypt another tenant's secrets.
+    explanation: Correct. With a shared key, any tenant allowed to reference it could
+      read every tenant's secrets. A separate key in each namespace prevents that.
+  - id: c
+    text: Because kustomize-controller supports only one key per cluster.
+    explanation: Not correct. With a shared key, any tenant allowed to reference it
+      could read every tenant's secrets. A separate key in each namespace prevents
+      that.
+  - id: d
+    text: Because age keys expire when shared.
+    explanation: Not correct. With a shared key, any tenant allowed to reference it
+      could read every tenant's secrets. A separate key in each namespace prevents
+      that.
+  correct_option: b
+  explanation: Correct. With a shared key, any tenant allowed to reference it could
+    read every tenant's secrets. A separate key in each namespace prevents that.
+- id: ats099-010-q21
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Offboard a tenant in the right order
+  source_readings:
+  - sections/section-010/module-02/course-04-onboarding-and-offboarding-tenants.md
+  prompt: What is the safe way to offboard a tenant whose namespace holds Flux objects
+    that prune?
+  options:
+  - id: a
+    text: Remove the tenant's Flux objects first and the ServiceAccount, RoleBinding
+      and Namespace in a later commit.
+    explanation: Correct. The tenant's Kustomization prunes as the tenant's ServiceAccount.
+      If that account or its rights disappear first, the cleanup is refused and the
+      namespace can stay in Terminating.
+  - id: b
+    text: Delete the whole tenant folder in one commit with `--force`.
+    explanation: Not correct. The tenant's Kustomization prunes as the tenant's ServiceAccount.
+      If that account or its rights disappear first, the cleanup is refused and the
+      namespace can stay in Terminating.
+  - id: c
+    text: Delete the RoleBinding first and the Flux objects last.
+    explanation: Not correct. The tenant's Kustomization prunes as the tenant's ServiceAccount.
+      If that account or its rights disappear first, the cleanup is refused and the
+      namespace can stay in Terminating.
+  - id: d
+    text: Delete the Namespace with `kubectl delete` and keep the folder.
+    explanation: Not correct. The tenant's Kustomization prunes as the tenant's ServiceAccount.
+      If that account or its rights disappear first, the cleanup is refused and the
+      namespace can stay in Terminating.
+  correct_option: a
+  explanation: Correct. The tenant's Kustomization prunes as the tenant's ServiceAccount.
+    If that account or its rights disappear first, the cleanup is refused and the
+    namespace can stay in Terminating.
+- id: ats099-010-q22
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Generate tenant objects with the Flux CLI
+  source_readings:
+  - sections/section-010/module-02/course-04-onboarding-and-offboarding-tenants.md
+  prompt: Which command prints the Namespace, ServiceAccount and RoleBinding of a
+    tenant without applying them?
+  options:
+  - id: a
+    text: "`flux install --tenant team-b`"
+    explanation: Not correct. `flux create tenant` with `--export` writes the objects
+      to the terminal. They then go into the platform repository.
+  - id: b
+    text: "`flux get tenant team-b`"
+    explanation: Not correct. `flux create tenant` with `--export` writes the objects
+      to the terminal. They then go into the platform repository.
+  - id: c
+    text: "`flux bootstrap tenant team-b`"
+    explanation: Not correct. `flux create tenant` with `--export` writes the objects
+      to the terminal. They then go into the platform repository.
+  - id: d
+    text: "`flux create tenant team-b --with-namespace=team-b --export`"
+    explanation: Correct. `flux create tenant` with `--export` writes the objects
+      to the terminal. They then go into the platform repository.
+  correct_option: d
+  explanation: Correct. `flux create tenant` with `--export` writes the objects to
+    the terminal. They then go into the platform repository.
+- id: ats099-010-q23
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose a repository layout that matches ownership
+  source_readings:
+  - sections/section-010/module-03/course-01-repository-layouts.md
+  prompt: Which layout matches Git permissions to ownership in a cluster shared by
+    teams?
+  options:
+  - id: a
+    text: One repository for everything, writable by all teams.
+    explanation: Not correct. Git permissions are set per repository or branch. A
+      platform repository plus a repository per tenant lets the tenant push to its
+      own repository only.
+  - id: b
+    text: One repository per environment, writable by all teams.
+    explanation: Not correct. Git permissions are set per repository or branch. A
+      platform repository plus a repository per tenant lets the tenant push to its
+      own repository only.
+  - id: c
+    text: One platform repository owned by the platform team and one repository per
+      tenant.
+    explanation: Correct. Git permissions are set per repository or branch. A platform
+      repository plus a repository per tenant lets the tenant push to its own repository
+      only.
+  - id: d
+    text: One branch per tenant in the platform repository.
+    explanation: Not correct. Git permissions are set per repository or branch. A
+      platform repository plus a repository per tenant lets the tenant push to its
+      own repository only.
+  correct_option: c
+  explanation: Correct. Git permissions are set per repository or branch. A platform
+    repository plus a repository per tenant lets the tenant push to its own repository
+    only.
+- id: ats099-010-q24
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use dependsOn to order Kustomizations
+  source_readings:
+  - sections/section-010/module-03/course-01-repository-layouts.md
+  prompt: A `tenants` Kustomization must wait for `infrastructure`. Which field does
+    that?
+  options:
+  - id: a
+    text: "`spec.wait: infrastructure`"
+    explanation: Not correct. `spec.dependsOn` makes a Kustomization wait until the
+      listed Kustomizations are Ready.
+  - id: b
+    text: "`spec.dependsOn` with the name `infrastructure`."
+    explanation: Correct. `spec.dependsOn` makes a Kustomization wait until the listed
+      Kustomizations are Ready.
+  - id: c
+    text: "`spec.sourceRef.name: infrastructure`"
+    explanation: Not correct. `spec.dependsOn` makes a Kustomization wait until the
+      listed Kustomizations are Ready.
+  - id: d
+    text: "`spec.targetNamespace: infrastructure`"
+    explanation: Not correct. `spec.dependsOn` makes a Kustomization wait until the
+      listed Kustomizations are Ready.
+  correct_option: b
+  explanation: Correct. `spec.dependsOn` makes a Kustomization wait until the listed
+    Kustomizations are Ready.
+- id: ats099-010-q25
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Protect the watched branch
+  source_readings:
+  - sections/section-010/module-03/course-02-git-permissions-and-verified-sources.md
+  prompt: Which Git server setting protects the branch Flux reads against rewritten
+    history?
+  options:
+  - id: a
+    text: Blocking force pushes on the branch.
+    explanation: Correct. A force push can rewrite the history under Flux. Branch
+      protection on the Git server blocks it.
+  - id: b
+    text: Using a longer `interval` on the GitRepository.
+    explanation: Not correct. A force push can rewrite the history under Flux. Branch
+      protection on the Git server blocks it.
+  - id: c
+    text: 'Setting `prune: false` on the Kustomization.'
+    explanation: Not correct. A force push can rewrite the history under Flux. Branch
+      protection on the Git server blocks it.
+  - id: d
+    text: Naming the branch `flux`.
+    explanation: Not correct. A force push can rewrite the history under Flux. Branch
+      protection on the Git server blocks it.
+  correct_option: a
+  explanation: Correct. A force push can rewrite the history under Flux. Branch protection
+    on the Git server blocks it.
+- id: ats099-010-q26
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Verify commit signatures in a GitRepository
+  source_readings:
+  - sections/section-010/module-03/course-02-git-permissions-and-verified-sources.md
+  prompt: Which `GitRepository` field makes source-controller check the signature
+    of the latest commit?
+  options:
+  - id: a
+    text: "`spec.ignore` with the signer name."
+    explanation: 'Not correct. `spec.verify` with `mode: HEAD` checks the latest commit
+      against the public keys in the referenced Secret.'
+  - id: b
+    text: "`spec.suspend: false`"
+    explanation: 'Not correct. `spec.verify` with `mode: HEAD` checks the latest commit
+      against the public keys in the referenced Secret.'
+  - id: c
+    text: "`spec.ref.signed: true`"
+    explanation: 'Not correct. `spec.verify` with `mode: HEAD` checks the latest commit
+      against the public keys in the referenced Secret.'
+  - id: d
+    text: "`spec.verify` with `mode: HEAD` and a `secretRef` to the public keys."
+    explanation: 'Correct. `spec.verify` with `mode: HEAD` checks the latest commit
+      against the public keys in the referenced Secret.'
+  correct_option: d
+  explanation: 'Correct. `spec.verify` with `mode: HEAD` checks the latest commit
+    against the public keys in the referenced Secret.'
+- id: ats099-010-q27
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Describe what happens when verification fails
+  source_readings:
+  - sections/section-010/module-03/course-02-git-permissions-and-verified-sources.md
+  prompt: A `GitRepository` with `spec.verify` meets an unsigned commit. What happens?
+  options:
+  - id: a
+    text: The commit is applied and a warning is logged.
+    explanation: Not correct. Source-controller refuses to produce an artifact from
+      a revision that fails verification, so what already runs keeps running.
+  - id: b
+    text: Flux deletes the objects the source created.
+    explanation: Not correct. Source-controller refuses to produce an artifact from
+      a revision that fails verification, so what already runs keeps running.
+  - id: c
+    text: No new artifact is produced, the old artifact stays, and the source shows
+      `Ready` `False`.
+    explanation: Correct. Source-controller refuses to produce an artifact from a
+      revision that fails verification, so what already runs keeps running.
+  - id: d
+    text: The Kustomization is suspended and its objects are deleted.
+    explanation: Not correct. Source-controller refuses to produce an artifact from
+      a revision that fails verification, so what already runs keeps running.
+  correct_option: c
+  explanation: Correct. Source-controller refuses to produce an artifact from a revision
+    that fails verification, so what already runs keeps running.
+- id: ats099-010-q28
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the Kubernetes API for admission policy
+  source_readings:
+  - sections/section-010/module-03/course-03-admission-policy-for-flux-objects.md
+  prompt: Which Kubernetes API runs a CEL rule in the API server to reject a request
+    without a webhook?
+  options:
+  - id: a
+    text: ResourceQuota
+    explanation: Not correct. ValidatingAdmissionPolicy evaluates CEL expressions
+      inside the API server and needs a ValidatingAdmissionPolicyBinding to take effect.
+  - id: b
+    text: ValidatingAdmissionPolicy
+    explanation: Correct. ValidatingAdmissionPolicy evaluates CEL expressions inside
+      the API server and needs a ValidatingAdmissionPolicyBinding to take effect.
+  - id: c
+    text: PodDisruptionBudget
+    explanation: Not correct. ValidatingAdmissionPolicy evaluates CEL expressions
+      inside the API server and needs a ValidatingAdmissionPolicyBinding to take effect.
+  - id: d
+    text: NetworkPolicy
+    explanation: Not correct. ValidatingAdmissionPolicy evaluates CEL expressions
+      inside the API server and needs a ValidatingAdmissionPolicyBinding to take effect.
+  correct_option: b
+  explanation: Correct. ValidatingAdmissionPolicy evaluates CEL expressions inside
+    the API server and needs a ValidatingAdmissionPolicyBinding to take effect.
+- id: ats099-010-q29
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain the role of the binding
+  source_readings:
+  - sections/section-010/module-03/course-03-admission-policy-for-flux-objects.md
+  prompt: What does a ValidatingAdmissionPolicyBinding do?
+  options:
+  - id: a
+    text: It connects a policy to the namespaces it applies to and sets the action,
+      such as `Deny`.
+    explanation: Correct. The policy defines what to check. The binding says where
+      it applies and what to do on a failure.
+  - id: b
+    text: It defines the CEL expression.
+    explanation: Not correct. The policy defines what to check. The binding says where
+      it applies and what to do on a failure.
+  - id: c
+    text: It lists the Flux objects that may bypass the policy.
+    explanation: Not correct. The policy defines what to check. The binding says where
+      it applies and what to do on a failure.
+  - id: d
+    text: It installs the admission webhook.
+    explanation: Not correct. The policy defines what to check. The binding says where
+      it applies and what to do on a failure.
+  correct_option: a
+  explanation: Correct. The policy defines what to check. The binding says where it
+    applies and what to do on a failure.
+- id: ats099-010-q30
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Pick the validation action
+  source_readings:
+  - sections/section-010/module-03/course-03-admission-policy-for-flux-objects.md
+  prompt: A policy should only warn at first. Which `validationActions` value does
+    that?
+  options:
+  - id: a
+    text: "`Deny`"
+    explanation: Not correct. `Warn` returns a warning and allows the request. `Deny`
+      rejects it and `Audit` records it.
+  - id: b
+    text: "`Reject`"
+    explanation: Not correct. `Warn` returns a warning and allows the request. `Deny`
+      rejects it and `Audit` records it.
+  - id: c
+    text: "`Block`"
+    explanation: Not correct. `Warn` returns a warning and allows the request. `Deny`
+      rejects it and `Audit` records it.
+  - id: d
+    text: "`Warn`"
+    explanation: Correct. `Warn` returns a warning and allows the request. `Deny`
+      rejects it and `Audit` records it.
+  correct_option: d
+  explanation: Correct. `Warn` returns a warning and allows the request. `Deny` rejects
+    it and `Audit` records it.
+- id: ats099-010-q31
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Test a policy without storing an object
+  source_readings:
+  - sections/section-010/module-03/course-03-admission-policy-for-flux-objects.md
+  prompt: Which command sends an object through admission without storing it?
+  options:
+  - id: a
+    text: "`kubectl apply --dry-run=client -f file.yaml`"
+    explanation: Not correct. A server-side dry run sends the request to the API server,
+      so admission policies run. A client-side dry run never reaches the API server.
+  - id: b
+    text: "`kubectl diff --server-side -f file.yaml`"
+    explanation: Not correct. A server-side dry run sends the request to the API server,
+      so admission policies run. A client-side dry run never reaches the API server.
+  - id: c
+    text: "`kubectl apply --dry-run=server -f file.yaml`"
+    explanation: Correct. A server-side dry run sends the request to the API server,
+      so admission policies run. A client-side dry run never reaches the API server.
+  - id: d
+    text: "`flux diff kustomization`"
+    explanation: Not correct. A server-side dry run sends the request to the API server,
+      so admission policies run. A client-side dry run never reaches the API server.
+  correct_option: c
+  explanation: Correct. A server-side dry run sends the request to the API server,
+    so admission policies run. A client-side dry run never reaches the API server.
+- id: ats099-010-q32
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Follow a Flux object to its resources
+  source_readings:
+  - sections/section-010/module-03/course-04-auditing-what-tenants-run.md
+  prompt: Which command prints the objects that the Kustomization `team-a` created?
+  options:
+  - id: a
+    text: "`flux get tenants`"
+    explanation: Not correct. `flux tree` prints a Flux object and the resources in
+      its inventory.
+  - id: b
+    text: "`flux tree kustomization team-a -n team-a`"
+    explanation: Correct. `flux tree` prints a Flux object and the resources in its
+      inventory.
+  - id: c
+    text: "`flux export team-a`"
+    explanation: Not correct. `flux tree` prints a Flux object and the resources in
+      its inventory.
+  - id: d
+    text: "`flux logs --tree`"
+    explanation: Not correct. `flux tree` prints a Flux object and the resources in
+      its inventory.
+  correct_option: b
+  explanation: Correct. `flux tree` prints a Flux object and the resources in its
+    inventory.
+- id: ats099-010-q33
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find the Flux object that owns a resource
+  source_readings:
+  - sections/section-010/module-03/course-04-auditing-what-tenants-run.md
+  prompt: A Deployment looks wrong and you need to know which Flux object manages
+    it. Which command answers that?
+  options:
+  - id: a
+    text: "`flux trace deployment podinfo -n team-a`"
+    explanation: Correct. `flux trace` reports the Kustomization, source and revision
+      that manage the object.
+  - id: b
+    text: "`flux get deployment podinfo`"
+    explanation: Not correct. `flux trace` reports the Kustomization, source and revision
+      that manage the object.
+  - id: c
+    text: "`kubectl get kustomization -A -o wide`"
+    explanation: Not correct. `flux trace` reports the Kustomization, source and revision
+      that manage the object.
+  - id: d
+    text: "`flux stats`"
+    explanation: Not correct. `flux trace` reports the Kustomization, source and revision
+      that manage the object.
+  correct_option: a
+  explanation: Correct. `flux trace` reports the Kustomization, source and revision
+    that manage the object.

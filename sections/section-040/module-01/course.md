@@ -4,7 +4,7 @@
 
 This module practises recovery while nothing is at stake. Flux itself is cheap to remove and to bring back, because it only manages objects; the workloads keep running without it. Keep one sentence in mind: **reinstalling Flux adopts what is running; it does not recreate it.**
 
-The module has three parts. **What Git Holds And What It Does Not** takes stock of everything Flux needs that Git cannot give it. **Suspend, Uninstall And Reinstall Flux** pauses Flux, removes it, puts it back with `flux bootstrap`, and proves the workloads were adopted; a graded lab follows it. **Rebuilding A Lost Cluster** sets out the order for the worst case, a cluster that is gone.
+The module has five parts. **What Git Holds And What It Does Not** takes stock of everything Flux needs that Git cannot give it. **Suspend, Uninstall And Reinstall Flux** pauses Flux, removes it, puts it back with `flux bootstrap`, and proves the workloads were adopted; a graded lab follows it. **Rebuilding A Lost Cluster** sets out the order for the worst case, a cluster that is gone. **Reading The State Of A Broken Flux Installation** is the triage to run before any recovery. **Recovery Objectives And Drills** covers recovery time, recovery point and how to rehearse.
 
 ## Learning objectives
 
@@ -16,6 +16,8 @@ After this module you can:
 - Reinstall Flux with `flux bootstrap` from the same repository and path.
 - Prove that a workload was adopted by comparing its UID and reading the `Kustomization`'s inventory.
 - Put the steps of a full cluster rebuild in the right order.
+- Triage a broken Flux installation with `flux check`, `flux get` and `flux logs` before you change anything.
+- State a recovery time objective and a recovery point objective, and say which failures Flux affects.
 
 ## Before you start
 

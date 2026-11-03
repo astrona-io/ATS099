@@ -16,14 +16,32 @@ By default Flux does not give that guarantee. kustomize-controller applies files
 
 ## The learning path
 
-The section has one module. It has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, a cluster where Flux is already bootstrapped and the tenant repository `gitops/team-a` is waiting to be onboarded. The landing page starts the playground for you.
+The section has three modules. Each has a landing page, deep-dive parts, a graded lab right after the part it tests, and a summary. Each module has its own playground, a cluster where Flux is already bootstrapped. The landing page starts the playground for you.
 
 ### 1. Onboard Tenants With Impersonation
 
 1. Platform Administrators, Tenants And Their Repositories
 2. Impersonation With spec.serviceAccountName
 3. Locking Down The Cluster For Tenants, followed by the lab **Onboard A Locked-Down Tenant**
-4. Summary
+4. Impersonation In HelmReleases And Other Objects
+5. Reading And Fixing A Refused Tenant
+6. Summary
+
+### 2. Guardrails And Secrets For Tenants
+
+1. Choosing The Role Of A Tenant
+2. Quotas And Limits Per Tenant, followed by the lab **Give A Tenant Fewer Rights And A Quota**
+3. Network Isolation And Tenant Secrets
+4. Onboarding And Offboarding Many Tenants
+5. Summary
+
+### 3. Governing Tenants With Repositories And Policy
+
+1. Repository Layouts For Many Teams
+2. Git Permissions And Verified Sources
+3. Admission Policy For Flux Objects, followed by the lab **Reject Flux Kustomizations Without A ServiceAccount**
+4. Auditing What Tenants Run
+5. Summary
 
 ## Section capstone: Repair A Tenant That Cannot Deploy
 

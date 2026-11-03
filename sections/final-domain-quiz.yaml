@@ -1,4 +1,4 @@
-# Final domain knowledge check across all four sections.
+# Final domain knowledge check across all sections.
 schema_version: 1
 kind: question_bank
 id: ats099-final
@@ -292,3 +292,629 @@ questions:
   correct_option: c
   explanation: Correct. Flux retries forever, but objects behind a missing credential
     wait.
+- id: ats099-final-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain the scope of a RoleBinding
+  source_readings:
+  - sections/section-010/module-01/course-01-platform-and-tenant-repositories.md
+  prompt: A RoleBinding in the namespace team-a binds the ClusterRole cluster-admin
+    to the ServiceAccount team-a. What rights does the account get?
+  options:
+  - id: a
+    text: Every right in the whole cluster.
+    explanation: Not correct. That needs a ClusterRoleBinding.
+  - id: b
+    text: Every right inside the namespace team-a and none outside it.
+    explanation: Correct. A RoleBinding limits the rules of a ClusterRole to its own
+      namespace.
+  - id: c
+    text: Read-only rights inside team-a.
+    explanation: Not correct. cluster-admin is not read-only.
+  - id: d
+    text: No rights, because a RoleBinding cannot name cluster-admin.
+    explanation: Not correct. A RoleBinding may reference a ClusterRole.
+  correct_option: b
+  explanation: Correct. A RoleBinding limits the rules of a ClusterRole to its own
+    namespace.
+- id: ats099-final-q14
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the default ServiceAccount flag
+  source_readings:
+  - sections/section-010/module-01/course-03-locking-down-the-cluster.md
+  prompt: A tenant writes a Kustomization with no serviceAccountName. Which flag makes
+    it run with no rights instead of cluster-admin?
+  options:
+  - id: a
+    text: "--default-service-account=default"
+    explanation: Correct. The object impersonates the empty default account in its
+      namespace.
+  - id: b
+    text: "--no-remote-bases=true"
+    explanation: Not correct. It stops Kustomize from pulling remote bases.
+  - id: c
+    text: "--no-cross-namespace-refs=true"
+    explanation: Not correct. It limits references to the object's own namespace.
+  - id: d
+    text: "--log-level=error"
+    explanation: Not correct. It only changes the log output.
+  correct_option: a
+  explanation: Correct. The object impersonates the empty default account in its namespace.
+- id: ats099-final-q15
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say why the admin ClusterRole protects a quota
+  source_readings:
+  - sections/section-010/module-02/course-01-choosing-the-tenant-role.md
+  prompt: Why is the ClusterRole `admin` a better tenant role than `cluster-admin`
+    when the platform sets a ResourceQuota?
+  options:
+  - id: a
+    text: "`admin` hides the ResourceQuota from the tenant."
+    explanation: Not correct. The built-in `admin` role has only get, list and watch
+      on resource quotas, while `cluster-admin` allows every verb.
+  - id: b
+    text: "`admin` blocks Deployments above the quota."
+    explanation: Not correct. The built-in `admin` role has only get, list and watch
+      on resource quotas, while `cluster-admin` allows every verb.
+  - id: c
+    text: "`admin` cannot be bound with a RoleBinding."
+    explanation: Not correct. The built-in `admin` role has only get, list and watch
+      on resource quotas, while `cluster-admin` allows every verb.
+  - id: d
+    text: "`admin` allows only reading a ResourceQuota, so the tenant cannot change
+      or delete it."
+    explanation: Correct. The built-in `admin` role has only get, list and watch on
+      resource quotas, while `cluster-admin` allows every verb.
+  correct_option: d
+  explanation: Correct. The built-in `admin` role has only get, list and watch on
+    resource quotas, while `cluster-admin` allows every verb.
+- id: ats099-final-q16
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Place a SOPS decryption Secret
+  source_readings:
+  - sections/section-010/module-02/course-03-network-isolation-and-tenant-secrets.md
+  prompt: Where must the Secret named in `spec.decryption.secretRef` of a tenant Flux
+    `Kustomization` be?
+  options:
+  - id: a
+    text: In `flux-system`.
+    explanation: Not correct. The Flux object looks the Secret up in its own namespace,
+      which also keeps one tenant from using another tenant's key.
+  - id: b
+    text: In the `default` namespace.
+    explanation: Not correct. The Flux object looks the Secret up in its own namespace,
+      which also keeps one tenant from using another tenant's key.
+  - id: c
+    text: In the same namespace as the Flux `Kustomization`.
+    explanation: Correct. The Flux object looks the Secret up in its own namespace,
+      which also keeps one tenant from using another tenant's key.
+  - id: d
+    text: In the tenant's Git repository.
+    explanation: Not correct. The Flux object looks the Secret up in its own namespace,
+      which also keeps one tenant from using another tenant's key.
+  correct_option: c
+  explanation: Correct. The Flux object looks the Secret up in its own namespace,
+    which also keeps one tenant from using another tenant's key.
+- id: ats099-final-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use dependsOn to order Kustomizations
+  source_readings:
+  - sections/section-010/module-03/course-01-repository-layouts.md
+  prompt: A `tenants` Kustomization must wait for `infrastructure`. Which field does
+    that?
+  options:
+  - id: a
+    text: "`spec.wait: infrastructure`"
+    explanation: Not correct. `spec.dependsOn` makes a Kustomization wait until the
+      listed Kustomizations are Ready.
+  - id: b
+    text: "`spec.dependsOn` with the name `infrastructure`."
+    explanation: Correct. `spec.dependsOn` makes a Kustomization wait until the listed
+      Kustomizations are Ready.
+  - id: c
+    text: "`spec.sourceRef.name: infrastructure`"
+    explanation: Not correct. `spec.dependsOn` makes a Kustomization wait until the
+      listed Kustomizations are Ready.
+  - id: d
+    text: "`spec.targetNamespace: infrastructure`"
+    explanation: Not correct. `spec.dependsOn` makes a Kustomization wait until the
+      listed Kustomizations are Ready.
+  correct_option: b
+  explanation: Correct. `spec.dependsOn` makes a Kustomization wait until the listed
+    Kustomizations are Ready.
+- id: ats099-final-q18
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain the role of the binding
+  source_readings:
+  - sections/section-010/module-03/course-03-admission-policy-for-flux-objects.md
+  prompt: What does a ValidatingAdmissionPolicyBinding do?
+  options:
+  - id: a
+    text: It connects a policy to the namespaces it applies to and sets the action,
+      such as `Deny`.
+    explanation: Correct. The policy defines what to check. The binding says where
+      it applies and what to do on a failure.
+  - id: b
+    text: It defines the CEL expression.
+    explanation: Not correct. The policy defines what to check. The binding says where
+      it applies and what to do on a failure.
+  - id: c
+    text: It lists the Flux objects that may bypass the policy.
+    explanation: Not correct. The policy defines what to check. The binding says where
+      it applies and what to do on a failure.
+  - id: d
+    text: It installs the admission webhook.
+    explanation: Not correct. The policy defines what to check. The binding says where
+      it applies and what to do on a failure.
+  correct_option: a
+  explanation: Correct. The policy defines what to check. The binding says where it
+    applies and what to do on a failure.
+- id: ats099-final-q19
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Store chat webhook addresses safely
+  source_readings:
+  - sections/section-020/module-01/course-01-events-providers-and-alerts.md
+  prompt: Where do you keep the address of a Microsoft Teams webhook?
+  options:
+  - id: a
+    text: In spec.address of the Provider in Git.
+    explanation: Not correct. That puts the secret in Git.
+  - id: b
+    text: In the eventMetadata of the Alert.
+    explanation: Not correct. eventMetadata is sent with every event.
+  - id: c
+    text: In a Secret with the key address, named in spec.secretRef.
+    explanation: Correct. Whoever holds the address can post to the channel.
+  - id: d
+    text: In a ConfigMap in flux-system.
+    explanation: Not correct. A ConfigMap is not a secret store.
+  correct_option: c
+  explanation: Correct. Whoever holds the address can post to the channel.
+- id: ats099-final-q20
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read a histogram
+  source_readings:
+  - sections/section-020/module-01/course-03-metrics-and-flux-stats.md
+  prompt: What kind of metric is gotk_reconcile_duration_seconds?
+  options:
+  - id: a
+    text: A gauge that goes up and down.
+    explanation: Not correct. It sorts measurements into buckets.
+  - id: b
+    text: A histogram, with the series _bucket, _count and _sum.
+    explanation: Correct. It records how long reconciliations take per object.
+  - id: c
+    text: A counter with a single series.
+    explanation: Not correct. It has three series.
+  - id: d
+    text: A log line per reconcile.
+    explanation: Not correct. It is a metric, not a log.
+  correct_option: b
+  explanation: Correct. It records how long reconciliations take per object.
+- id: ats099-final-q21
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Keep the interval with a Receiver
+  source_readings:
+  - sections/section-020/module-02/course-01-what-a-receiver-is.md
+  prompt: Why keep an `interval` on a source that has a Receiver?
+  options:
+  - id: a
+    text: The Receiver cannot work without an interval.
+    explanation: Not correct. A webhook is sent once. A long interval such as `1h`
+      costs few requests and still catches a missed call.
+  - id: b
+    text: A webhook can be lost, and the interval is the fallback.
+    explanation: Correct. A webhook is sent once. A long interval such as `1h` costs
+      few requests and still catches a missed call.
+  - id: c
+    text: The interval sets how fast the Receiver responds.
+    explanation: Not correct. A webhook is sent once. A long interval such as `1h`
+      costs few requests and still catches a missed call.
+  - id: d
+    text: The interval signs the webhook.
+    explanation: Not correct. A webhook is sent once. A long interval such as `1h`
+      costs few requests and still catches a missed call.
+  correct_option: b
+  explanation: Correct. A webhook is sent once. A long interval such as `1h` costs
+    few requests and still catches a missed call.
+- id: ats099-final-q22
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose a type that checks a signature
+  source_readings:
+  - sections/section-020/module-02/course-03-receivers-for-git-hosts-and-registries.md
+  prompt: Which Receiver type verifies an HMAC signature computed over the request
+    body?
+  options:
+  - id: a
+    text: "`generic`"
+    explanation: Not correct. `generic-hmac` checks the `X-Signature` header. `generic`
+      relies on the secret path alone.
+  - id: b
+    text: "`github` with no events"
+    explanation: Not correct. `generic-hmac` checks the `X-Signature` header. `generic`
+      relies on the secret path alone.
+  - id: c
+    text: "`dockerhub`"
+    explanation: Not correct. `generic-hmac` checks the `X-Signature` header. `generic`
+      relies on the secret path alone.
+  - id: d
+    text: "`generic-hmac`"
+    explanation: Correct. `generic-hmac` checks the `X-Signature` header. `generic`
+      relies on the secret path alone.
+  correct_option: d
+  explanation: Correct. `generic-hmac` checks the `X-Signature` header. `generic`
+    relies on the secret path alone.
+- id: ats099-final-q23
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the condition that means the last reconcile worked
+  source_readings:
+  - sections/section-020/module-03/course-01-reading-status-conditions.md
+  prompt: Which condition type says the last reconcile of the current spec finished
+    with success?
+  options:
+  - id: a
+    text: "`Stalled`"
+    explanation: Not correct. `Ready` `True` is the main success condition of a Flux
+      object.
+  - id: b
+    text: "`Ready`"
+    explanation: Correct. `Ready` `True` is the main success condition of a Flux object.
+  - id: c
+    text: "`Reconciling`"
+    explanation: Not correct. `Ready` `True` is the main success condition of a Flux
+      object.
+  - id: d
+    text: "`Fetched`"
+    explanation: Not correct. `Ready` `True` is the main success condition of a Flux
+      object.
+  correct_option: b
+  explanation: Correct. `Ready` `True` is the main success condition of a Flux object.
+- id: ats099-final-q24
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what timeout does
+  source_readings:
+  - sections/section-020/module-03/course-02-health-checks-and-timeouts.md
+  prompt: 'A rollout takes 4 minutes and the Kustomization has `timeout: 2m` with
+    a health check. What happens?'
+  options:
+  - id: a
+    text: Flux waits 4 minutes and succeeds.
+    explanation: Not correct. After the timeout, an object that is not ready counts
+      as a failure.
+  - id: b
+    text: Flux deletes the Deployment.
+    explanation: Not correct. After the timeout, an object that is not ready counts
+      as a failure.
+  - id: c
+    text: Flux ignores the health check.
+    explanation: Not correct. After the timeout, an object that is not ready counts
+      as a failure.
+  - id: d
+    text: The reconcile fails with `HealthCheckFailed`, although the application starts.
+    explanation: Correct. After the timeout, an object that is not ready counts as
+      a failure.
+  correct_option: d
+  explanation: Correct. After the timeout, an object that is not ready counts as a
+    failure.
+- id: ats099-final-q25
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain the cross-namespace risk
+  source_readings:
+  - sections/section-030/module-01/course-01-cross-namespace-references.md
+  prompt: Why does a shared platform forbid cross-namespace references?
+  options:
+  - id: a
+    text: They make source-controller crash.
+    explanation: Not correct. The risk is access, not stability.
+  - id: b
+    text: They are not supported by Flux.
+    explanation: Not correct. They work by default.
+  - id: c
+    text: They double the storage of every artifact.
+    explanation: Not correct. They save a fetch.
+  - id: d
+    text: A team could point at the platform's GitRepository and apply folders that
+      are not theirs.
+    explanation: Correct. That source holds the whole platform repository.
+  correct_option: d
+  explanation: Correct. That source holds the whole platform repository.
+- id: ats099-final-q26
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Test the address from the right place
+  source_readings:
+  - sections/section-030/module-01/course-04-reading-a-failing-remote-apply.md
+  prompt: A kubeconfig uses `https://kubernetes.default.svc`. Why does a check from
+    your laptop fail although the Kustomization works?
+  options:
+  - id: a
+    text: The token is valid only for the controller.
+    explanation: Not correct. The address must work from the pod of kustomize-controller,
+      not from your machine.
+  - id: b
+    text: That address only resolves inside the cluster, so the check must run from
+      a pod in it.
+    explanation: Correct. The address must work from the pod of kustomize-controller,
+      not from your machine.
+  - id: c
+    text: kubectl cannot read a kubeconfig from a Secret.
+    explanation: Not correct. The address must work from the pod of kustomize-controller,
+      not from your machine.
+  - id: d
+    text: The certificate is valid only for `localhost`.
+    explanation: Not correct. The address must work from the pod of kustomize-controller,
+      not from your machine.
+  correct_option: b
+  explanation: Correct. The address must work from the pod of kustomize-controller,
+    not from your machine.
+- id: ats099-final-q27
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know which key is read
+  source_readings:
+  - sections/section-030/module-02/course-01-how-flux-reads-a-kubeconfig-secret.md
+  prompt: Which key of the Secret does Flux read by default?
+  options:
+  - id: a
+    text: "`kubeconfig`"
+    explanation: Not correct. The field `secretRef.key` selects another key.
+  - id: b
+    text: "`value`, then `value.yaml` if there is no `value`."
+    explanation: Correct. The field `secretRef.key` selects another key.
+  - id: c
+    text: "`config`"
+    explanation: Not correct. The field `secretRef.key` selects another key.
+  - id: d
+    text: "`token`"
+    explanation: Not correct. The field `secretRef.key` selects another key.
+  correct_option: b
+  explanation: Correct. The field `secretRef.key` selects another key.
+- id: ats099-final-q28
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Prove an old token is dead
+  source_readings:
+  - sections/section-030/module-02/course-02-token-lifetime-and-rotation.md
+  prompt: Which API tells you whether the API server still accepts a token?
+  options:
+  - id: a
+    text: SelfSubjectRulesReview
+    explanation: Not correct. A TokenReview returns `authenticated` for the token;
+      an invalid token comes back as not authenticated.
+  - id: b
+    text: TokenReview
+    explanation: Correct. A TokenReview returns `authenticated` for the token; an
+      invalid token comes back as not authenticated.
+  - id: c
+    text: CertificateSigningRequest
+    explanation: Not correct. A TokenReview returns `authenticated` for the token;
+      an invalid token comes back as not authenticated.
+  - id: d
+    text: SubjectAccessReview on the token
+    explanation: Not correct. A TokenReview returns `authenticated` for the token;
+      an invalid token comes back as not authenticated.
+  correct_option: b
+  explanation: Correct. A TokenReview returns `authenticated` for the token; an invalid
+    token comes back as not authenticated.
+- id: ats099-final-q29
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what deleting a pruning Kustomization does
+  source_readings:
+  - sections/section-030/module-02/course-04-remote-health-checks-and-pruning.md
+  prompt: 'What happens to the remote objects when a Kustomization with `prune: true`
+    is deleted and `deletionPolicy` is not set?'
+  options:
+  - id: a
+    text: They stay, as the Kustomization is only an object.
+    explanation: Not correct. The default `MirrorPrune` deletes when `prune` is true.
+      `Orphan` keeps the objects.
+  - id: b
+    text: They are removed from the remote cluster, using the kubeconfig.
+    explanation: Correct. The default `MirrorPrune` deletes when `prune` is true.
+      `Orphan` keeps the objects.
+  - id: c
+    text: They move to the management cluster.
+    explanation: Not correct. The default `MirrorPrune` deletes when `prune` is true.
+      `Orphan` keeps the objects.
+  - id: d
+    text: They are suspended.
+    explanation: Not correct. The default `MirrorPrune` deletes when `prune` is true.
+      `Orphan` keeps the objects.
+  correct_option: b
+  explanation: Correct. The default `MirrorPrune` deletes when `prune` is true. `Orphan`
+    keeps the objects.
+- id: ats099-final-q30
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Escape a literal dollar sign
+  source_readings:
+  - sections/section-030/module-03/course-02-environments-as-folders-and-overlays.md
+  prompt: How do you keep the text `${HOME}` in a manifest when `postBuild` substitution
+    is on?
+  options:
+  - id: a
+    text: Write it as `\\${HOME}`.
+    explanation: Not correct. Substitution replaces every `${...}`, and a doubled
+      dollar sign marks a literal one.
+  - id: b
+    text: Write it as `$${HOME}`.
+    explanation: Correct. Substitution replaces every `${...}`, and a doubled dollar
+      sign marks a literal one.
+  - id: c
+    text: Wrap it in single quotes.
+    explanation: Not correct. Substitution replaces every `${...}`, and a doubled
+      dollar sign marks a literal one.
+  - id: d
+    text: It is never replaced.
+    explanation: Not correct. Substitution replaces every `${...}`, and a doubled
+      dollar sign marks a literal one.
+  correct_option: b
+  explanation: Correct. Substitution replaces every `${...}`, and a doubled dollar
+    sign marks a literal one.
+- id: ats099-final-q31
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Judge flux export as a backup
+  source_readings:
+  - sections/section-040/module-01/course-01-what-git-does-not-hold.md
+  prompt: Is flux export a backup of the cluster?
+  options:
+  - id: a
+    text: No. It exports Flux objects that are already in Git, never Secret values
+      or data.
+    explanation: Correct. Credentials and data need their own home.
+  - id: b
+    text: Yes. It exports Secrets and volumes.
+    explanation: Not correct. It prints no Secret values.
+  - id: c
+    text: Yes, but only for Helm releases.
+    explanation: Not correct. It covers Flux objects, not just Helm.
+  - id: d
+    text: No. It deletes the objects it exports.
+    explanation: Not correct. It only prints YAML.
+  correct_option: a
+  explanation: Correct. Credentials and data need their own home.
+- id: ats099-final-q32
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Triage a broken installation
+  source_readings:
+  - sections/section-040/module-01/course-04-reading-the-state-of-a-broken-flux.md
+  prompt: Which command tests that the Flux controllers are ready and the custom resource
+    definitions exist?
+  options:
+  - id: a
+    text: "`flux get sources all -A`"
+    explanation: Not correct. `flux check` also exits with a non-zero status when
+      something is wrong, so it works in a script.
+  - id: b
+    text: "`flux export kustomization --all`"
+    explanation: Not correct. `flux check` also exits with a non-zero status when
+      something is wrong, so it works in a script.
+  - id: c
+    text: "`flux check`"
+    explanation: Correct. `flux check` also exits with a non-zero status when something
+      is wrong, so it works in a script.
+  - id: d
+    text: "`flux trace`"
+    explanation: Not correct. `flux check` also exits with a non-zero status when
+      something is wrong, so it works in a script.
+  correct_option: c
+  explanation: Correct. `flux check` also exits with a non-zero status when something
+    is wrong, so it works in a script.
+- id: ats099-final-q33
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Sort the backup
+  source_readings:
+  - sections/section-040/module-02/course-01-what-to-back-up-and-what-to-leave.md
+  prompt: Which of these must be backed up because only the cluster holds it?
+  options:
+  - id: a
+    text: A Deployment defined in Git.
+    explanation: Not correct. Items in Git or in another system that can produce them
+      again need a plan, not a backup.
+  - id: b
+    text: An image stored in a registry.
+    explanation: Not correct. Items in Git or in another system that can produce them
+      again need a plan, not a backup.
+  - id: c
+    text: A Secret created by hand for an application.
+    explanation: Correct. Items in Git or in another system that can produce them
+      again need a plan, not a backup.
+  - id: d
+    text: A certificate that an issuer can produce again.
+    explanation: Not correct. Items in Git or in another system that can produce them
+      again need a plan, not a backup.
+  correct_option: c
+  explanation: Correct. Items in Git or in another system that can produce them again
+    need a plan, not a backup.
+- id: ats099-final-q34
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the Kustomization field for SOPS
+  source_readings:
+  - sections/section-040/module-02/course-03-keys-for-encrypted-secrets.md
+  prompt: Which Kustomization field makes Flux decrypt SOPS files?
+  options:
+  - id: a
+    text: "`spec.postBuild.decrypt`"
+    explanation: Not correct. The Secret in `secretRef` holds the private key and
+      is in the Kustomization's namespace.
+  - id: b
+    text: "`spec.sops.enabled`"
+    explanation: Not correct. The Secret in `secretRef` holds the private key and
+      is in the Kustomization's namespace.
+  - id: c
+    text: "`spec.decryption.provider: sops` with `spec.decryption.secretRef`"
+    explanation: Correct. The Secret in `secretRef` holds the private key and is in
+      the Kustomization's namespace.
+  - id: d
+    text: "`spec.kubeConfig.sops`"
+    explanation: Not correct. The Secret in `secretRef` holds the private key and
+      is in the Kustomization's namespace.
+  correct_option: c
+  explanation: Correct. The Secret in `secretRef` holds the private key and is in
+    the Kustomization's namespace.
+- id: ats099-final-q35
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Keep a restored Secret outside Flux
+  source_readings:
+  - sections/section-040/module-02/course-04-restoring-and-checking-a-backup.md
+  prompt: A restored Secret is not in Git. What should it not carry after the restore?
+  options:
+  - id: a
+    text: A namespace.
+    explanation: Not correct. An object that Flux owns is deleted with `prune` when
+      it leaves Git.
+  - id: b
+    text: A type.
+    explanation: Not correct. An object that Flux owns is deleted with `prune` when
+      it leaves Git.
+  - id: c
+    text: A data field.
+    explanation: Not correct. An object that Flux owns is deleted with `prune` when
+      it leaves Git.
+  - id: d
+    text: The label `kustomize.toolkit.fluxcd.io/name`, which would make it Flux's.
+    explanation: Correct. An object that Flux owns is deleted with `prune` when it
+      leaves Git.
+  correct_option: d
+  explanation: Correct. An object that Flux owns is deleted with `prune` when it leaves
+    Git.
+- id: ats099-final-q36
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Find where patches go
+  source_readings:
+  - sections/section-040/module-03/course-03-tuning-the-controllers.md
+  prompt: In which file do you put a patch for a controller Deployment?
+  options:
+  - id: a
+    text: "`gotk-components.yaml`"
+    explanation: Not correct. Bootstrap keeps your patches when it runs again.
+  - id: b
+    text: "`gotk-sync.yaml`"
+    explanation: Not correct. Bootstrap keeps your patches when it runs again.
+  - id: c
+    text: The `GitRepository` object.
+    explanation: Not correct. Bootstrap keeps your patches when it runs again.
+  - id: d
+    text: "`kustomization.yaml` in the `flux-system` folder."
+    explanation: Correct. Bootstrap keeps your patches when it runs again.
+  correct_option: d
+  explanation: Correct. Bootstrap keeps your patches when it runs again.

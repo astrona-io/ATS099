@@ -13,17 +13,38 @@ This section makes failures visible. Every Flux controller records **events** ab
 - Writing an `Alert` that selects events by object, by severity and by message, with `exclusionList` winning over `inclusionList`.
 - Reading the payload a generic provider posts, in the log of a webhook receiver.
 - The metrics every controller exports on port `8080`, such as `gotk_reconcile_duration_seconds`, and which metrics come from kube-state-metrics instead.
+- Provider types, and where addresses and tokens belong.
+- Receivers that make Flux reconcile when a webhook arrives, and commit status from Flux.
+- Status conditions, health checks, timeouts, Prometheus rules and a daily operating checklist.
 
 ## The learning path
 
-The section has one module. It has a landing page, three short parts, a graded lab right after the part it tests, and a summary. The module has its own playground, a cluster where Flux runs podinfo and a webhook receiver waits in the namespace `monitoring`. The landing page starts the playground for you.
+The section has three modules. Each has a landing page, short parts, a graded lab right after the part it tests, and a summary. Each module has its own playground, a cluster where Flux runs podinfo. The landing page of a module starts its playground for you.
 
 ### 1. Send Flux Events To Webhooks And Chat
 
 1. Events, Providers And Alerts
 2. Choosing Which Events Become Alerts, followed by the lab **Alert A Webhook When podinfo Fails**
 3. Metrics And flux stats
-4. Summary
+4. Provider Types And Their Secrets
+5. Reading Events And Logs Of The Controllers
+6. Summary
+
+### 2. Receivers And Commit Status
+
+1. What A Receiver Is
+2. Exposing A Receiver Safely, followed by the lab **Make Flux Fetch When A Webhook Arrives**
+3. Receivers For Git Hosts And Registries
+4. Commit Status From Flux
+5. Summary
+
+### 3. Health, Metrics And Monitoring
+
+1. Reading Status Conditions
+2. Health Checks And Timeouts, followed by the lab **Check The Health Of One Deployment**
+3. Monitoring Flux With Prometheus
+4. A Daily Operating Checklist
+5. Summary
 
 ## Section capstone: Find Why No Alert Arrives
 

@@ -1,0 +1,59 @@
+# Make Flux Fetch When A Webhook Arrives
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-lab-020-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, seeds the repositories and bootstraps Flux from gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-099-lab-020-02-setup"
+      description: "Checks the starting state: no Receiver and no token Secret"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea, the tester pod and the webhook receiver"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers that exist"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-receiver-spec"
+      description: "Passes when Receiver fleet-push is a Ready generic Receiver with the Secret receiver-token for GitRepository flux-system"
+      type: "file"
+      source: "validation/validate-receiver-spec.sh"
+    - name: "validate-receiver-in-git"
+      description: "Passes when the Receiver is committed under clusters/kind in gitops/fleet and no token is in the repository"
+      type: "file"
+      source: "validation/validate-receiver-in-git.sh"
+    - name: "validate-receiver-triggers"
+      description: "Passes when a POST to the Receiver path changes the reconcile annotation of GitRepository flux-system"
+      type: "file"
+      source: "validation/validate-receiver-triggers.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - mendhak/http-https-echo:42
+      - nicolaka/netshoot:v0.13

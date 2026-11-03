@@ -4,7 +4,7 @@ A Flux `Kustomization` that stops applying does not page anyone. Its `Ready` con
 
 Flux already knows when something fails. Every controller records a Kubernetes **event** each time it reconciles an object, with a severity of `info` or `error`. notification-controller, one of the four default Flux controllers, can forward those events anywhere: a chat channel, an incident tool, or a plain webhook. You configure it with two objects. Keep one sentence in mind: **a Provider says where events go, and an Alert says which events go there.**
 
-The module has three parts. **Events, Providers And Alerts** reads the events Flux records, sends them to a webhook receiver, and reads the payload that arrives. **Choosing Which Events Become Alerts** narrows an Alert to errors from one object, so people only get messages that need action; a graded lab follows it. **Metrics And flux stats** turns from single events to numbers over time: the Prometheus metrics the controllers export.
+The module has five parts. **Events, Providers And Alerts** reads the events Flux records, sends them to a webhook receiver, and reads the payload that arrives. **Choosing Which Events Become Alerts** narrows an Alert to errors from one object, so people only get messages that need action; a graded lab follows it. **Metrics And flux stats** turns from single events to numbers over time: the Prometheus metrics the controllers export. **Provider Types And Their Secrets** lists the provider types and shows where the address and token belong. **Reading Events And Logs Of The Controllers** shows how to find the cause of a failure after the alert arrives.
 
 ## Learning objectives
 
@@ -15,6 +15,8 @@ After this module you can:
 - Read the JSON payload a generic provider posts.
 - Select events with `eventSources`, `eventSeverity`, `inclusionList` and `exclusionList`.
 - Explain why `info` events reach a receiver that should only get errors.
+- Choose a provider type and keep its address or token in a Secret named by `secretRef`.
+- Read events with `flux events` and controller logs with `flux logs`, and say which one answers which question.
 - Read `gotk_reconcile_duration_seconds` from a controller's `/metrics` endpoint, and say which Flux metrics come from kube-state-metrics.
 
 ## Before you start

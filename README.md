@@ -41,10 +41,18 @@ back after a loss, which only works when everything before it lives in Git.
 
 | Module | Reader | Parts | Labs |
 | --- | --- | --- | --- |
-| 010-01 | [Onboard Tenants With Impersonation](sections/section-010/module-01/course.md) | 3 | [lab-01](sections/section-010/module-01/labs/lab-01) |
-| 020-01 | [Send Flux Events To Webhooks And Chat](sections/section-020/module-01/course.md) | 3 | [lab-01](sections/section-020/module-01/labs/lab-01) |
-| 030-01 | [Deliver To Other Namespaces And Clusters](sections/section-030/module-01/course.md) | 3 | [lab-01](sections/section-030/module-01/labs/lab-01) |
-| 040-01 | [Recover A Cluster From Git](sections/section-040/module-01/course.md) | 3 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 010-01 | [Onboard Tenants With Impersonation](sections/section-010/module-01/course.md) | 5 | [lab-01](sections/section-010/module-01/labs/lab-01) |
+| 010-02 | [Guardrails And Secrets For Tenants](sections/section-010/module-02/course.md) | 4 | [lab-01](sections/section-010/module-02/labs/lab-01) |
+| 010-03 | [Governing Tenants With Repositories And Policy](sections/section-010/module-03/course.md) | 4 | [lab-01](sections/section-010/module-03/labs/lab-01) |
+| 020-01 | [Send Flux Events To Webhooks And Chat](sections/section-020/module-01/course.md) | 5 | [lab-01](sections/section-020/module-01/labs/lab-01) |
+| 020-02 | [Receivers And Commit Status](sections/section-020/module-02/course.md) | 4 | [lab-01](sections/section-020/module-02/labs/lab-01) |
+| 020-03 | [Health, Metrics And Monitoring](sections/section-020/module-03/course.md) | 4 | [lab-01](sections/section-020/module-03/labs/lab-01) |
+| 030-01 | [Deliver To Other Namespaces And Clusters](sections/section-030/module-01/course.md) | 5 | [lab-01](sections/section-030/module-01/labs/lab-01) |
+| 030-02 | [Kubeconfig Secrets, Tokens And Remote Rights](sections/section-030/module-02/course.md) | 4 | [lab-01](sections/section-030/module-02/labs/lab-01) |
+| 030-03 | [Fleets, Environments And Promotion](sections/section-030/module-03/course.md) | 4 | [lab-01](sections/section-030/module-03/labs/lab-01) |
+| 040-01 | [Recover A Cluster From Git](sections/section-040/module-01/course.md) | 5 | [lab-01](sections/section-040/module-01/labs/lab-01) |
+| 040-02 | [Backing Up What Git Does Not Hold](sections/section-040/module-02/course.md) | 4 | [lab-01](sections/section-040/module-02/labs/lab-01) |
+| 040-03 | [Upgrading And Tuning Flux](sections/section-040/module-03/course.md) | 4 | [lab-01](sections/section-040/module-03/labs/lab-01) |
 
 ---
 

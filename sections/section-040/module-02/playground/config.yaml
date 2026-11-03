@@ -1,0 +1,29 @@
+# Backing Up What Git Does Not Hold (PLAYGROUND) — Playground environment
+# A clean sandbox: it spins up, runs OS prep, then stays running for free
+# exploration. No task, no grading, no `astrona submit`.
+# Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-playground-040-02"
+  docs:
+    guide: "docs/overview.md"
+bootstrap:
+  init:
+    - name: "prepare"
+      description: "Install the Flux CLI, start Gitea and the webhook receiver, seed the repositories and bootstrap Flux. Flux bootstrapped from gitops/fleet. podinfo runs in podinfo. The Secrets app-credentials and registry-auth are in podinfo, carry the label dr-backup=critical, and are not in Git."
+      type: "file"
+      source: "bootstrap/prepare.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea (Service gitea-http on port 3000), the tester client and the webhook receiver."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - mendhak/http-https-echo:42
+      - nicolaka/netshoot:v0.13

@@ -105,8 +105,96 @@ modules:
           - name: "Kustomization API"
             url: https://fluxcd.io/flux/components/kustomize/kustomizations/
       - type: reading
-        title: Summary
-        path: sections/section-010/module-01/course-04-summary.md
+        title: "Impersonation In HelmReleases And Other Objects"
+        path: sections/section-010/module-01/course-04-impersonation-in-helm-and-other-controllers.md
+      - type: reading
+        title: "Reading And Fixing A Refused Tenant"
+        path: sections/section-010/module-01/course-05-reading-and-fixing-refusals.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-01/course-06-summary.md
+
+      - type: reading
+        title: "Guardrails And Secrets For Tenants"
+        path: sections/section-010/module-02/course.md
+      - type: reading
+        title: "Choosing The Role Of A Tenant"
+        path: sections/section-010/module-02/course-01-choosing-the-tenant-role.md
+      - type: reading
+        title: "Quotas And Limits Per Tenant"
+        path: sections/section-010/module-02/course-02-quotas-and-limits.md
+      - type: reading
+        title: "Question"
+        path: sections/section-010/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Give A Tenant Fewer Rights And A Quota Lab"
+        path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: multi-tenancy
+        task_kind: build
+        tags: [tenant, rbac, admin-role, resourcequota, networkpolicy]
+        learning_goals:
+          - Replace a tenant's cluster-admin RoleBinding with the admin role by renaming the binding in Git
+          - Add a ResourceQuota and a default-deny NetworkPolicy to the tenant namespace
+          - Prove that the tenant still deploys and can no longer change quotas
+        resources:
+          - name: "Kubernetes RBAC"
+            url: https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+          - name: "Resource quotas"
+            url: https://kubernetes.io/docs/concepts/policy/resource-quotas/
+          - name: "Flux multi-tenancy"
+            url: https://fluxcd.io/flux/installation/configuration/multitenancy/
+      - type: reading
+        title: "Network Isolation And Tenant Secrets"
+        path: sections/section-010/module-02/course-03-network-isolation-and-tenant-secrets.md
+      - type: reading
+        title: "Onboarding And Offboarding Many Tenants"
+        path: sections/section-010/module-02/course-04-onboarding-and-offboarding-tenants.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-02/course-05-summary.md
+
+      - type: reading
+        title: "Governing Tenants With Repositories And Policy"
+        path: sections/section-010/module-03/course.md
+      - type: reading
+        title: "Repository Layouts For Many Teams"
+        path: sections/section-010/module-03/course-01-repository-layouts.md
+      - type: reading
+        title: "Git Permissions And Verified Sources"
+        path: sections/section-010/module-03/course-02-git-permissions-and-verified-sources.md
+      - type: reading
+        title: "Admission Policy For Flux Objects"
+        path: sections/section-010/module-03/course-03-admission-policy-for-flux-objects.md
+      - type: reading
+        title: "Question"
+        path: sections/section-010/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Reject Flux Kustomizations Without A ServiceAccount Lab"
+        path: sections/section-010/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: multi-tenancy
+        task_kind: build
+        tags: [admission-policy, validatingadmissionpolicy, cel, tenant, kustomization]
+        learning_goals:
+          - Write a ValidatingAdmissionPolicy and a binding that reject a tenant Kustomization without a ServiceAccount
+          - Apply the policy from Git with a platform Kustomization
+          - Prove the API server rejects the object and accepts it with a ServiceAccount
+        resources:
+          - name: "ValidatingAdmissionPolicy"
+            url: https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/
+          - name: "Flux multi-tenancy"
+            url: https://fluxcd.io/flux/installation/configuration/multitenancy/
+          - name: "Kustomization API"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+      - type: reading
+        title: "Auditing What Tenants Run"
+        path: sections/section-010/module-03/course-04-auditing-what-tenants-run.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-010/module-03/course-05-summary.md
 
       - type: reading
         title: Question
@@ -178,8 +266,96 @@ modules:
         title: "Metrics And flux stats"
         path: sections/section-020/module-01/course-03-metrics-and-flux-stats.md
       - type: reading
-        title: Summary
-        path: sections/section-020/module-01/course-04-summary.md
+        title: "Provider Types And Their Secrets"
+        path: sections/section-020/module-01/course-04-provider-types-and-secrets.md
+      - type: reading
+        title: "Reading Events And Logs Of The Controllers"
+        path: sections/section-020/module-01/course-05-reading-events-and-logs.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-01/course-06-summary.md
+
+      - type: reading
+        title: "Receivers And Commit Status"
+        path: sections/section-020/module-02/course.md
+      - type: reading
+        title: "What A Receiver Is"
+        path: sections/section-020/module-02/course-01-what-a-receiver-is.md
+      - type: reading
+        title: "Exposing A Receiver Safely"
+        path: sections/section-020/module-02/course-02-exposing-a-receiver-safely.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Make Flux Fetch When A Webhook Arrives Lab"
+        path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: alerting
+        task_kind: build
+        tags: [receiver, webhook, generic-receiver, token-secret, reconcile-annotation]
+        learning_goals:
+          - Create a token Secret and commit a generic Receiver for the GitRepository flux-system
+          - Read the webhook path from the Receiver status
+          - Prove with a POST that the Receiver makes the source reconcile
+        resources:
+          - name: "Receivers"
+            url: https://fluxcd.io/flux/components/notification/receivers/
+          - name: "Providers"
+            url: https://fluxcd.io/flux/components/notification/providers/
+          - name: "Webhook receivers guide"
+            url: https://fluxcd.io/flux/guides/webhook-receivers/
+      - type: reading
+        title: "Receivers For Git Hosts And Registries"
+        path: sections/section-020/module-02/course-03-receivers-for-git-hosts-and-registries.md
+      - type: reading
+        title: "Commit Status From Flux"
+        path: sections/section-020/module-02/course-04-commit-status-from-flux.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-02/course-05-summary.md
+
+      - type: reading
+        title: "Health, Metrics And Monitoring"
+        path: sections/section-020/module-03/course.md
+      - type: reading
+        title: "Reading Status Conditions"
+        path: sections/section-020/module-03/course-01-reading-status-conditions.md
+      - type: reading
+        title: "Health Checks And Timeouts"
+        path: sections/section-020/module-03/course-02-health-checks-and-timeouts.md
+      - type: reading
+        title: "Question"
+        path: sections/section-020/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Check The Health Of One Deployment Lab"
+        path: sections/section-020/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: monitoring
+        task_kind: build
+        tags: [health-checks, kustomization, timeout, retry-interval, healthy-condition]
+        learning_goals:
+          - Replace wait with a health check on one Deployment
+          - Set a timeout and a retry interval on the Kustomization in Git
+          - Prove the Kustomization reports Ready and Healthy
+        resources:
+          - name: "Kustomization health checks"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/#health-checks
+          - name: "Monitoring guide"
+            url: https://fluxcd.io/flux/monitoring/
+          - name: "Flux CLI"
+            url: https://fluxcd.io/flux/cmd/
+      - type: reading
+        title: "Monitoring Flux With Prometheus"
+        path: sections/section-020/module-03/course-03-monitoring-flux-with-prometheus.md
+      - type: reading
+        title: "A Daily Operating Checklist"
+        path: sections/section-020/module-03/course-04-a-daily-operating-checklist.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-020/module-03/course-05-summary.md
 
       - type: reading
         title: Question
@@ -250,8 +426,96 @@ modules:
         title: "Cluster API And Fleets Of Clusters"
         path: sections/section-030/module-01/course-03-cluster-api-and-fleets.md
       - type: reading
-        title: Summary
-        path: sections/section-030/module-01/course-04-summary.md
+        title: "Reading A Failing Remote Apply"
+        path: sections/section-030/module-01/course-04-reading-a-failing-remote-apply.md
+      - type: reading
+        title: "Cross-Namespace Rules For Other Kinds"
+        path: sections/section-030/module-01/course-05-cross-namespace-rules-for-other-kinds.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-01/course-06-summary.md
+
+      - type: reading
+        title: "Kubeconfig Secrets, Tokens And Remote Rights"
+        path: sections/section-030/module-02/course.md
+      - type: reading
+        title: "How Flux Reads A Kubeconfig Secret"
+        path: sections/section-030/module-02/course-01-how-flux-reads-a-kubeconfig-secret.md
+      - type: reading
+        title: "Token Lifetime And Rotation"
+        path: sections/section-030/module-02/course-02-token-lifetime-and-rotation.md
+      - type: reading
+        title: "Question"
+        path: sections/section-030/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Rotate The Token In A kubeconfig Secret Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: remote-clusters
+        task_kind: build
+        tags: [kubeconfig, token-rotation, serviceaccount, tokenreview, secret]
+        learning_goals:
+          - Create a second token for the remote ServiceAccount and rebuild the kubeconfig Secret
+          - Confirm the Kustomization is Ready with the new token before removing the old one
+          - Delete the old token Secret and prove the account stays scoped
+        resources:
+          - name: "Kustomization kubeConfig"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/#kubeconfig-remote-clusters
+          - name: "Service account tokens"
+            url: https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/
+          - name: "Managing Kubernetes clusters with Flux"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/
+      - type: reading
+        title: "Scoping The Remote Account"
+        path: sections/section-030/module-02/course-03-scoping-the-remote-account.md
+      - type: reading
+        title: "Remote Health Checks And Pruning"
+        path: sections/section-030/module-02/course-04-remote-health-checks-and-pruning.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-02/course-05-summary.md
+
+      - type: reading
+        title: "Fleets, Environments And Promotion"
+        path: sections/section-030/module-03/course.md
+      - type: reading
+        title: "Push And Pull Delivery"
+        path: sections/section-030/module-03/course-01-push-and-pull-delivery.md
+      - type: reading
+        title: "Environments As Folders And Overlays"
+        path: sections/section-030/module-03/course-02-environments-as-folders-and-overlays.md
+      - type: reading
+        title: "Promotion Order With dependsOn And Health"
+        path: sections/section-030/module-03/course-03-promotion-order-with-dependson-and-health.md
+      - type: reading
+        title: "Question"
+        path: sections/section-030/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Promote Staging To Production Lab"
+        path: sections/section-030/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: environments
+        task_kind: build
+        tags: [dependson, promotion, wait, kubeconfig, environments]
+        learning_goals:
+          - Make the staging Kustomization wait for its objects
+          - Commit a production Kustomization that depends on staging and uses its own kubeconfig
+          - Prove production is applied by Flux and both accounts stay scoped
+        resources:
+          - name: "Kustomization dependsOn"
+            url: https://fluxcd.io/flux/components/kustomize/kustomizations/#dependencies
+          - name: "Repository structure"
+            url: https://fluxcd.io/flux/guides/repository-structure/
+          - name: "Flux CLI"
+            url: https://fluxcd.io/flux/cmd/
+      - type: reading
+        title: "Operating A Fleet"
+        path: sections/section-030/module-03/course-04-operating-a-fleet.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-030/module-03/course-05-summary.md
 
       - type: reading
         title: Question
@@ -321,8 +585,96 @@ modules:
         title: "Rebuilding A Lost Cluster"
         path: sections/section-040/module-01/course-03-rebuilding-a-lost-cluster.md
       - type: reading
-        title: Summary
-        path: sections/section-040/module-01/course-04-summary.md
+        title: "Reading The State Of A Broken Flux Installation"
+        path: sections/section-040/module-01/course-04-reading-the-state-of-a-broken-flux.md
+      - type: reading
+        title: "Recovery Objectives And Drills"
+        path: sections/section-040/module-01/course-05-recovery-objectives-and-drills.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-040/module-01/course-06-summary.md
+
+      - type: reading
+        title: "Backing Up What Git Does Not Hold"
+        path: sections/section-040/module-02/course.md
+      - type: reading
+        title: "What To Back Up And What To Leave"
+        path: sections/section-040/module-02/course-01-what-to-back-up-and-what-to-leave.md
+      - type: reading
+        title: "Exporting Secrets And Flux Objects Safely"
+        path: sections/section-040/module-02/course-02-exporting-secrets-and-flux-objects-safely.md
+      - type: reading
+        title: "Keys For Encrypted Secrets"
+        path: sections/section-040/module-02/course-03-keys-for-encrypted-secrets.md
+      - type: reading
+        title: "Restoring And Checking A Backup"
+        path: sections/section-040/module-02/course-04-restoring-and-checking-a-backup.md
+      - type: reading
+        title: "Question"
+        path: sections/section-040/module-02/labs/lab-01/question.md
+      - type: lab
+        title: "Restore Secrets From An Exported Backup Lab"
+        path: sections/section-040/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: disaster-recovery
+        task_kind: migration
+        tags: [backup, secrets, kubectl-export, restore, resourceversion]
+        learning_goals:
+          - Clean a raw kubectl export so that it can be applied again
+          - Restore Secrets from a backup with the backed-up values
+          - Keep restored Secrets out of Git and out of Flux's ownership
+        resources:
+          - name: "Flux export commands"
+            url: https://fluxcd.io/flux/cmd/flux_export/
+          - name: "Managing Secrets with SOPS"
+            url: https://fluxcd.io/flux/guides/mozilla-sops/
+          - name: "Kubernetes Secrets"
+            url: https://kubernetes.io/docs/concepts/configuration/secret/
+      - type: reading
+        title: "Summary"
+        path: sections/section-040/module-02/course-05-summary.md
+
+      - type: reading
+        title: "Upgrading And Tuning Flux"
+        path: sections/section-040/module-03/course.md
+      - type: reading
+        title: "Where The Flux Version Comes From"
+        path: sections/section-040/module-03/course-01-where-the-flux-version-comes-from.md
+      - type: reading
+        title: "Upgrading Flux Through Git"
+        path: sections/section-040/module-03/course-02-upgrading-flux-through-git.md
+      - type: reading
+        title: "Tuning The Controllers"
+        path: sections/section-040/module-03/course-03-tuning-the-controllers.md
+      - type: reading
+        title: "Question"
+        path: sections/section-040/module-03/labs/lab-01/question.md
+      - type: lab
+        title: "Tune kustomize-controller Through Git Lab"
+        path: sections/section-040/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: operations
+        task_kind: build
+        tags: [flux-bootstrap, kustomize-patch, concurrency, resource-limits, flux-system]
+        learning_goals:
+          - Add a controller argument and a memory limit with patches in kustomization.yaml
+          - Let Flux apply its own change from Git
+          - Confirm that only kustomize-controller changed
+        resources:
+          - name: "Customize Flux manifests"
+            url: https://fluxcd.io/flux/installation/configuration/
+          - name: "Flux upgrade"
+            url: https://fluxcd.io/flux/installation/upgrade/
+          - name: "Flux monitoring"
+            url: https://fluxcd.io/flux/monitoring/
+      - type: reading
+        title: "Watching The Controllers"
+        path: sections/section-040/module-03/course-04-watching-the-controllers.md
+      - type: reading
+        title: "Summary"
+        path: sections/section-040/module-03/course-05-summary.md
 
       - type: reading
         title: Question

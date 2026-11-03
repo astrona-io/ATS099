@@ -1,4 +1,5 @@
 # Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
 schema_version: 1
 kind: question_bank
 id: ats099-020
@@ -238,3 +239,801 @@ questions:
     explanation: Not correct. It is a metric, not a log.
   correct_option: b
   explanation: Correct. It records how long reconciliations take per object.
+- id: ats099-020-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Keep a provider address out of Git
+  source_readings:
+  - sections/section-020/module-01/course-04-provider-types-and-secrets.md
+  prompt: Where should the webhook address of a Slack Provider be kept?
+  options:
+  - id: a
+    text: In `spec.address` of the Provider in Git.
+    explanation: Not correct. The address works like a password because anyone who
+      holds it can post to the channel. A Secret in the Provider's namespace keeps
+      it out of Git.
+  - id: b
+    text: In an annotation on the Alert.
+    explanation: Not correct. The address works like a password because anyone who
+      holds it can post to the channel. A Secret in the Provider's namespace keeps
+      it out of Git.
+  - id: c
+    text: In a Secret with the key `address`, named by `spec.secretRef`.
+    explanation: Correct. The address works like a password because anyone who holds
+      it can post to the channel. A Secret in the Provider's namespace keeps it out
+      of Git.
+  - id: d
+    text: In the `inclusionList` of the Alert.
+    explanation: Not correct. The address works like a password because anyone who
+      holds it can post to the channel. A Secret in the Provider's namespace keeps
+      it out of Git.
+  correct_option: c
+  explanation: Correct. The address works like a password because anyone who holds
+    it can post to the channel. A Secret in the Provider's namespace keeps it out
+    of Git.
+- id: ats099-020-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read what Ready on a Provider means
+  source_readings:
+  - sections/section-020/module-01/course-04-provider-types-and-secrets.md
+  prompt: A Provider shows `Ready` `True`, but no messages arrive. What does `Ready`
+    tell you?
+  options:
+  - id: a
+    text: Messages were delivered at least once.
+    explanation: Not correct. `Ready` checks the configuration, such as the Secret.
+      The log of notification-controller shows the HTTP status of each delivery.
+  - id: b
+    text: The configuration was accepted. It does not say that delivery works.
+    explanation: Correct. `Ready` checks the configuration, such as the Secret. The
+      log of notification-controller shows the HTTP status of each delivery.
+  - id: c
+    text: The channel exists on the chat service.
+    explanation: Not correct. `Ready` checks the configuration, such as the Secret.
+      The log of notification-controller shows the HTTP status of each delivery.
+  - id: d
+    text: The Alert is connected to the Provider.
+    explanation: Not correct. `Ready` checks the configuration, such as the Secret.
+      The log of notification-controller shows the HTTP status of each delivery.
+  correct_option: b
+  explanation: Correct. `Ready` checks the configuration, such as the Secret. The
+    log of notification-controller shows the HTTP status of each delivery.
+- id: ats099-020-q13
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose the tool that lists events of one object
+  source_readings:
+  - sections/section-020/module-01/course-05-reading-events-and-logs.md
+  prompt: Which command lists the events Flux recorded for the Kustomization `podinfo`?
+  options:
+  - id: a
+    text: "`flux events --for Kustomization/podinfo -n flux-system`"
+    explanation: Correct. `flux events` with `--for` limits the list to one object.
+  - id: b
+    text: "`flux logs --events podinfo`"
+    explanation: Not correct. `flux events` with `--for` limits the list to one object.
+  - id: c
+    text: "`kubectl get alerts -n flux-system`"
+    explanation: Not correct. `flux events` with `--for` limits the list to one object.
+  - id: d
+    text: "`flux trace kustomization podinfo`"
+    explanation: Not correct. `flux events` with `--for` limits the list to one object.
+  correct_option: a
+  explanation: Correct. `flux events` with `--for` limits the list to one object.
+- id: ats099-020-q14
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say why events must be read soon
+  source_readings:
+  - sections/section-020/module-01/course-05-reading-events-and-logs.md
+  prompt: Why should you read Kubernetes events soon after a failure?
+  options:
+  - id: a
+    text: Flux deletes events when the object is Ready again.
+    explanation: Not correct. Events expire. Forwarding them with an Alert keeps a
+      copy.
+  - id: b
+    text: Events are cleared on every reconcile.
+    explanation: Not correct. Events expire. Forwarding them with an Alert keeps a
+      copy.
+  - id: c
+    text: Events are kept only for objects in `flux-system`.
+    explanation: Not correct. Events expire. Forwarding them with an Alert keeps a
+      copy.
+  - id: d
+    text: Kubernetes keeps events only for a short time, about an hour by default.
+    explanation: Correct. Events expire. Forwarding them with an Alert keeps a copy.
+  correct_option: d
+  explanation: Correct. Events expire. Forwarding them with an Alert keeps a copy.
+- id: ats099-020-q15
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say what a Receiver does
+  source_readings:
+  - sections/section-020/module-02/course-01-what-a-receiver-is.md
+  prompt: What does a Receiver do when a call arrives on its path?
+  options:
+  - id: a
+    text: It applies the manifests from the request body.
+    explanation: Not correct. The call only asks for a check. The source then fetches
+      the latest revision of the branch it follows.
+  - id: b
+    text: It changes the revision of the GitRepository.
+    explanation: Not correct. The call only asks for a check. The source then fetches
+      the latest revision of the branch it follows.
+  - id: c
+    text: It asks the listed Flux objects to reconcile now.
+    explanation: Correct. The call only asks for a check. The source then fetches
+      the latest revision of the branch it follows.
+  - id: d
+    text: It restarts the Flux controllers.
+    explanation: Not correct. The call only asks for a check. The source then fetches
+      the latest revision of the branch it follows.
+  correct_option: c
+  explanation: Correct. The call only asks for a check. The source then fetches the
+    latest revision of the branch it follows.
+- id: ats099-020-q16
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Keep the interval with a Receiver
+  source_readings:
+  - sections/section-020/module-02/course-01-what-a-receiver-is.md
+  prompt: Why keep an `interval` on a source that has a Receiver?
+  options:
+  - id: a
+    text: The Receiver cannot work without an interval.
+    explanation: Not correct. A webhook is sent once. A long interval such as `1h`
+      costs few requests and still catches a missed call.
+  - id: b
+    text: A webhook can be lost, and the interval is the fallback.
+    explanation: Correct. A webhook is sent once. A long interval such as `1h` costs
+      few requests and still catches a missed call.
+  - id: c
+    text: The interval sets how fast the Receiver responds.
+    explanation: Not correct. A webhook is sent once. A long interval such as `1h`
+      costs few requests and still catches a missed call.
+  - id: d
+    text: The interval signs the webhook.
+    explanation: Not correct. A webhook is sent once. A long interval such as `1h`
+      costs few requests and still catches a missed call.
+  correct_option: b
+  explanation: Correct. A webhook is sent once. A long interval such as `1h` costs
+    few requests and still catches a missed call.
+- id: ats099-020-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find the annotation a Receiver sets
+  source_readings:
+  - sections/section-020/module-02/course-01-what-a-receiver-is.md
+  prompt: Which annotation changes on a source after a Receiver asks it to reconcile?
+  options:
+  - id: a
+    text: "`reconcile.fluxcd.io/requestedAt`"
+    explanation: Correct. The Receiver sets the same annotation that `flux reconcile`
+      sets, with the current time.
+  - id: b
+    text: "`kustomize.toolkit.fluxcd.io/reconcile`"
+    explanation: Not correct. The Receiver sets the same annotation that `flux reconcile`
+      sets, with the current time.
+  - id: c
+    text: "`notification.toolkit.fluxcd.io/trigger`"
+    explanation: Not correct. The Receiver sets the same annotation that `flux reconcile`
+      sets, with the current time.
+  - id: d
+    text: "`source.toolkit.fluxcd.io/fetch`"
+    explanation: Not correct. The Receiver sets the same annotation that `flux reconcile`
+      sets, with the current time.
+  correct_option: a
+  explanation: Correct. The Receiver sets the same annotation that `flux reconcile`
+    sets, with the current time.
+- id: ats099-020-q18
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Find the path of a Receiver
+  source_readings:
+  - sections/section-020/module-02/course-02-exposing-a-receiver-safely.md
+  prompt: Where do you read the URL path to give to the sender?
+  options:
+  - id: a
+    text: In `spec.webhookPath` of the Receiver.
+    explanation: Not correct. The controller writes the path to the status once the
+      Receiver is ready.
+  - id: b
+    text: In the label `path` on the Secret.
+    explanation: Not correct. The controller writes the path to the status once the
+      Receiver is ready.
+  - id: c
+    text: In the log of source-controller.
+    explanation: Not correct. The controller writes the path to the status once the
+      Receiver is ready.
+  - id: d
+    text: In `status.webhookPath` of the Receiver.
+    explanation: Correct. The controller writes the path to the status once the Receiver
+      is ready.
+  correct_option: d
+  explanation: Correct. The controller writes the path to the status once the Receiver
+    is ready.
+- id: ats099-020-q19
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say why the path contains a hash
+  source_readings:
+  - sections/section-020/module-02/course-02-exposing-a-receiver-safely.md
+  prompt: What is the path of a Receiver computed from?
+  options:
+  - id: a
+    text: The name of the Service only.
+    explanation: Not correct. The hash makes the path impossible to guess without
+      the token, and it changes when the token changes.
+  - id: b
+    text: A random value that never changes.
+    explanation: Not correct. The hash makes the path impossible to guess without
+      the token, and it changes when the token changes.
+  - id: c
+    text: A SHA-256 hash of the token, the name and the namespace of the Receiver.
+    explanation: Correct. The hash makes the path impossible to guess without the
+      token, and it changes when the token changes.
+  - id: d
+    text: The IP address of the sender.
+    explanation: Not correct. The hash makes the path impossible to guess without
+      the token, and it changes when the token changes.
+  correct_option: c
+  explanation: Correct. The hash makes the path impossible to guess without the token,
+    and it changes when the token changes.
+- id: ats099-020-q20
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the Service that exposes receivers
+  source_readings:
+  - sections/section-020/module-02/course-02-exposing-a-receiver-safely.md
+  prompt: Which Service receives the calls for Receivers?
+  options:
+  - id: a
+    text: "`notification-controller` in `monitoring`"
+    explanation: Not correct. Flux installs the Service `webhook-receiver` in `flux-system`.
+      The receiver in `monitoring` in the lab only logs requests.
+  - id: b
+    text: "`webhook-receiver` in the namespace `flux-system`"
+    explanation: Correct. Flux installs the Service `webhook-receiver` in `flux-system`.
+      The receiver in `monitoring` in the lab only logs requests.
+  - id: c
+    text: "`source-controller` in `flux-system`"
+    explanation: Not correct. Flux installs the Service `webhook-receiver` in `flux-system`.
+      The receiver in `monitoring` in the lab only logs requests.
+  - id: d
+    text: "`webhook-receiver` in `monitoring`"
+    explanation: Not correct. Flux installs the Service `webhook-receiver` in `flux-system`.
+      The receiver in `monitoring` in the lab only logs requests.
+  correct_option: b
+  explanation: Correct. Flux installs the Service `webhook-receiver` in `flux-system`.
+    The receiver in `monitoring` in the lab only logs requests.
+- id: ats099-020-q21
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Limit what an Ingress exposes
+  source_readings:
+  - sections/section-020/module-02/course-02-exposing-a-receiver-safely.md
+  prompt: What should an Ingress for a Receiver route?
+  options:
+  - id: a
+    text: Only the path prefix `/hook/` of the Service `webhook-receiver`.
+    explanation: Correct. Routing only the hook path keeps other endpoints of the
+      controller private.
+  - id: b
+    text: The whole Service on every path.
+    explanation: Not correct. Routing only the hook path keeps other endpoints of
+      the controller private.
+  - id: c
+    text: The metrics port `8080`.
+    explanation: Not correct. Routing only the hook path keeps other endpoints of
+      the controller private.
+  - id: d
+    text: The Gitea Service.
+    explanation: Not correct. Routing only the hook path keeps other endpoints of
+      the controller private.
+  correct_option: a
+  explanation: Correct. Routing only the hook path keeps other endpoints of the controller
+    private.
+- id: ats099-020-q22
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose a type that checks a signature
+  source_readings:
+  - sections/section-020/module-02/course-03-receivers-for-git-hosts-and-registries.md
+  prompt: Which Receiver type verifies an HMAC signature computed over the request
+    body?
+  options:
+  - id: a
+    text: "`generic`"
+    explanation: Not correct. `generic-hmac` checks the `X-Signature` header. `generic`
+      relies on the secret path alone.
+  - id: b
+    text: "`github` with no events"
+    explanation: Not correct. `generic-hmac` checks the `X-Signature` header. `generic`
+      relies on the secret path alone.
+  - id: c
+    text: "`dockerhub`"
+    explanation: Not correct. `generic-hmac` checks the `X-Signature` header. `generic`
+      relies on the secret path alone.
+  - id: d
+    text: "`generic-hmac`"
+    explanation: Correct. `generic-hmac` checks the `X-Signature` header. `generic`
+      relies on the secret path alone.
+  correct_option: d
+  explanation: Correct. `generic-hmac` checks the `X-Signature` header. `generic`
+    relies on the secret path alone.
+- id: ats099-020-q23
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Filter events of a Git host
+  source_readings:
+  - sections/section-020/module-02/course-03-receivers-for-git-hosts-and-registries.md
+  prompt: What does `spec.events` do on a Receiver of type `github`?
+  options:
+  - id: a
+    text: It lists the branches Flux follows.
+    explanation: Not correct. Without `events`, every event of the host triggers a
+      reconcile, including events like issue comments.
+  - id: b
+    text: It lists the namespaces to reconcile.
+    explanation: Not correct. Without `events`, every event of the host triggers a
+      reconcile, including events like issue comments.
+  - id: c
+    text: It lists the event names that trigger a reconcile, such as `ping` and `push`.
+    explanation: Correct. Without `events`, every event of the host triggers a reconcile,
+      including events like issue comments.
+  - id: d
+    text: It sets the severity of the notifications.
+    explanation: Not correct. Without `events`, every event of the host triggers a
+      reconcile, including events like issue comments.
+  correct_option: c
+  explanation: Correct. Without `events`, every event of the host triggers a reconcile,
+    including events like issue comments.
+- id: ats099-020-q24
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say what the token must equal
+  source_readings:
+  - sections/section-020/module-02/course-03-receivers-for-git-hosts-and-registries.md
+  prompt: For a Receiver of type `github`, what must the token in the Secret equal?
+  options:
+  - id: a
+    text: The password of the Git user.
+    explanation: Not correct. GitHub signs each request with the webhook secret. The
+      controller checks the signature with the token.
+  - id: b
+    text: The webhook secret configured on the GitHub repository.
+    explanation: Correct. GitHub signs each request with the webhook secret. The controller
+      checks the signature with the token.
+  - id: c
+    text: The name of the Receiver.
+    explanation: Not correct. GitHub signs each request with the webhook secret. The
+      controller checks the signature with the token.
+  - id: d
+    text: The GitHub App ID.
+    explanation: Not correct. GitHub signs each request with the webhook secret. The
+      controller checks the signature with the token.
+  correct_option: b
+  explanation: Correct. GitHub signs each request with the webhook secret. The controller
+    checks the signature with the token.
+- id: ats099-020-q25
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Pick the Provider type for a commit status
+  source_readings:
+  - sections/section-020/module-02/course-04-commit-status-from-flux.md
+  prompt: Which kind of Provider sets a status on a commit?
+  options:
+  - id: a
+    text: A Git host type such as `github`, `gitlab` or `gitea`.
+    explanation: Correct. Git host types call the host's API to set the commit status
+      instead of sending a chat message.
+  - id: b
+    text: "`generic`"
+    explanation: Not correct. Git host types call the host's API to set the commit
+      status instead of sending a chat message.
+  - id: c
+    text: "`slack`"
+    explanation: Not correct. Git host types call the host's API to set the commit
+      status instead of sending a chat message.
+  - id: d
+    text: "`alertmanager`"
+    explanation: Not correct. Git host types call the host's API to set the commit
+      status instead of sending a chat message.
+  correct_option: a
+  explanation: Correct. Git host types call the host's API to set the commit status
+    instead of sending a chat message.
+- id: ats099-020-q26
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Set the address of a commit status Provider
+  source_readings:
+  - sections/section-020/module-02/course-04-commit-status-from-flux.md
+  prompt: What goes in `spec.address` of a commit status Provider?
+  options:
+  - id: a
+    text: The address of the Git host.
+    explanation: Not correct. The Provider needs to know which repository holds the
+      commit.
+  - id: b
+    text: The address of the webhook-receiver Service.
+    explanation: Not correct. The Provider needs to know which repository holds the
+      commit.
+  - id: c
+    text: The name of the branch.
+    explanation: Not correct. The Provider needs to know which repository holds the
+      commit.
+  - id: d
+    text: The address of the repository.
+    explanation: Correct. The Provider needs to know which repository holds the commit.
+  correct_option: d
+  explanation: Correct. The Provider needs to know which repository holds the commit.
+- id: ats099-020-q27
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Keep info events for commit status
+  source_readings:
+  - sections/section-020/module-02/course-04-commit-status-from-flux.md
+  prompt: Why must an Alert for a commit status keep the default `eventSeverity`?
+  options:
+  - id: a
+    text: Info events are cheaper to send than errors.
+    explanation: 'Not correct. With `eventSeverity: error`, only failures arrive and
+      no commit gets a success status.'
+  - id: b
+    text: The host rejects error events.
+    explanation: 'Not correct. With `eventSeverity: error`, only failures arrive and
+      no commit gets a success status.'
+  - id: c
+    text: The commit turns green only when a success event reaches the host.
+    explanation: 'Correct. With `eventSeverity: error`, only failures arrive and no
+      commit gets a success status.'
+  - id: d
+    text: The default severity hides the revision.
+    explanation: 'Not correct. With `eventSeverity: error`, only failures arrive and
+      no commit gets a success status.'
+  correct_option: c
+  explanation: 'Correct. With `eventSeverity: error`, only failures arrive and no
+    commit gets a success status.'
+- id: ats099-020-q28
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the condition that means the last reconcile worked
+  source_readings:
+  - sections/section-020/module-03/course-01-reading-status-conditions.md
+  prompt: Which condition type says the last reconcile of the current spec finished
+    with success?
+  options:
+  - id: a
+    text: "`Stalled`"
+    explanation: Not correct. `Ready` `True` is the main success condition of a Flux
+      object.
+  - id: b
+    text: "`Ready`"
+    explanation: Correct. `Ready` `True` is the main success condition of a Flux object.
+  - id: c
+    text: "`Reconciling`"
+    explanation: Not correct. `Ready` `True` is the main success condition of a Flux
+      object.
+  - id: d
+    text: "`Fetched`"
+    explanation: Not correct. `Ready` `True` is the main success condition of a Flux
+      object.
+  correct_option: b
+  explanation: Correct. `Ready` `True` is the main success condition of a Flux object.
+- id: ats099-020-q29
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read Stalled
+  source_readings:
+  - sections/section-020/module-03/course-01-reading-status-conditions.md
+  prompt: What does `Stalled` `True` mean on a Flux object?
+  options:
+  - id: a
+    text: The controller stopped retrying because retrying cannot help until the spec
+      changes.
+    explanation: Correct. A stalled object, such as one with an invalid spec, needs
+      a change in Git.
+  - id: b
+    text: The object is suspended.
+    explanation: Not correct. A stalled object, such as one with an invalid spec,
+      needs a change in Git.
+  - id: c
+    text: The controller restarts.
+    explanation: Not correct. A stalled object, such as one with an invalid spec,
+      needs a change in Git.
+  - id: d
+    text: The object waits for the next interval.
+    explanation: Not correct. A stalled object, such as one with an invalid spec,
+      needs a change in Git.
+  correct_option: a
+  explanation: Correct. A stalled object, such as one with an invalid spec, needs
+    a change in Git.
+- id: ats099-020-q30
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find the revision that runs
+  source_readings:
+  - sections/section-020/module-03/course-01-reading-status-conditions.md
+  prompt: A Kustomization is `Ready` `False`. How do you tell which revision still
+    runs?
+  options:
+  - id: a
+    text: Read `status.lastAttemptedRevision`.
+    explanation: Not correct. `lastAppliedRevision` is the revision applied last with
+      success. `lastAttemptedRevision` is the one tried last.
+  - id: b
+    text: Read `spec.sourceRef`.
+    explanation: Not correct. `lastAppliedRevision` is the revision applied last with
+      success. `lastAttemptedRevision` is the one tried last.
+  - id: c
+    text: Read the Alert.
+    explanation: Not correct. `lastAppliedRevision` is the revision applied last with
+      success. `lastAttemptedRevision` is the one tried last.
+  - id: d
+    text: Read `status.lastAppliedRevision`.
+    explanation: Correct. `lastAppliedRevision` is the revision applied last with
+      success. `lastAttemptedRevision` is the one tried last.
+  correct_option: d
+  explanation: Correct. `lastAppliedRevision` is the revision applied last with success.
+    `lastAttemptedRevision` is the one tried last.
+- id: ats099-020-q31
+  type: single_choice
+  difficulty: beginner
+  learning_objective: List every object that is not ready
+  source_readings:
+  - sections/section-020/module-03/course-01-reading-status-conditions.md
+  prompt: Which command lists the Flux objects that are not ready, in every namespace?
+  options:
+  - id: a
+    text: "`flux stats`"
+    explanation: Not correct. `--status-selector` filters by the state of a condition.
+  - id: b
+    text: "`flux check`"
+    explanation: Not correct. `--status-selector` filters by the state of a condition.
+  - id: c
+    text: "`flux get all -A --status-selector ready=false`"
+    explanation: Correct. `--status-selector` filters by the state of a condition.
+  - id: d
+    text: "`kubectl get events -A`"
+    explanation: Not correct. `--status-selector` filters by the state of a condition.
+  correct_option: c
+  explanation: Correct. `--status-selector` filters by the state of a condition.
+- id: ats099-020-q32
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know when healthChecks is ignored
+  source_readings:
+  - sections/section-020/module-03/course-02-health-checks-and-timeouts.md
+  prompt: When is `spec.healthChecks` ignored?
+  options:
+  - id: a
+    text: When `spec.timeout` is set.
+    explanation: 'Not correct. `wait: true` already covers every applied object, so
+      use `wait` or `healthChecks`, not both.'
+  - id: b
+    text: When `spec.wait` is `true`.
+    explanation: 'Correct. `wait: true` already covers every applied object, so use
+      `wait` or `healthChecks`, not both.'
+  - id: c
+    text: When `prune` is `false`.
+    explanation: 'Not correct. `wait: true` already covers every applied object, so
+      use `wait` or `healthChecks`, not both.'
+  - id: d
+    text: When `dependsOn` is set.
+    explanation: 'Not correct. `wait: true` already covers every applied object, so
+      use `wait` or `healthChecks`, not both.'
+  correct_option: b
+  explanation: 'Correct. `wait: true` already covers every applied object, so use
+    `wait` or `healthChecks`, not both.'
+- id: ats099-020-q33
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what retryInterval does
+  source_readings:
+  - sections/section-020/module-03/course-02-health-checks-and-timeouts.md
+  prompt: What does `spec.retryInterval` set on a Kustomization?
+  options:
+  - id: a
+    text: How long Flux waits before it tries again after a failure.
+    explanation: Correct. Without it, the retry waits for the full `interval`.
+  - id: b
+    text: How long Flux waits for the health checks.
+    explanation: Not correct. Without it, the retry waits for the full `interval`.
+  - id: c
+    text: How often Flux fetches the source.
+    explanation: Not correct. Without it, the retry waits for the full `interval`.
+  - id: d
+    text: How long a failed object stays suspended.
+    explanation: Not correct. Without it, the retry waits for the full `interval`.
+  correct_option: a
+  explanation: Correct. Without it, the retry waits for the full `interval`.
+- id: ats099-020-q34
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what timeout does
+  source_readings:
+  - sections/section-020/module-03/course-02-health-checks-and-timeouts.md
+  prompt: 'A rollout takes 4 minutes and the Kustomization has `timeout: 2m` with
+    a health check. What happens?'
+  options:
+  - id: a
+    text: Flux waits 4 minutes and succeeds.
+    explanation: Not correct. After the timeout, an object that is not ready counts
+      as a failure.
+  - id: b
+    text: Flux deletes the Deployment.
+    explanation: Not correct. After the timeout, an object that is not ready counts
+      as a failure.
+  - id: c
+    text: Flux ignores the health check.
+    explanation: Not correct. After the timeout, an object that is not ready counts
+      as a failure.
+  - id: d
+    text: The reconcile fails with `HealthCheckFailed`, although the application starts.
+    explanation: Correct. After the timeout, an object that is not ready counts as
+      a failure.
+  correct_option: d
+  explanation: Correct. After the timeout, an object that is not ready counts as a
+    failure.
+- id: ats099-020-q35
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what the Healthy condition shows
+  source_readings:
+  - sections/section-020/module-03/course-02-health-checks-and-timeouts.md
+  prompt: When does a Kustomization set the condition `Healthy`?
+  options:
+  - id: a
+    text: Always, on every Kustomization.
+    explanation: Not correct. Without health checks, there is nothing to report, and
+      `Healthy` is not set.
+  - id: b
+    text: Only when it has `dependsOn`.
+    explanation: Not correct. Without health checks, there is nothing to report, and
+      `Healthy` is not set.
+  - id: c
+    text: 'When it has health checks, through `wait: true` or `healthChecks`.'
+    explanation: Correct. Without health checks, there is nothing to report, and `Healthy`
+      is not set.
+  - id: d
+    text: Only when `prune` is true.
+    explanation: Not correct. Without health checks, there is nothing to report, and
+      `Healthy` is not set.
+  correct_option: c
+  explanation: Correct. Without health checks, there is nothing to report, and `Healthy`
+    is not set.
+- id: ats099-020-q36
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find the source of gotk_resource_info
+  source_readings:
+  - sections/section-020/module-03/course-03-monitoring-flux-with-prometheus.md
+  prompt: Which component exports `gotk_resource_info`?
+  options:
+  - id: a
+    text: source-controller
+    explanation: Not correct. The Flux controllers export `gotk_reconcile_duration_seconds`
+      and controller-runtime metrics. The resource info metric comes from kube-state-metrics.
+  - id: b
+    text: kube-state-metrics, configured for the Flux custom resources.
+    explanation: Correct. The Flux controllers export `gotk_reconcile_duration_seconds`
+      and controller-runtime metrics. The resource info metric comes from kube-state-metrics.
+  - id: c
+    text: kustomize-controller
+    explanation: Not correct. The Flux controllers export `gotk_reconcile_duration_seconds`
+      and controller-runtime metrics. The resource info metric comes from kube-state-metrics.
+  - id: d
+    text: notification-controller
+    explanation: Not correct. The Flux controllers export `gotk_reconcile_duration_seconds`
+      and controller-runtime metrics. The resource info metric comes from kube-state-metrics.
+  correct_option: b
+  explanation: Correct. The Flux controllers export `gotk_reconcile_duration_seconds`
+    and controller-runtime metrics. The resource info metric comes from kube-state-metrics.
+- id: ats099-020-q37
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Pick the port a PodMonitor scrapes
+  source_readings:
+  - sections/section-020/module-03/course-03-monitoring-flux-with-prometheus.md
+  prompt: Which port name does a PodMonitor use to scrape a Flux controller?
+  options:
+  - id: a
+    text: "`http-prom`"
+    explanation: Correct. The controllers serve metrics on port `8080`, named `http-prom`.
+  - id: b
+    text: "`metrics`"
+    explanation: Not correct. The controllers serve metrics on port `8080`, named
+      `http-prom`.
+  - id: c
+    text: "`http-webhook`"
+    explanation: Not correct. The controllers serve metrics on port `8080`, named
+      `http-prom`.
+  - id: d
+    text: "`http`"
+    explanation: Not correct. The controllers serve metrics on port `8080`, named
+      `http-prom`.
+  correct_option: a
+  explanation: Correct. The controllers serve metrics on port `8080`, named `http-prom`.
+- id: ats099-020-q38
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say why a rule can fire when alerts cannot
+  source_readings:
+  - sections/section-020/module-03/course-03-monitoring-flux-with-prometheus.md
+  prompt: Why does a Prometheus rule still work when notification-controller is down?
+  options:
+  - id: a
+    text: Prometheus restarts notification-controller.
+    explanation: Not correct. Metrics and notifications are independent paths, so
+      use both.
+  - id: b
+    text: Alerts and rules use the same Provider.
+    explanation: Not correct. Metrics and notifications are independent paths, so
+      use both.
+  - id: c
+    text: Prometheus reads the events directly.
+    explanation: Not correct. Metrics and notifications are independent paths, so
+      use both.
+  - id: d
+    text: It uses metrics from the other controllers and does not depend on notification-controller.
+    explanation: Correct. Metrics and notifications are independent paths, so use
+      both.
+  correct_option: d
+  explanation: Correct. Metrics and notifications are independent paths, so use both.
+- id: ats099-020-q39
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Pick the right command for a pre-upgrade test
+  source_readings:
+  - sections/section-020/module-03/course-04-a-daily-operating-checklist.md
+  prompt: Which command tests the prerequisites before a Flux install or upgrade?
+  options:
+  - id: a
+    text: "`flux stats -A`"
+    explanation: Not correct. `flux check --pre` checks the cluster before a change.
+      `flux check` checks the installed controllers.
+  - id: b
+    text: "`flux diff kustomization`"
+    explanation: Not correct. `flux check --pre` checks the cluster before a change.
+      `flux check` checks the installed controllers.
+  - id: c
+    text: "`flux check --pre`"
+    explanation: Correct. `flux check --pre` checks the cluster before a change. `flux
+      check` checks the installed controllers.
+  - id: d
+    text: "`flux trace`"
+    explanation: Not correct. `flux check --pre` checks the cluster before a change.
+      `flux check` checks the installed controllers.
+  correct_option: c
+  explanation: Correct. `flux check --pre` checks the cluster before a change. `flux
+    check` checks the installed controllers.
+- id: ats099-020-q40
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Find the Flux object that manages a Deployment
+  source_readings:
+  - sections/section-020/module-03/course-04-a-daily-operating-checklist.md
+  prompt: Which command shows which Kustomization and source manage the Deployment
+    `podinfo` in `podinfo`?
+  options:
+  - id: a
+    text: "`flux tree deployment podinfo`"
+    explanation: Not correct. `flux trace` goes from a resource to the Flux object
+      that manages it.
+  - id: b
+    text: "`flux trace deployment podinfo -n podinfo`"
+    explanation: Correct. `flux trace` goes from a resource to the Flux object that
+      manages it.
+  - id: c
+    text: "`flux get deployment podinfo`"
+    explanation: Not correct. `flux trace` goes from a resource to the Flux object
+      that manages it.
+  - id: d
+    text: "`flux stats`"
+    explanation: Not correct. `flux trace` goes from a resource to the Flux object
+      that manages it.
+  correct_option: b
+  explanation: Correct. `flux trace` goes from a resource to the Flux object that
+    manages it.

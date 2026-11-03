@@ -1,0 +1,63 @@
+# Give A Tenant Fewer Rights And A Quota
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-lab-010-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, seeds the repositories and bootstraps Flux from gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-099-lab-010-02-setup"
+      description: "Onboards team-a through gitops/fleet with a cluster-admin RoleBinding"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea, the tester pod and the webhook receiver"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers that exist"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-role-binding"
+      description: "Passes when no RoleBinding in team-a uses cluster-admin and team-a cannot update ResourceQuotas"
+      type: "file"
+      source: "validation/validate-role-binding.sh"
+    - name: "validate-quota-and-policy"
+      description: "Passes when team-a-quota allows 10 pods and default-deny-ingress blocks all ingress in team-a"
+      type: "file"
+      source: "validation/validate-quota-and-policy.sh"
+    - name: "validate-tenant-deploys"
+      description: "Passes when the team-a Kustomization is Ready and podinfo runs in team-a"
+      type: "file"
+      source: "validation/validate-tenant-deploys.sh"
+    - name: "validate-guardrails-in-git"
+      description: "Passes when the quota and the network policy are in tenants/team-a in Git"
+      type: "file"
+      source: "validation/validate-guardrails-in-git.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - mendhak/http-https-echo:42
+      - nicolaka/netshoot:v0.13

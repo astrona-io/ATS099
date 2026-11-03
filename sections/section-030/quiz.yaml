@@ -1,4 +1,5 @@
 # Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
 schema_version: 1
 kind: question_bank
 id: ats099-030
@@ -242,3 +243,1096 @@ questions:
     explanation: Not correct. A kubeconfig is a Secret, never in Git.
   correct_option: c
   explanation: Correct. Protect the management cluster like the most sensitive one.
+- id: ats099-030-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Read a failing remote apply in order
+  source_readings:
+  - sections/section-030/module-01/course-04-reading-a-failing-remote-apply.md
+  prompt: A remote Kustomization fails with a message about an unknown certificate
+    authority. Which stage failed?
+  options:
+  - id: a
+    text: 'The rights: the account lacks a verb.'
+    explanation: 'Not correct. The stages run in order: Secret, kubeconfig, connection,
+      certificate, login, rights. The message names the stage.'
+  - id: b
+    text: 'The Secret: the key `value` is missing.'
+    explanation: 'Not correct. The stages run in order: Secret, kubeconfig, connection,
+      certificate, login, rights. The message names the stage.'
+  - id: c
+    text: 'The certificate: `certificate-authority-data` is missing or belongs to
+      another cluster.'
+    explanation: 'Correct. The stages run in order: Secret, kubeconfig, connection,
+      certificate, login, rights. The message names the stage.'
+  - id: d
+    text: 'The login: the token has expired.'
+    explanation: 'Not correct. The stages run in order: Secret, kubeconfig, connection,
+      certificate, login, rights. The message names the stage.'
+  correct_option: c
+  explanation: 'Correct. The stages run in order: Secret, kubeconfig, connection,
+    certificate, login, rights. The message names the stage.'
+- id: ats099-030-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Test the address from the right place
+  source_readings:
+  - sections/section-030/module-01/course-04-reading-a-failing-remote-apply.md
+  prompt: A kubeconfig uses `https://kubernetes.default.svc`. Why does a check from
+    your laptop fail although the Kustomization works?
+  options:
+  - id: a
+    text: The token is valid only for the controller.
+    explanation: Not correct. The address must work from the pod of kustomize-controller,
+      not from your machine.
+  - id: b
+    text: That address only resolves inside the cluster, so the check must run from
+      a pod in it.
+    explanation: Correct. The address must work from the pod of kustomize-controller,
+      not from your machine.
+  - id: c
+    text: kubectl cannot read a kubeconfig from a Secret.
+    explanation: Not correct. The address must work from the pod of kustomize-controller,
+      not from your machine.
+  - id: d
+    text: The certificate is valid only for `localhost`.
+    explanation: Not correct. The address must work from the pod of kustomize-controller,
+      not from your machine.
+  correct_option: b
+  explanation: Correct. The address must work from the pod of kustomize-controller,
+    not from your machine.
+- id: ats099-030-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what a failing remote apply leaves behind
+  source_readings:
+  - sections/section-030/module-01/course-04-reading-a-failing-remote-apply.md
+  prompt: A remote Kustomization starts to fail. What happens to the objects it applied
+    before?
+  options:
+  - id: a
+    text: They keep running; a failing Kustomization does not remove what it applied.
+    explanation: Correct. A failure stops new applies. It does not delete anything.
+  - id: b
+    text: They are pruned at the next interval.
+    explanation: Not correct. A failure stops new applies. It does not delete anything.
+  - id: c
+    text: They are suspended by the controller.
+    explanation: Not correct. A failure stops new applies. It does not delete anything.
+  - id: d
+    text: They are moved to the management cluster.
+    explanation: Not correct. A failure stops new applies. It does not delete anything.
+  correct_option: a
+  explanation: Correct. A failure stops new applies. It does not delete anything.
+- id: ats099-030-q14
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the fix for forbidden
+  source_readings:
+  - sections/section-030/module-01/course-04-reading-a-failing-remote-apply.md
+  prompt: The status says the account `flux-deployer` cannot `create` `configmaps`
+    in `podinfo-staging`. What is the right fix?
+  options:
+  - id: a
+    text: Bind the account to `cluster-admin`.
+    explanation: Not correct. Grant exactly the verb and kind that the message names,
+      in the namespace it names.
+  - id: b
+    text: Delete the Kustomization and recreate it.
+    explanation: Not correct. Grant exactly the verb and kind that the message names,
+      in the namespace it names.
+  - id: c
+    text: Turn on `--insecure-kubeconfig-tls`.
+    explanation: Not correct. Grant exactly the verb and kind that the message names,
+      in the namespace it names.
+  - id: d
+    text: Grant `create` on `configmaps` in `podinfo-staging` only, if the folder
+      should hold ConfigMaps.
+    explanation: Correct. Grant exactly the verb and kind that the message names,
+      in the namespace it names.
+  correct_option: d
+  explanation: Correct. Grant exactly the verb and kind that the message names, in
+    the namespace it names.
+- id: ats099-030-q15
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know which references never cross a namespace
+  source_readings:
+  - sections/section-030/module-01/course-05-cross-namespace-rules-for-other-kinds.md
+  prompt: Which reference can never point at another namespace?
+  options:
+  - id: a
+    text: "`spec.sourceRef.namespace` on a Kustomization"
+    explanation: Not correct. Secret and ConfigMap references are always in the namespace
+      of the object that uses them.
+  - id: b
+    text: "`spec.dependsOn[].namespace`"
+    explanation: Not correct. Secret and ConfigMap references are always in the namespace
+      of the object that uses them.
+  - id: c
+    text: "`spec.kubeConfig.secretRef`"
+    explanation: Correct. Secret and ConfigMap references are always in the namespace
+      of the object that uses them.
+  - id: d
+    text: "`spec.eventSources[].namespace` on an Alert"
+    explanation: Not correct. Secret and ConfigMap references are always in the namespace
+      of the object that uses them.
+  correct_option: c
+  explanation: Correct. Secret and ConfigMap references are always in the namespace
+    of the object that uses them.
+- id: ats099-030-q16
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know where a Provider must be
+  source_readings:
+  - sections/section-030/module-01/course-05-cross-namespace-rules-for-other-kinds.md
+  prompt: An Alert is in `team-a`. Where must its Provider be?
+  options:
+  - id: a
+    text: In `flux-system`.
+    explanation: Not correct. An Alert finds its Provider in its own namespace only.
+  - id: b
+    text: In `team-a`; `providerRef` takes no namespace.
+    explanation: Correct. An Alert finds its Provider in its own namespace only.
+  - id: c
+    text: In any namespace named in `providerRef.namespace`.
+    explanation: Not correct. An Alert finds its Provider in its own namespace only.
+  - id: d
+    text: In the namespace of the event source.
+    explanation: Not correct. An Alert finds its Provider in its own namespace only.
+  correct_option: b
+  explanation: Correct. An Alert finds its Provider in its own namespace only.
+- id: ats099-030-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what the lockdown flag restricts
+  source_readings:
+  - sections/section-030/module-01/course-05-cross-namespace-rules-for-other-kinds.md
+  prompt: What does `--no-cross-namespace-refs=true` restrict?
+  options:
+  - id: a
+    text: References from one Flux object to another in a different namespace.
+    explanation: Correct. Restricting what is applied is the job of impersonation
+      with a limited ServiceAccount.
+  - id: b
+    text: Which namespaces a Kustomization may apply objects into.
+    explanation: Not correct. Restricting what is applied is the job of impersonation
+      with a limited ServiceAccount.
+  - id: c
+    text: Which users may create Flux objects.
+    explanation: Not correct. Restricting what is applied is the job of impersonation
+      with a limited ServiceAccount.
+  - id: d
+    text: Which Secrets the controllers may read.
+    explanation: Not correct. Restricting what is applied is the job of impersonation
+      with a limited ServiceAccount.
+  correct_option: a
+  explanation: Correct. Restricting what is applied is the job of impersonation with
+    a limited ServiceAccount.
+- id: ats099-030-q18
+  type: single_choice
+  difficulty: advanced
+  learning_objective: List cross-namespace references before the flag
+  source_readings:
+  - sections/section-030/module-01/course-05-cross-namespace-rules-for-other-kinds.md
+  prompt: What should you do before you set `--no-cross-namespace-refs=true` on a
+    cluster that already runs Flux?
+  options:
+  - id: a
+    text: Restart all the controllers.
+    explanation: Not correct. Objects that use a cross-namespace reference stop reconciling
+      when the flag is on.
+  - id: b
+    text: Delete every Alert and Receiver.
+    explanation: Not correct. Objects that use a cross-namespace reference stop reconciling
+      when the flag is on.
+  - id: c
+    text: Nothing; existing objects are not checked.
+    explanation: Not correct. Objects that use a cross-namespace reference stop reconciling
+      when the flag is on.
+  - id: d
+    text: List the existing cross-namespace references and move or accept each one.
+    explanation: Correct. Objects that use a cross-namespace reference stop reconciling
+      when the flag is on.
+  correct_option: d
+  explanation: Correct. Objects that use a cross-namespace reference stop reconciling
+    when the flag is on.
+- id: ats099-030-q19
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say where Flux looks for the kubeconfig Secret
+  source_readings:
+  - sections/section-030/module-02/course-01-how-flux-reads-a-kubeconfig-secret.md
+  prompt: In which namespace does Flux look for the Secret named in `spec.kubeConfig.secretRef.name`?
+  options:
+  - id: a
+    text: In `flux-system` only.
+    explanation: Not correct. There is no field for another namespace, so one tenant
+      cannot name another tenant's credential.
+  - id: b
+    text: In `kube-system`.
+    explanation: Not correct. There is no field for another namespace, so one tenant
+      cannot name another tenant's credential.
+  - id: c
+    text: In the namespace of the Kustomization.
+    explanation: Correct. There is no field for another namespace, so one tenant cannot
+      name another tenant's credential.
+  - id: d
+    text: In any namespace that has the Secret.
+    explanation: Not correct. There is no field for another namespace, so one tenant
+      cannot name another tenant's credential.
+  correct_option: c
+  explanation: Correct. There is no field for another namespace, so one tenant cannot
+    name another tenant's credential.
+- id: ats099-030-q20
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know which key is read
+  source_readings:
+  - sections/section-030/module-02/course-01-how-flux-reads-a-kubeconfig-secret.md
+  prompt: Which key of the Secret does Flux read by default?
+  options:
+  - id: a
+    text: "`kubeconfig`"
+    explanation: Not correct. The field `secretRef.key` selects another key.
+  - id: b
+    text: "`value`, then `value.yaml` if there is no `value`."
+    explanation: Correct. The field `secretRef.key` selects another key.
+  - id: c
+    text: "`config`"
+    explanation: Not correct. The field `secretRef.key` selects another key.
+  - id: d
+    text: "`token`"
+    explanation: Not correct. The field `secretRef.key` selects another key.
+  correct_option: b
+  explanation: Correct. The field `secretRef.key` selects another key.
+- id: ats099-030-q21
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Fix a wrong key without renaming it
+  source_readings:
+  - sections/section-030/module-02/course-01-how-flux-reads-a-kubeconfig-secret.md
+  prompt: A Secret was made with `--from-file=staging.kubeconfig`. How do you make
+    the Kustomization read it?
+  options:
+  - id: a
+    text: Set `spec.kubeConfig.secretRef.key` to `staging.kubeconfig`.
+    explanation: Correct. The key is chosen with `secretRef.key`; a Secret key can
+      also be recreated as `value`.
+  - id: b
+    text: Set `spec.kubeConfig.file` to the file name.
+    explanation: Not correct. The key is chosen with `secretRef.key`; a Secret key
+      can also be recreated as `value`.
+  - id: c
+    text: Add the annotation `kustomize.toolkit.fluxcd.io/key`.
+    explanation: Not correct. The key is chosen with `secretRef.key`; a Secret key
+      can also be recreated as `value`.
+  - id: d
+    text: Rename the Secret to `value`.
+    explanation: Not correct. The key is chosen with `secretRef.key`; a Secret key
+      can also be recreated as `value`.
+  correct_option: a
+  explanation: Correct. The key is chosen with `secretRef.key`; a Secret key can also
+    be recreated as `value`.
+- id: ats099-030-q22
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know what the exec flag allows
+  source_readings:
+  - sections/section-030/module-02/course-01-how-flux-reads-a-kubeconfig-secret.md
+  prompt: What does `--insecure-kubeconfig-exec` allow?
+  options:
+  - id: a
+    text: Kubeconfigs that skip TLS verification.
+    explanation: Not correct. A Secret that can run a program in the controller pod
+      is refused by default.
+  - id: b
+    text: Kubeconfigs in a namespace other than the Kustomization's.
+    explanation: Not correct. A Secret that can run a program in the controller pod
+      is refused by default.
+  - id: c
+    text: Kubeconfigs with more than one context.
+    explanation: Not correct. A Secret that can run a program in the controller pod
+      is refused by default.
+  - id: d
+    text: Kubeconfigs that run a program (`exec`) or use an `auth-provider`.
+    explanation: Correct. A Secret that can run a program in the controller pod is
+      refused by default.
+  correct_option: d
+  explanation: Correct. A Secret that can run a program in the controller pod is refused
+    by default.
+- id: ats099-030-q23
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know what the TLS flag allows
+  source_readings:
+  - sections/section-030/module-02/course-01-how-flux-reads-a-kubeconfig-secret.md
+  prompt: Which kubeconfigs are accepted only when `--insecure-kubeconfig-tls` is
+    set?
+  options:
+  - id: a
+    text: Kubeconfigs with a token.
+    explanation: Not correct. The flag is set on kustomize-controller and helm-controller
+      and applies to every object.
+  - id: b
+    text: Kubeconfigs with a client certificate in the file.
+    explanation: Not correct. The flag is set on kustomize-controller and helm-controller
+      and applies to every object.
+  - id: c
+    text: Kubeconfigs that skip TLS verification or point at a certificate by file
+      path.
+    explanation: Correct. The flag is set on kustomize-controller and helm-controller
+      and applies to every object.
+  - id: d
+    text: Kubeconfigs for more than one cluster.
+    explanation: Not correct. The flag is set on kustomize-controller and helm-controller
+      and applies to every object.
+  correct_option: c
+  explanation: Correct. The flag is set on kustomize-controller and helm-controller
+    and applies to every object.
+- id: ats099-030-q24
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say when a changed Secret takes effect
+  source_readings:
+  - sections/section-030/module-02/course-01-how-flux-reads-a-kubeconfig-secret.md
+  prompt: When does a changed kubeconfig Secret take effect?
+  options:
+  - id: a
+    text: Only after kustomize-controller is restarted.
+    explanation: Not correct. The Secret is read on each reconcile, which makes rotation
+      without downtime possible.
+  - id: b
+    text: At the next reconcile, with no restart of the controller.
+    explanation: Correct. The Secret is read on each reconcile, which makes rotation
+      without downtime possible.
+  - id: c
+    text: Only after the Kustomization is deleted and recreated.
+    explanation: Not correct. The Secret is read on each reconcile, which makes rotation
+      without downtime possible.
+  - id: d
+    text: Only after `flux install` is run again.
+    explanation: Not correct. The Secret is read on each reconcile, which makes rotation
+      without downtime possible.
+  correct_option: b
+  explanation: Correct. The Secret is read on each reconcile, which makes rotation
+    without downtime possible.
+- id: ats099-030-q25
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say what a long-lived token is
+  source_readings:
+  - sections/section-030/module-02/course-02-token-lifetime-and-rotation.md
+  prompt: What is a token from a Secret of type `kubernetes.io/service-account-token`?
+  options:
+  - id: a
+    text: A ServiceAccount token with no expiry, valid until the Secret or ServiceAccount
+      is deleted.
+    explanation: 'Correct. The simplicity is the risk: a copy of it works for years.'
+  - id: b
+    text: A token that expires after 1 hour.
+    explanation: 'Not correct. The simplicity is the risk: a copy of it works for
+      years.'
+  - id: c
+    text: A token valid only for one namespace.
+    explanation: 'Not correct. The simplicity is the risk: a copy of it works for
+      years.'
+  - id: d
+    text: A token that renews itself.
+    explanation: 'Not correct. The simplicity is the risk: a copy of it works for
+      years.'
+  correct_option: a
+  explanation: 'Correct. The simplicity is the risk: a copy of it works for years.'
+- id: ats099-030-q26
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Create a short-lived token
+  source_readings:
+  - sections/section-030/module-02/course-02-token-lifetime-and-rotation.md
+  prompt: Which command creates a token for `flux-deployer` that expires?
+  options:
+  - id: a
+    text: "`kubectl -n staging-access get token flux-deployer --expires=24h`"
+    explanation: Not correct. The TokenRequest API issues the token, and something
+      must renew it before it ends.
+  - id: b
+    text: "`kubectl -n staging-access create secret token flux-deployer`"
+    explanation: Not correct. The TokenRequest API issues the token, and something
+      must renew it before it ends.
+  - id: c
+    text: "`flux create token flux-deployer --duration=24h`"
+    explanation: Not correct. The TokenRequest API issues the token, and something
+      must renew it before it ends.
+  - id: d
+    text: "`kubectl -n staging-access create token flux-deployer --duration=24h`"
+    explanation: Correct. The TokenRequest API issues the token, and something must
+      renew it before it ends.
+  correct_option: d
+  explanation: Correct. The TokenRequest API issues the token, and something must
+    renew it before it ends.
+- id: ats099-030-q27
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Order a rotation with no gap
+  source_readings:
+  - sections/section-030/module-02/course-02-token-lifetime-and-rotation.md
+  prompt: What is the right order to rotate a token with no gap?
+  options:
+  - id: a
+    text: Delete the old token, then create the new token.
+    explanation: Not correct. The old token must stay until the new kubeconfig works,
+      and must be gone at the end.
+  - id: b
+    text: Replace the Secret key, then create the new token.
+    explanation: Not correct. The old token must stay until the new kubeconfig works,
+      and must be gone at the end.
+  - id: c
+    text: Create the new token, build and test the kubeconfig, replace the Secret
+      key, reconcile, then delete the old token.
+    explanation: Correct. The old token must stay until the new kubeconfig works,
+      and must be gone at the end.
+  - id: d
+    text: Create the new token, delete the old one, then replace the Secret key.
+    explanation: Not correct. The old token must stay until the new kubeconfig works,
+      and must be gone at the end.
+  correct_option: c
+  explanation: Correct. The old token must stay until the new kubeconfig works, and
+    must be gone at the end.
+- id: ats099-030-q28
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Prove an old token is dead
+  source_readings:
+  - sections/section-030/module-02/course-02-token-lifetime-and-rotation.md
+  prompt: Which API tells you whether the API server still accepts a token?
+  options:
+  - id: a
+    text: SelfSubjectRulesReview
+    explanation: Not correct. A TokenReview returns `authenticated` for the token;
+      an invalid token comes back as not authenticated.
+  - id: b
+    text: TokenReview
+    explanation: Correct. A TokenReview returns `authenticated` for the token; an
+      invalid token comes back as not authenticated.
+  - id: c
+    text: CertificateSigningRequest
+    explanation: Not correct. A TokenReview returns `authenticated` for the token;
+      an invalid token comes back as not authenticated.
+  - id: d
+    text: SubjectAccessReview on the token
+    explanation: Not correct. A TokenReview returns `authenticated` for the token;
+      an invalid token comes back as not authenticated.
+  correct_option: b
+  explanation: Correct. A TokenReview returns `authenticated` for the token; an invalid
+    token comes back as not authenticated.
+- id: ats099-030-q29
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Know what deleting the token Secret does
+  source_readings:
+  - sections/section-030/module-02/course-02-token-lifetime-and-rotation.md
+  prompt: What happens to a long-lived token when its Secret is deleted?
+  options:
+  - id: a
+    text: It stops working, because the API server checks that the Secret still exists.
+    explanation: Correct. Deleting the token Secret is how the old credential is revoked.
+  - id: b
+    text: It keeps working until it is older than 1 year.
+    explanation: Not correct. Deleting the token Secret is how the old credential
+      is revoked.
+  - id: c
+    text: It keeps working until the ServiceAccount is deleted.
+    explanation: Not correct. Deleting the token Secret is how the old credential
+      is revoked.
+  - id: d
+    text: It is moved to the ServiceAccount.
+    explanation: Not correct. Deleting the token Secret is how the old credential
+      is revoked.
+  correct_option: a
+  explanation: Correct. Deleting the token Secret is how the old credential is revoked.
+- id: ats099-030-q30
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Say why avoid cluster-admin for the remote account
+  source_readings:
+  - sections/section-030/module-02/course-03-scoping-the-remote-account.md
+  prompt: Why should the remote account not hold `cluster-admin`?
+  options:
+  - id: a
+    text: Flux cannot use that role.
+    explanation: Not correct. A narrow Role limits the damage of a leaked credential
+      to one application.
+  - id: b
+    text: The role makes health checks fail.
+    explanation: Not correct. A narrow Role limits the damage of a leaked credential
+      to one application.
+  - id: c
+    text: The role cannot be bound to a ServiceAccount.
+    explanation: Not correct. A narrow Role limits the damage of a leaked credential
+      to one application.
+  - id: d
+    text: A leak of its token would give control of the whole remote cluster.
+    explanation: Correct. A narrow Role limits the damage of a leaked credential to
+      one application.
+  correct_option: d
+  explanation: Correct. A narrow Role limits the damage of a leaked credential to
+    one application.
+- id: ats099-030-q31
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: List the verbs Flux needs
+  source_readings:
+  - sections/section-030/module-02/course-03-scoping-the-remote-account.md
+  prompt: Which verbs does the account need on the kinds in the folder to apply, health-check
+    and prune?
+  options:
+  - id: a
+    text: Only `create` and `update`.
+    explanation: Not correct. Server-side apply needs `get`, `create`, `patch`; health
+      checks need `list` and `watch`; pruning needs `delete`.
+  - id: b
+    text: Only `get` and `list`.
+    explanation: Not correct. Server-side apply needs `get`, `create`, `patch`; health
+      checks need `list` and `watch`; pruning needs `delete`.
+  - id: c
+    text: "`get`, `list`, `watch`, `create`, `update`, `patch` and `delete`"
+    explanation: Correct. Server-side apply needs `get`, `create`, `patch`; health
+      checks need `list` and `watch`; pruning needs `delete`.
+  - id: d
+    text: "`create` and `delete`, since `patch` is not used."
+    explanation: Not correct. Server-side apply needs `get`, `create`, `patch`; health
+      checks need `list` and `watch`; pruning needs `delete`.
+  correct_option: c
+  explanation: Correct. Server-side apply needs `get`, `create`, `patch`; health checks
+    need `list` and `watch`; pruning needs `delete`.
+- id: ats099-030-q32
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know what a Role cannot cover
+  source_readings:
+  - sections/section-030/module-02/course-03-scoping-the-remote-account.md
+  prompt: Why can an account limited by a Role not create the namespace `podinfo-staging`?
+  options:
+  - id: a
+    text: Flux never creates namespaces.
+    explanation: Not correct. Create the namespace when the cluster is set up, or
+      give a separate account a narrow ClusterRole.
+  - id: b
+    text: A namespace is cluster-scoped, so it needs a ClusterRole.
+    explanation: Correct. Create the namespace when the cluster is set up, or give
+      a separate account a narrow ClusterRole.
+  - id: c
+    text: A Role cannot hold `create`.
+    explanation: Not correct. Create the namespace when the cluster is set up, or
+      give a separate account a narrow ClusterRole.
+  - id: d
+    text: Namespaces can only be created by the API server.
+    explanation: Not correct. Create the namespace when the cluster is set up, or
+      give a separate account a narrow ClusterRole.
+  correct_option: b
+  explanation: Correct. Create the namespace when the cluster is set up, or give a
+    separate account a narrow ClusterRole.
+- id: ats099-030-q33
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Check what an account can do
+  source_readings:
+  - sections/section-030/module-02/course-03-scoping-the-remote-account.md
+  prompt: Which command lists everything `flux-deployer` can do in `podinfo-staging`?
+  options:
+  - id: a
+    text: "`kubectl auth can-i --list -n podinfo-staging --as=system:serviceaccount:staging-access:flux-deployer`"
+    explanation: Correct. `--list` prints all rules for the account in the namespace,
+      which is the list to review.
+  - id: b
+    text: "`kubectl get rolebindings -A`"
+    explanation: Not correct. `--list` prints all rules for the account in the namespace,
+      which is the list to review.
+  - id: c
+    text: "`flux get accounts -n podinfo-staging`"
+    explanation: Not correct. `--list` prints all rules for the account in the namespace,
+      which is the list to review.
+  - id: d
+    text: "`kubectl describe sa flux-deployer`"
+    explanation: Not correct. `--list` prints all rules for the account in the namespace,
+      which is the list to review.
+  correct_option: a
+  explanation: Correct. `--list` prints all rules for the account in the namespace,
+    which is the list to review.
+- id: ats099-030-q34
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what a missing list and watch breaks
+  source_readings:
+  - sections/section-030/module-02/course-04-remote-health-checks-and-pruning.md
+  prompt: A Role has `create` and `patch` but not `list` and `watch`. What happens?
+  options:
+  - id: a
+    text: The apply fails at the first object.
+    explanation: Not correct. Health checks watch the remote objects with the same
+      client as the apply.
+  - id: b
+    text: Nothing; health checks use the management account.
+    explanation: Not correct. Health checks watch the remote objects with the same
+      client as the apply.
+  - id: c
+    text: The prune deletes the objects.
+    explanation: Not correct. Health checks watch the remote objects with the same
+      client as the apply.
+  - id: d
+    text: The apply works and the health check fails with a forbidden message.
+    explanation: Correct. Health checks watch the remote objects with the same client
+      as the apply.
+  correct_option: d
+  explanation: Correct. Health checks watch the remote objects with the same client
+    as the apply.
+- id: ats099-030-q35
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Protect an object from pruning
+  source_readings:
+  - sections/section-030/module-02/course-04-remote-health-checks-and-pruning.md
+  prompt: How do you stop Flux from pruning a PersistentVolumeClaim that stays in
+    the folder?
+  options:
+  - id: a
+    text: 'Set `spec.prune: false` on the PersistentVolumeClaim.'
+    explanation: Not correct. The annotation excludes one object from pruning.
+  - id: b
+    text: 'Add the label `app.kubernetes.io/managed-by: none`.'
+    explanation: Not correct. The annotation excludes one object from pruning.
+  - id: c
+    text: 'Add the annotation `kustomize.toolkit.fluxcd.io/prune: disabled` to the
+      object.'
+    explanation: Correct. The annotation excludes one object from pruning.
+  - id: d
+    text: Remove the claim from the Role.
+    explanation: Not correct. The annotation excludes one object from pruning.
+  correct_option: c
+  explanation: Correct. The annotation excludes one object from pruning.
+- id: ats099-030-q36
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what deleting a pruning Kustomization does
+  source_readings:
+  - sections/section-030/module-02/course-04-remote-health-checks-and-pruning.md
+  prompt: 'What happens to the remote objects when a Kustomization with `prune: true`
+    is deleted and `deletionPolicy` is not set?'
+  options:
+  - id: a
+    text: They stay, as the Kustomization is only an object.
+    explanation: Not correct. The default `MirrorPrune` deletes when `prune` is true.
+      `Orphan` keeps the objects.
+  - id: b
+    text: They are removed from the remote cluster, using the kubeconfig.
+    explanation: Correct. The default `MirrorPrune` deletes when `prune` is true.
+      `Orphan` keeps the objects.
+  - id: c
+    text: They move to the management cluster.
+    explanation: Not correct. The default `MirrorPrune` deletes when `prune` is true.
+      `Orphan` keeps the objects.
+  - id: d
+    text: They are suspended.
+    explanation: Not correct. The default `MirrorPrune` deletes when `prune` is true.
+      `Orphan` keeps the objects.
+  correct_option: b
+  explanation: Correct. The default `MirrorPrune` deletes when `prune` is true. `Orphan`
+    keeps the objects.
+- id: ats099-030-q37
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Handle a missing kubeconfig on delete
+  source_readings:
+  - sections/section-030/module-02/course-04-remote-health-checks-and-pruning.md
+  prompt: A pruning Kustomization is deleted after its kubeconfig Secret was removed,
+    and it stays in terminating. What is the cause?
+  options:
+  - id: a
+    text: The cleanup needs the kubeconfig to reach the remote cluster and cannot
+      run.
+    explanation: Correct. Restore the Secret, or set `deletionPolicy` to `Orphan`
+      before the delete and accept that objects stay.
+  - id: b
+    text: The finalizer belongs to the GitRepository.
+    explanation: Not correct. Restore the Secret, or set `deletionPolicy` to `Orphan`
+      before the delete and accept that objects stay.
+  - id: c
+    text: The prune label is set on the Secret.
+    explanation: Not correct. Restore the Secret, or set `deletionPolicy` to `Orphan`
+      before the delete and accept that objects stay.
+  - id: d
+    text: The remote cluster is suspended.
+    explanation: Not correct. Restore the Secret, or set `deletionPolicy` to `Orphan`
+      before the delete and accept that objects stay.
+  correct_option: a
+  explanation: Correct. Restore the Secret, or set `deletionPolicy` to `Orphan` before
+    the delete and accept that objects stay.
+- id: ats099-030-q38
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the two delivery layouts
+  source_readings:
+  - sections/section-030/module-03/course-01-push-and-pull-delivery.md
+  prompt: What is the layout called where each cluster runs its own Flux?
+  options:
+  - id: a
+    text: Hub and spoke, with one Flux for all.
+    explanation: Not correct. The other layout, a management cluster that applies
+      with `spec.kubeConfig`, is called hub and spoke.
+  - id: b
+    text: Push delivery from CI.
+    explanation: Not correct. The other layout, a management cluster that applies
+      with `spec.kubeConfig`, is called hub and spoke.
+  - id: c
+    text: Multi-tenancy lockdown.
+    explanation: Not correct. The other layout, a management cluster that applies
+      with `spec.kubeConfig`, is called hub and spoke.
+  - id: d
+    text: Standalone, one Flux per cluster.
+    explanation: Correct. The other layout, a management cluster that applies with
+      `spec.kubeConfig`, is called hub and spoke.
+  correct_option: d
+  explanation: Correct. The other layout, a management cluster that applies with `spec.kubeConfig`,
+    is called hub and spoke.
+- id: ats099-030-q39
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: State the cost of a management cluster
+  source_readings:
+  - sections/section-030/module-03/course-01-push-and-pull-delivery.md
+  prompt: What is the main risk of one management cluster that delivers to many clusters?
+  options:
+  - id: a
+    text: It cannot run health checks.
+    explanation: Not correct. Narrow accounts reduce the blast radius.
+  - id: b
+    text: It needs a Flux instance in every cluster.
+    explanation: Not correct. Narrow accounts reduce the blast radius.
+  - id: c
+    text: It holds credentials for all clusters, so its compromise reaches all of
+      them.
+    explanation: Correct. Narrow accounts reduce the blast radius.
+  - id: d
+    text: It cannot use Git.
+    explanation: Not correct. Narrow accounts reduce the blast radius.
+  correct_option: c
+  explanation: Correct. Narrow accounts reduce the blast radius.
+- id: ats099-030-q40
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Choose between layouts
+  source_readings:
+  - sections/section-030/module-03/course-01-push-and-pull-delivery.md
+  prompt: A cluster must keep converging when the network to the management cluster
+    is down. Which layout fits?
+  options:
+  - id: a
+    text: A management cluster with `spec.kubeConfig`.
+    explanation: Not correct. A local Flux only needs Git and keeps working when the
+      management plane is lost.
+  - id: b
+    text: A Flux instance in that cluster.
+    explanation: Correct. A local Flux only needs Git and keeps working when the management
+      plane is lost.
+  - id: c
+    text: Push delivery from CI.
+    explanation: Not correct. A local Flux only needs Git and keeps working when the
+      management plane is lost.
+  - id: d
+    text: A shared GitRepository in `flux-system`.
+    explanation: Not correct. A local Flux only needs Git and keeps working when the
+      management plane is lost.
+  correct_option: b
+  explanation: Correct. A local Flux only needs Git and keeps working when the management
+    plane is lost.
+- id: ats099-030-q41
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Prefer folders to branches
+  source_readings:
+  - sections/section-030/module-03/course-02-environments-as-folders-and-overlays.md
+  prompt: Why prefer a folder per environment to a branch per environment?
+  options:
+  - id: a
+    text: All environments stay visible on one branch, and merges do not carry unwanted
+      differences.
+    explanation: Correct. A diff between environments becomes a diff between folders.
+  - id: b
+    text: Flux cannot follow more than one branch.
+    explanation: Not correct. A diff between environments becomes a diff between folders.
+  - id: c
+    text: Folders are faster to fetch.
+    explanation: Not correct. A diff between environments becomes a diff between folders.
+  - id: d
+    text: Branches cannot be protected.
+    explanation: Not correct. A diff between environments becomes a diff between folders.
+  correct_option: a
+  explanation: Correct. A diff between environments becomes a diff between folders.
+- id: ats099-030-q42
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use a base and overlays
+  source_readings:
+  - sections/section-030/module-03/course-02-environments-as-folders-and-overlays.md
+  prompt: What does an overlay for production contain in a base-plus-overlay layout?
+  options:
+  - id: a
+    text: A full copy of the base manifests.
+    explanation: Not correct. Review a change to the base once and it applies to every
+      environment.
+  - id: b
+    text: The Flux Kustomization for production.
+    explanation: Not correct. Review a change to the base once and it applies to every
+      environment.
+  - id: c
+    text: Only the image tag.
+    explanation: Not correct. Review a change to the base once and it applies to every
+      environment.
+  - id: d
+    text: The reference to the base and only what differs, such as a namespace or
+      a replica patch.
+    explanation: Correct. Review a change to the base once and it applies to every
+      environment.
+  correct_option: d
+  explanation: Correct. Review a change to the base once and it applies to every environment.
+- id: ats099-030-q43
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use postBuild substitution
+  source_readings:
+  - sections/section-030/module-03/course-02-environments-as-folders-and-overlays.md
+  prompt: Where do you keep a value that is a secret for `postBuild` substitution?
+  options:
+  - id: a
+    text: In `spec.postBuild.substitute` in the Kustomization.
+    explanation: Not correct. `substitute` values are visible in the Kustomization
+      object.
+  - id: b
+    text: In the overlay's `kustomization.yaml`.
+    explanation: Not correct. `substitute` values are visible in the Kustomization
+      object.
+  - id: c
+    text: In a Secret named under `spec.postBuild.substituteFrom`.
+    explanation: Correct. `substitute` values are visible in the Kustomization object.
+  - id: d
+    text: In a label on the Deployment.
+    explanation: Not correct. `substitute` values are visible in the Kustomization
+      object.
+  correct_option: c
+  explanation: Correct. `substitute` values are visible in the Kustomization object.
+- id: ats099-030-q44
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Escape a literal dollar sign
+  source_readings:
+  - sections/section-030/module-03/course-02-environments-as-folders-and-overlays.md
+  prompt: How do you keep the text `${HOME}` in a manifest when `postBuild` substitution
+    is on?
+  options:
+  - id: a
+    text: Write it as `\\${HOME}`.
+    explanation: Not correct. Substitution replaces every `${...}`, and a doubled
+      dollar sign marks a literal one.
+  - id: b
+    text: Write it as `$${HOME}`.
+    explanation: Correct. Substitution replaces every `${...}`, and a doubled dollar
+      sign marks a literal one.
+  - id: c
+    text: Wrap it in single quotes.
+    explanation: Not correct. Substitution replaces every `${...}`, and a doubled
+      dollar sign marks a literal one.
+  - id: d
+    text: It is never replaced.
+    explanation: Not correct. Substitution replaces every `${...}`, and a doubled
+      dollar sign marks a literal one.
+  correct_option: b
+  explanation: Correct. Substitution replaces every `${...}`, and a doubled dollar
+    sign marks a literal one.
+- id: ats099-030-q45
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Define dependsOn
+  source_readings:
+  - sections/section-030/module-03/course-03-promotion-order-with-dependson-and-health.md
+  prompt: What does `spec.dependsOn` do on a Kustomization?
+  options:
+  - id: a
+    text: It makes the Kustomization wait until the listed Kustomizations are Ready.
+    explanation: Correct. It is about state, not time.
+  - id: b
+    text: It copies the objects of another Kustomization.
+    explanation: Not correct. It is about state, not time.
+  - id: c
+    text: It delays the apply by a fixed time.
+    explanation: Not correct. It is about state, not time.
+  - id: d
+    text: It runs the other Kustomization first, whatever its state.
+    explanation: Not correct. It is about state, not time.
+  correct_option: a
+  explanation: Correct. It is about state, not time.
+- id: ats099-030-q46
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Make Ready mean healthy
+  source_readings:
+  - sections/section-030/module-03/course-03-promotion-order-with-dependson-and-health.md
+  prompt: 'Why set `wait: true` on staging when production has `dependsOn` on it?'
+  options:
+  - id: a
+    text: "`dependsOn` does not work without `wait`."
+    explanation: Not correct. Promotion needs Ready to mean that the application runs.
+  - id: b
+    text: "`wait` copies the staging image to production."
+    explanation: Not correct. Promotion needs Ready to mean that the application runs.
+  - id: c
+    text: "`wait` sets the delay before production starts."
+    explanation: Not correct. Promotion needs Ready to mean that the application runs.
+  - id: d
+    text: Without it, staging is Ready as soon as the manifests are applied, even
+      if pods crash.
+    explanation: Correct. Promotion needs Ready to mean that the application runs.
+  correct_option: d
+  explanation: Correct. Promotion needs Ready to mean that the application runs.
+- id: ats099-030-q47
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what dependsOn does not do
+  source_readings:
+  - sections/section-030/module-03/course-03-promotion-order-with-dependson-and-health.md
+  prompt: Which is true of `dependsOn`?
+  options:
+  - id: a
+    text: It runs tests on staging.
+    explanation: Not correct. Each Kustomization is independent once it has started.
+  - id: b
+    text: It delays production by a day.
+    explanation: Not correct. Each Kustomization is independent once it has started.
+  - id: c
+    text: It does not undo staging when production fails.
+    explanation: Correct. Each Kustomization is independent once it has started.
+  - id: d
+    text: It rolls back production when staging fails.
+    explanation: Not correct. Each Kustomization is independent once it has started.
+  correct_option: c
+  explanation: Correct. Each Kustomization is independent once it has started.
+- id: ats099-030-q48
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Promote by version
+  source_readings:
+  - sections/section-030/module-03/course-03-promotion-order-with-dependson-and-health.md
+  prompt: How can production follow only a version that a person has approved?
+  options:
+  - id: a
+    text: Give production the same range as staging.
+    explanation: Not correct. The tag change is a reviewed commit, and it is the promotion.
+  - id: b
+    text: Give production a source pinned to an exact tag and change the tag after
+      staging is accepted.
+    explanation: Correct. The tag change is a reviewed commit, and it is the promotion.
+  - id: c
+    text: Set `dependsOn` on the GitRepository.
+    explanation: Not correct. The tag change is a reviewed commit, and it is the promotion.
+  - id: d
+    text: Use `flux suspend` on staging.
+    explanation: Not correct. The tag change is a reviewed commit, and it is the promotion.
+  correct_option: b
+  explanation: Correct. The tag change is a reviewed commit, and it is the promotion.
+- id: ats099-030-q49
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Select a cluster for a command
+  source_readings:
+  - sections/section-030/module-03/course-04-operating-a-fleet.md
+  prompt: Which flag selects the cluster for a `flux` command?
+  options:
+  - id: a
+    text: "`--context`"
+    explanation: Correct. The Flux CLI reads the kubeconfig as kubectl does.
+  - id: b
+    text: "`--cluster`"
+    explanation: Not correct. The Flux CLI reads the kubeconfig as kubectl does.
+  - id: c
+    text: "`--target`"
+    explanation: Not correct. The Flux CLI reads the kubeconfig as kubectl does.
+  - id: d
+    text: "`--server`"
+    explanation: Not correct. The Flux CLI reads the kubeconfig as kubectl does.
+  correct_option: a
+  explanation: Correct. The Flux CLI reads the kubeconfig as kubectl does.
+- id: ats099-030-q50
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Preview a change
+  source_readings:
+  - sections/section-030/module-03/course-04-operating-a-fleet.md
+  prompt: Which command previews what a Kustomization would change without applying?
+  options:
+  - id: a
+    text: "`flux reconcile kustomization podinfo-production --dry-run`"
+    explanation: Not correct. It builds the local folder and compares it with the
+      live state.
+  - id: b
+    text: "`flux get kustomization podinfo-production --diff`"
+    explanation: Not correct. It builds the local folder and compares it with the
+      live state.
+  - id: c
+    text: "`flux trace kustomization podinfo-production`"
+    explanation: Not correct. It builds the local folder and compares it with the
+      live state.
+  - id: d
+    text: "`flux diff kustomization podinfo-production --path ./apps/podinfo-production`"
+    explanation: Correct. It builds the local folder and compares it with the live
+      state.
+  correct_option: d
+  explanation: Correct. It builds the local folder and compares it with the live state.
+- id: ats099-030-q51
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know where the Kustomizations live
+  source_readings:
+  - sections/section-030/module-03/course-04-operating-a-fleet.md
+  prompt: With one management cluster, where do the Kustomization objects for the
+    remote clusters live?
+  options:
+  - id: a
+    text: On each remote cluster.
+    explanation: Not correct. The remote clusters hold only the applied objects.
+  - id: b
+    text: In the namespace of the application.
+    explanation: Not correct. The remote clusters hold only the applied objects.
+  - id: c
+    text: On the management cluster.
+    explanation: Correct. The remote clusters hold only the applied objects.
+  - id: d
+    text: In Git only.
+    explanation: Not correct. The remote clusters hold only the applied objects.
+  correct_option: c
+  explanation: Correct. The remote clusters hold only the applied objects.
+- id: ats099-030-q52
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Pause one environment
+  source_readings:
+  - sections/section-030/module-03/course-04-operating-a-fleet.md
+  prompt: How do you freeze production without deleting anything?
+  options:
+  - id: a
+    text: "`flux delete kustomization podinfo-production`"
+    explanation: Not correct. Suspending stops the reconcile and keeps the objects;
+      resume later.
+  - id: b
+    text: "`flux suspend kustomization podinfo-production`"
+    explanation: Correct. Suspending stops the reconcile and keeps the objects; resume
+      later.
+  - id: c
+    text: "`flux uninstall`"
+    explanation: Not correct. Suspending stops the reconcile and keeps the objects;
+      resume later.
+  - id: d
+    text: "`kubectl scale deployment podinfo --replicas=0`"
+    explanation: Not correct. Suspending stops the reconcile and keeps the objects;
+      resume later.
+  correct_option: b
+  explanation: Correct. Suspending stops the reconcile and keeps the objects; resume
+    later.

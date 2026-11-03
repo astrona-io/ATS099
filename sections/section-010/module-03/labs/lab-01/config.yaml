@@ -1,0 +1,63 @@
+# Reject Flux Kustomizations Without A ServiceAccount
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-099-lab-010-03"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-git-and-flux"
+      description: "Installs the Flux CLI 2.9.6, starts Gitea, seeds the repositories and bootstraps Flux from gitops/fleet"
+      type: "file"
+      source: "bootstrap/01-install-git-and-flux.sh"
+    - name: "ats-099-lab-010-03-setup"
+      description: "Onboards team-a through gitops/fleet"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Gitea, the tester pod and the webhook receiver"
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-flux"
+      description: "Waits for Gitea and the Flux controllers that exist"
+      type: "file"
+      source: "testing/wait-for-flux.sh"
+    - name: "reference-solution"
+      description: "The work a correct learner does; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-policy-objects"
+      description: "Passes when the policy and the binding exist, the binding denies and selects tenant namespaces by label"
+      type: "file"
+      source: "validation/validate-policy-objects.sh"
+    - name: "validate-policy-enforced"
+      description: "Passes when a server-side dry run of a Kustomization without a ServiceAccount is rejected in team-a and one with a ServiceAccount is accepted"
+      type: "file"
+      source: "validation/validate-policy-enforced.sh"
+    - name: "validate-policies-from-git"
+      description: "Passes when the policy files and the policies Kustomization are in gitops/fleet and the Kustomization is Ready"
+      type: "file"
+      source: "validation/validate-policies-from-git.sh"
+    - name: "validate-platform-and-tenant-ready"
+      description: "Passes when flux-system, tenants and team-a Kustomizations are Ready"
+      type: "file"
+      source: "validation/validate-platform-and-tenant-ready.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - ghcr.io/stefanprodan/podinfo:6.15.0
+      - gitea/gitea:28.2.0-rootless
+      - mendhak/http-https-echo:42
+      - nicolaka/netshoot:v0.13

@@ -1,4 +1,5 @@
 # Knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+---
 schema_version: 1
 kind: question_bank
 id: ats099-040
@@ -247,3 +248,982 @@ questions:
     explanation: Correct. Nobody has to remember the order during the outage.
   correct_option: d
   explanation: Correct. Nobody has to remember the order during the outage.
+- id: ats099-040-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Triage a broken installation
+  source_readings:
+  - sections/section-040/module-01/course-04-reading-the-state-of-a-broken-flux.md
+  prompt: Which command tests that the Flux controllers are ready and the custom resource
+    definitions exist?
+  options:
+  - id: a
+    text: "`flux get sources all -A`"
+    explanation: Not correct. `flux check` also exits with a non-zero status when
+      something is wrong, so it works in a script.
+  - id: b
+    text: "`flux export kustomization --all`"
+    explanation: Not correct. `flux check` also exits with a non-zero status when
+      something is wrong, so it works in a script.
+  - id: c
+    text: "`flux check`"
+    explanation: Correct. `flux check` also exits with a non-zero status when something
+      is wrong, so it works in a script.
+  - id: d
+    text: "`flux trace`"
+    explanation: Not correct. `flux check` also exits with a non-zero status when
+      something is wrong, so it works in a script.
+  correct_option: c
+  explanation: Correct. `flux check` also exits with a non-zero status when something
+    is wrong, so it works in a script.
+- id: ats099-040-q12
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Follow dependsOn to the cause
+  source_readings:
+  - sections/section-040/module-01/course-04-reading-the-state-of-a-broken-flux.md
+  prompt: A Kustomization says 'dependency not ready'. Where do you start?
+  options:
+  - id: a
+    text: With the Kustomization that shows the message.
+    explanation: Not correct. The message on the waiting Kustomization is a symptom
+      of another object.
+  - id: b
+    text: With the first Kustomization in the `dependsOn` chain that is not `Ready`.
+    explanation: Correct. The message on the waiting Kustomization is a symptom of
+      another object.
+  - id: c
+    text: With `flux uninstall`.
+    explanation: Not correct. The message on the waiting Kustomization is a symptom
+      of another object.
+  - id: d
+    text: With the controller that has the oldest pod.
+    explanation: Not correct. The message on the waiting Kustomization is a symptom
+      of another object.
+  correct_option: b
+  explanation: Correct. The message on the waiting Kustomization is a symptom of another
+    object.
+- id: ats099-040-q13
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know what removing a finalizer skips
+  source_readings:
+  - sections/section-040/module-01/course-04-reading-the-state-of-a-broken-flux.md
+  prompt: 'What does removing a finalizer by hand from a Kustomization with `prune:
+    true` skip?'
+  options:
+  - id: a
+    text: The cleanup of the objects it applied, which then stay without an owner.
+    explanation: Correct. `flux uninstall` avoids the problem because it removes the
+      finalizers in the right order.
+  - id: b
+    text: The check of the Git credential.
+    explanation: Not correct. `flux uninstall` avoids the problem because it removes
+      the finalizers in the right order.
+  - id: c
+    text: The renewal of the kubeconfig.
+    explanation: Not correct. `flux uninstall` avoids the problem because it removes
+      the finalizers in the right order.
+  - id: d
+    text: The reconcile interval.
+    explanation: Not correct. `flux uninstall` avoids the problem because it removes
+      the finalizers in the right order.
+  correct_option: a
+  explanation: Correct. `flux uninstall` avoids the problem because it removes the
+    finalizers in the right order.
+- id: ats099-040-q14
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Check workloads separately
+  source_readings:
+  - sections/section-040/module-01/course-04-reading-the-state-of-a-broken-flux.md
+  prompt: Flux is failing. What should you check next about the workloads?
+  options:
+  - id: a
+    text: Whether they were deleted when Flux failed.
+    explanation: Not correct. If the workloads are healthy, the incident is about
+      delivery and not about service.
+  - id: b
+    text: Whether they have a Flux label.
+    explanation: Not correct. If the workloads are healthy, the incident is about
+      delivery and not about service.
+  - id: c
+    text: Nothing; they are down.
+    explanation: Not correct. If the workloads are healthy, the incident is about
+      delivery and not about service.
+  - id: d
+    text: Whether they are still running, because Flux failing does not stop them.
+    explanation: Correct. If the workloads are healthy, the incident is about delivery
+      and not about service.
+  correct_option: d
+  explanation: Correct. If the workloads are healthy, the incident is about delivery
+    and not about service.
+- id: ats099-040-q15
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Define RTO
+  source_readings:
+  - sections/section-040/module-01/course-05-recovery-objectives-and-drills.md
+  prompt: What does the recovery time objective measure?
+  options:
+  - id: a
+    text: How much data may be lost.
+    explanation: Not correct. The recovery point objective is the one that measures
+      data loss in time.
+  - id: b
+    text: How often a backup runs.
+    explanation: Not correct. The recovery point objective is the one that measures
+      data loss in time.
+  - id: c
+    text: How long the service may be without delivery or a cluster before the cost
+      is too high.
+    explanation: Correct. The recovery point objective is the one that measures data
+      loss in time.
+  - id: d
+    text: How long a Git commit takes to apply.
+    explanation: Not correct. The recovery point objective is the one that measures
+      data loss in time.
+  correct_option: c
+  explanation: Correct. The recovery point objective is the one that measures data
+    loss in time.
+- id: ats099-040-q16
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say what Flux affects
+  source_readings:
+  - sections/section-040/module-01/course-05-recovery-objectives-and-drills.md
+  prompt: Which recovery number does Flux affect, and which does it not?
+  options:
+  - id: a
+    text: It affects recovery point only.
+    explanation: Not correct. A cluster rebuilt from Git takes the time of bootstrap
+      plus the time the workloads need to start.
+  - id: b
+    text: It affects recovery time; it does not affect recovery point, because it
+      holds no data.
+    explanation: Correct. A cluster rebuilt from Git takes the time of bootstrap plus
+      the time the workloads need to start.
+  - id: c
+    text: It affects both.
+    explanation: Not correct. A cluster rebuilt from Git takes the time of bootstrap
+      plus the time the workloads need to start.
+  - id: d
+    text: It affects neither.
+    explanation: Not correct. A cluster rebuilt from Git takes the time of bootstrap
+      plus the time the workloads need to start.
+  correct_option: b
+  explanation: Correct. A cluster rebuilt from Git takes the time of bootstrap plus
+    the time the workloads need to start.
+- id: ats099-040-q17
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Place the runbook
+  source_readings:
+  - sections/section-040/module-01/course-05-recovery-objectives-and-drills.md
+  prompt: Where should the runbook for a cluster recovery be stored?
+  options:
+  - id: a
+    text: Outside the cluster it recovers.
+    explanation: Correct. A runbook in the cluster is gone when you need it.
+  - id: b
+    text: In a ConfigMap in `flux-system`.
+    explanation: Not correct. A runbook in the cluster is gone when you need it.
+  - id: c
+    text: In the repository Flux reads, only.
+    explanation: Not correct. A runbook in the cluster is gone when you need it.
+  - id: d
+    text: On the node that runs the control plane.
+    explanation: Not correct. A runbook in the cluster is gone when you need it.
+  correct_option: a
+  explanation: Correct. A runbook in the cluster is gone when you need it.
+- id: ats099-040-q18
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Run a drill
+  source_readings:
+  - sections/section-040/module-01/course-05-recovery-objectives-and-drills.md
+  prompt: What is the point of a timed drill on a throwaway cluster?
+  options:
+  - id: a
+    text: To test the Git host's disk.
+    explanation: Not correct. Fix the runbook and anything in Git that caused a surprise.
+  - id: b
+    text: To measure the size of the repository.
+    explanation: Not correct. Fix the runbook and anything in Git that caused a surprise.
+  - id: c
+    text: To renew all credentials.
+    explanation: Not correct. Fix the runbook and anything in Git that caused a surprise.
+  - id: d
+    text: To compare the real time with the objective and to find missing or wrong
+      steps.
+    explanation: Correct. Fix the runbook and anything in Git that caused a surprise.
+  correct_option: d
+  explanation: Correct. Fix the runbook and anything in Git that caused a surprise.
+- id: ats099-040-q19
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Sort the backup
+  source_readings:
+  - sections/section-040/module-02/course-01-what-to-back-up-and-what-to-leave.md
+  prompt: Which of these must be backed up because only the cluster holds it?
+  options:
+  - id: a
+    text: A Deployment defined in Git.
+    explanation: Not correct. Items in Git or in another system that can produce them
+      again need a plan, not a backup.
+  - id: b
+    text: An image stored in a registry.
+    explanation: Not correct. Items in Git or in another system that can produce them
+      again need a plan, not a backup.
+  - id: c
+    text: A Secret created by hand for an application.
+    explanation: Correct. Items in Git or in another system that can produce them
+      again need a plan, not a backup.
+  - id: d
+    text: A certificate that an issuer can produce again.
+    explanation: Not correct. Items in Git or in another system that can produce them
+      again need a plan, not a backup.
+  correct_option: c
+  explanation: Correct. Items in Git or in another system that can produce them again
+    need a plan, not a backup.
+- id: ats099-040-q20
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find Secrets Git does not describe
+  source_readings:
+  - sections/section-040/module-02/course-01-what-to-back-up-and-what-to-leave.md
+  prompt: How do you list Secrets that Flux did not apply?
+  options:
+  - id: a
+    text: "`flux get secrets -A`"
+    explanation: Not correct. Flux labels what it applies. The list also holds Secrets
+      made by Kubernetes and by controllers.
+  - id: b
+    text: "`kubectl get secrets -A -l '!kustomize.toolkit.fluxcd.io/name'`"
+    explanation: Correct. Flux labels what it applies. The list also holds Secrets
+      made by Kubernetes and by controllers.
+  - id: c
+    text: "`flux export secret --all`"
+    explanation: Not correct. Flux labels what it applies. The list also holds Secrets
+      made by Kubernetes and by controllers.
+  - id: d
+    text: "`kubectl get secrets -A --show-flux`"
+    explanation: Not correct. Flux labels what it applies. The list also holds Secrets
+      made by Kubernetes and by controllers.
+  correct_option: b
+  explanation: Correct. Flux labels what it applies. The list also holds Secrets made
+    by Kubernetes and by controllers.
+- id: ats099-040-q21
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know what a Secret backup does not cover
+  source_readings:
+  - sections/section-040/module-02/course-01-what-to-back-up-and-what-to-leave.md
+  prompt: What does a backup of Secrets not cover?
+  options:
+  - id: a
+    text: Data in persistent volumes and databases.
+    explanation: Correct. Volumes and databases need their own backup tool.
+  - id: b
+    text: Credentials for other clusters.
+    explanation: Not correct. Volumes and databases need their own backup tool.
+  - id: c
+    text: The Git credential of Flux.
+    explanation: Not correct. Volumes and databases need their own backup tool.
+  - id: d
+    text: Decryption keys.
+    explanation: Not correct. Volumes and databases need their own backup tool.
+  correct_option: a
+  explanation: Correct. Volumes and databases need their own backup tool.
+- id: ats099-040-q22
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Back up the credential for a store
+  source_readings:
+  - sections/section-040/module-02/course-01-what-to-back-up-and-what-to-leave.md
+  prompt: Secrets live in an external store and Git holds references. What must the
+    cluster backup hold?
+  options:
+  - id: a
+    text: Every secret value in the store.
+    explanation: Not correct. The store has its own backup. Losing the cluster costs
+      only the time to restore the credential.
+  - id: b
+    text: Nothing.
+    explanation: Not correct. The store has its own backup. Losing the cluster costs
+      only the time to restore the credential.
+  - id: c
+    text: The store's disk.
+    explanation: Not correct. The store has its own backup. Losing the cluster costs
+      only the time to restore the credential.
+  - id: d
+    text: The credential that lets the cluster read the store.
+    explanation: Correct. The store has its own backup. Losing the cluster costs only
+      the time to restore the credential.
+  correct_option: d
+  explanation: Correct. The store has its own backup. Losing the cluster costs only
+    the time to restore the credential.
+- id: ats099-040-q23
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Spot the field that breaks a create
+  source_readings:
+  - sections/section-040/module-02/course-02-exporting-secrets-and-flux-objects-safely.md
+  prompt: Which field in a raw `kubectl get -o yaml` export makes a create fail?
+  options:
+  - id: a
+    text: "`metadata.name`"
+    explanation: Not correct. The API server rejects a create that has a `resourceVersion`.
+  - id: b
+    text: "`metadata.namespace`"
+    explanation: Not correct. The API server rejects a create that has a `resourceVersion`.
+  - id: c
+    text: "`metadata.resourceVersion`"
+    explanation: Correct. The API server rejects a create that has a `resourceVersion`.
+  - id: d
+    text: "`type`"
+    explanation: Not correct. The API server rejects a create that has a `resourceVersion`.
+  correct_option: c
+  explanation: Correct. The API server rejects a create that has a `resourceVersion`.
+- id: ats099-040-q24
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Select Secrets by label
+  source_readings:
+  - sections/section-040/module-02/course-02-exporting-secrets-and-flux-objects-safely.md
+  prompt: Why export Secrets by a label such as `dr-backup=critical`?
+  options:
+  - id: a
+    text: The label encrypts them.
+    explanation: Not correct. The label says what is in the backup and needs no list
+      of names.
+  - id: b
+    text: A new Secret with the label is included without a change to the script.
+    explanation: Correct. The label says what is in the backup and needs no list of
+      names.
+  - id: c
+    text: Flux needs the label to apply them.
+    explanation: Not correct. The label says what is in the backup and needs no list
+      of names.
+  - id: d
+    text: The label stops them being pruned.
+    explanation: Not correct. The label says what is in the backup and needs no list
+      of names.
+  correct_option: b
+  explanation: Correct. The label says what is in the backup and needs no list of
+    names.
+- id: ats099-040-q25
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Compare the live state with Git
+  source_readings:
+  - sections/section-040/module-02/course-02-exporting-secrets-and-flux-objects-safely.md
+  prompt: What does a difference between `flux export` and Git show?
+  options:
+  - id: a
+    text: A change that exists only in the cluster and would be lost in a rebuild.
+    explanation: Correct. Commit the change or remove it.
+  - id: b
+    text: A bug in the CLI.
+    explanation: Not correct. Commit the change or remove it.
+  - id: c
+    text: A Git outage.
+    explanation: Not correct. Commit the change or remove it.
+  - id: d
+    text: A stale source cache.
+    explanation: Not correct. Commit the change or remove it.
+  correct_option: a
+  explanation: Correct. Commit the change or remove it.
+- id: ats099-040-q26
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Protect the export
+  source_readings:
+  - sections/section-040/module-02/course-02-exporting-secrets-and-flux-objects-safely.md
+  prompt: Where should a file of exported Secrets be stored?
+  options:
+  - id: a
+    text: In `gitops/fleet` next to the Kustomizations.
+    explanation: Not correct. Plain text secrets in Git history cannot be taken back.
+  - id: b
+    text: In a ConfigMap in `flux-system`.
+    explanation: Not correct. Plain text secrets in Git history cannot be taken back.
+  - id: c
+    text: In plain text on the control plane node.
+    explanation: Not correct. Plain text secrets in Git history cannot be taken back.
+  - id: d
+    text: Encrypted, outside the cluster and outside the repository Flux reads.
+    explanation: Correct. Plain text secrets in Git history cannot be taken back.
+  correct_option: d
+  explanation: Correct. Plain text secrets in Git history cannot be taken back.
+- id: ats099-040-q27
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the Kustomization field for SOPS
+  source_readings:
+  - sections/section-040/module-02/course-03-keys-for-encrypted-secrets.md
+  prompt: Which Kustomization field makes Flux decrypt SOPS files?
+  options:
+  - id: a
+    text: "`spec.postBuild.decrypt`"
+    explanation: Not correct. The Secret in `secretRef` holds the private key and
+      is in the Kustomization's namespace.
+  - id: b
+    text: "`spec.sops.enabled`"
+    explanation: Not correct. The Secret in `secretRef` holds the private key and
+      is in the Kustomization's namespace.
+  - id: c
+    text: "`spec.decryption.provider: sops` with `spec.decryption.secretRef`"
+    explanation: Correct. The Secret in `secretRef` holds the private key and is in
+      the Kustomization's namespace.
+  - id: d
+    text: "`spec.kubeConfig.sops`"
+    explanation: Not correct. The Secret in `secretRef` holds the private key and
+      is in the Kustomization's namespace.
+  correct_option: c
+  explanation: Correct. The Secret in `secretRef` holds the private key and is in
+    the Kustomization's namespace.
+- id: ats099-040-q28
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know what a new key does
+  source_readings:
+  - sections/section-040/module-02/course-03-keys-for-encrypted-secrets.md
+  prompt: What happens to old SOPS-encrypted files if you give the cluster a new key?
+  options:
+  - id: a
+    text: They are decrypted by the new key.
+    explanation: Not correct. Key changes are planned jobs, not recovery steps.
+  - id: b
+    text: They cannot be decrypted with the new key; they must be encrypted again.
+    explanation: Correct. Key changes are planned jobs, not recovery steps.
+  - id: c
+    text: Flux encrypts them again.
+    explanation: Not correct. Key changes are planned jobs, not recovery steps.
+  - id: d
+    text: They are ignored.
+    explanation: Not correct. Key changes are planned jobs, not recovery steps.
+  correct_option: b
+  explanation: Correct. Key changes are planned jobs, not recovery steps.
+- id: ats099-040-q29
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Back up all Sealed Secrets keys
+  source_readings:
+  - sections/section-040/module-02/course-03-keys-for-encrypted-secrets.md
+  prompt: What must a Sealed Secrets key backup contain?
+  options:
+  - id: a
+    text: Every key Secret with the label `sealedsecrets.bitnami.com/sealed-secrets-key`,
+      not only the newest.
+    explanation: Correct. The controller renews keys on a schedule and old sealed
+      files need the old keys.
+  - id: b
+    text: Only the newest key.
+    explanation: Not correct. The controller renews keys on a schedule and old sealed
+      files need the old keys.
+  - id: c
+    text: Only the public certificate.
+    explanation: Not correct. The controller renews keys on a schedule and old sealed
+      files need the old keys.
+  - id: d
+    text: The controller's Deployment.
+    explanation: Not correct. The controller renews keys on a schedule and old sealed
+      files need the old keys.
+  correct_option: a
+  explanation: Correct. The controller renews keys on a schedule and old sealed files
+    need the old keys.
+- id: ats099-040-q30
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Place the key
+  source_readings:
+  - sections/section-040/module-02/course-03-keys-for-encrypted-secrets.md
+  prompt: Where should the decryption key be kept?
+  options:
+  - id: a
+    text: Next to the encrypted files.
+    explanation: Not correct. A key next to its files protects nothing.
+  - id: b
+    text: Only in the cluster.
+    explanation: Not correct. A key next to its files protects nothing.
+  - id: c
+    text: Only in the repository.
+    explanation: Not correct. A key next to its files protects nothing.
+  - id: d
+    text: Apart from the encrypted files, in more than one place.
+    explanation: Correct. A key next to its files protects nothing.
+  correct_option: d
+  explanation: Correct. A key next to its files protects nothing.
+- id: ats099-040-q31
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Order a restore
+  source_readings:
+  - sections/section-040/module-02/course-04-restoring-and-checking-a-backup.md
+  prompt: What comes first in a cluster restore?
+  options:
+  - id: a
+    text: The application Secrets.
+    explanation: Not correct. A Secret cannot be created in a namespace that does
+      not exist.
+  - id: b
+    text: The checks.
+    explanation: Not correct. A Secret cannot be created in a namespace that does
+      not exist.
+  - id: c
+    text: The cluster and the namespaces the Secrets live in.
+    explanation: Correct. A Secret cannot be created in a namespace that does not
+      exist.
+  - id: d
+    text: "`flux reconcile`."
+    explanation: Not correct. A Secret cannot be created in a namespace that does
+      not exist.
+  correct_option: c
+  explanation: Correct. A Secret cannot be created in a namespace that does not exist.
+- id: ats099-040-q32
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Restore the Git credential before bootstrap
+  source_readings:
+  - sections/section-040/module-02/course-04-restoring-and-checking-a-backup.md
+  prompt: Why restore the Git credential Secret before Flux starts?
+  options:
+  - id: a
+    text: Bootstrap deletes it.
+    explanation: Not correct. Restore the Secrets Flux needs, then bootstrap, then
+      the application Secrets.
+  - id: b
+    text: So Flux starts clean and does not fail on fetch.
+    explanation: Correct. Restore the Secrets Flux needs, then bootstrap, then the
+      application Secrets.
+  - id: c
+    text: Flux cannot start without any Secret.
+    explanation: Not correct. Restore the Secrets Flux needs, then bootstrap, then
+      the application Secrets.
+  - id: d
+    text: The credential expires at once.
+    explanation: Not correct. Restore the Secrets Flux needs, then bootstrap, then
+      the application Secrets.
+  correct_option: b
+  explanation: Correct. Restore the Secrets Flux needs, then bootstrap, then the application
+    Secrets.
+- id: ats099-040-q33
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Verify a restore
+  source_readings:
+  - sections/section-040/module-02/course-04-restoring-and-checking-a-backup.md
+  prompt: How do you check that a restored Secret has the backed-up value without
+    printing it?
+  options:
+  - id: a
+    text: Compare a hash of the value with a hash taken at backup time.
+    explanation: Correct. An object with the right name can have the wrong content.
+  - id: b
+    text: Compare the names only.
+    explanation: Not correct. An object with the right name can have the wrong content.
+  - id: c
+    text: Print the value and read it.
+    explanation: Not correct. An object with the right name can have the wrong content.
+  - id: d
+    text: Check the creation time.
+    explanation: Not correct. An object with the right name can have the wrong content.
+  correct_option: a
+  explanation: Correct. An object with the right name can have the wrong content.
+- id: ats099-040-q34
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Keep a restored Secret outside Flux
+  source_readings:
+  - sections/section-040/module-02/course-04-restoring-and-checking-a-backup.md
+  prompt: A restored Secret is not in Git. What should it not carry after the restore?
+  options:
+  - id: a
+    text: A namespace.
+    explanation: Not correct. An object that Flux owns is deleted with `prune` when
+      it leaves Git.
+  - id: b
+    text: A type.
+    explanation: Not correct. An object that Flux owns is deleted with `prune` when
+      it leaves Git.
+  - id: c
+    text: A data field.
+    explanation: Not correct. An object that Flux owns is deleted with `prune` when
+      it leaves Git.
+  - id: d
+    text: The label `kustomize.toolkit.fluxcd.io/name`, which would make it Flux's.
+    explanation: Correct. An object that Flux owns is deleted with `prune` when it
+      leaves Git.
+  correct_option: d
+  explanation: Correct. An object that Flux owns is deleted with `prune` when it leaves
+    Git.
+- id: ats099-040-q35
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Read both versions
+  source_readings:
+  - sections/section-040/module-03/course-01-where-the-flux-version-comes-from.md
+  prompt: Which command prints the version of the CLI and of the controllers?
+  options:
+  - id: a
+    text: "`flux check --pre`"
+    explanation: Not correct. `--client` prints the CLI only.
+  - id: b
+    text: "`flux get all`"
+    explanation: Not correct. `--client` prints the CLI only.
+  - id: c
+    text: "`flux version`"
+    explanation: Correct. `--client` prints the CLI only.
+  - id: d
+    text: "`flux install --export`"
+    explanation: Not correct. `--client` prints the CLI only.
+  correct_option: c
+  explanation: Correct. `--client` prints the CLI only.
+- id: ats099-040-q36
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the bootstrap files
+  source_readings:
+  - sections/section-040/module-03/course-01-where-the-flux-version-comes-from.md
+  prompt: Which file from bootstrap holds the controller Deployments and CRDs?
+  options:
+  - id: a
+    text: "`gotk-sync.yaml`"
+    explanation: Not correct. `gotk-sync.yaml` holds the `GitRepository` and `Kustomization`
+      for Flux itself.
+  - id: b
+    text: "`gotk-components.yaml`"
+    explanation: Correct. `gotk-sync.yaml` holds the `GitRepository` and `Kustomization`
+      for Flux itself.
+  - id: c
+    text: "`kustomization.yaml`"
+    explanation: Not correct. `gotk-sync.yaml` holds the `GitRepository` and `Kustomization`
+      for Flux itself.
+  - id: d
+    text: "`flux-system.yaml`"
+    explanation: Not correct. `gotk-sync.yaml` holds the `GitRepository` and `Kustomization`
+      for Flux itself.
+  correct_option: b
+  explanation: Correct. `gotk-sync.yaml` holds the `GitRepository` and `Kustomization`
+    for Flux itself.
+- id: ats099-040-q37
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Say why kubectl edits do not last
+  source_readings:
+  - sections/section-040/module-03/course-01-where-the-flux-version-comes-from.md
+  prompt: Why is an edit of a controller Deployment with `kubectl` reverted?
+  options:
+  - id: a
+    text: The Kustomization `flux-system` applies the folder from Git at each reconcile.
+    explanation: Correct. Git is the truth, so a change must be a commit.
+  - id: b
+    text: Kubernetes locks Flux Deployments.
+    explanation: Not correct. Git is the truth, so a change must be a commit.
+  - id: c
+    text: Flux has no write access.
+    explanation: Not correct. Git is the truth, so a change must be a commit.
+  - id: d
+    text: Kubernetes reverts all edits after 5 minutes.
+    explanation: Not correct. Git is the truth, so a change must be a commit.
+  correct_option: a
+  explanation: Correct. Git is the truth, so a change must be a commit.
+- id: ats099-040-q38
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Preview an install
+  source_readings:
+  - sections/section-040/module-03/course-01-where-the-flux-version-comes-from.md
+  prompt: What does `flux install --export` do?
+  options:
+  - id: a
+    text: It installs and then exports.
+    explanation: Not correct. Compare the output with `gotk-components.yaml` to see
+      what an upgrade changes.
+  - id: b
+    text: It exports the live objects.
+    explanation: Not correct. Compare the output with `gotk-components.yaml` to see
+      what an upgrade changes.
+  - id: c
+    text: It upgrades the controllers.
+    explanation: Not correct. Compare the output with `gotk-components.yaml` to see
+      what an upgrade changes.
+  - id: d
+    text: It prints the manifests the installed CLI would apply, without touching
+      the cluster.
+    explanation: Correct. Compare the output with `gotk-components.yaml` to see what
+      an upgrade changes.
+  correct_option: d
+  explanation: Correct. Compare the output with `gotk-components.yaml` to see what
+    an upgrade changes.
+- id: ats099-040-q39
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Upgrade a bootstrapped cluster
+  source_readings:
+  - sections/section-040/module-03/course-02-upgrading-flux-through-git.md
+  prompt: How do you upgrade Flux on a bootstrapped cluster?
+  options:
+  - id: a
+    text: Run `kubectl set image` on each controller.
+    explanation: Not correct. Bootstrap commits the new manifests, and Flux applies
+      them.
+  - id: b
+    text: Delete the `flux-system` namespace.
+    explanation: Not correct. Bootstrap commits the new manifests, and Flux applies
+      them.
+  - id: c
+    text: Update the CLI and run `flux bootstrap` again with the same URL, branch,
+      path and flags.
+    explanation: Correct. Bootstrap commits the new manifests, and Flux applies them.
+  - id: d
+    text: Run `flux uninstall`, then `flux get all`.
+    explanation: Not correct. Bootstrap commits the new manifests, and Flux applies
+      them.
+  correct_option: c
+  explanation: Correct. Bootstrap commits the new manifests, and Flux applies them.
+- id: ats099-040-q40
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Review the upgrade
+  source_readings:
+  - sections/section-040/module-03/course-02-upgrading-flux-through-git.md
+  prompt: What is the review of a Flux upgrade?
+  options:
+  - id: a
+    text: The output of `flux version`.
+    explanation: Not correct. Read the new image tags and changes to Deployments and
+      CRDs.
+  - id: b
+    text: The diff of the commit that bootstrap made.
+    explanation: Correct. Read the new image tags and changes to Deployments and CRDs.
+  - id: c
+    text: The pod list.
+    explanation: Not correct. Read the new image tags and changes to Deployments and
+      CRDs.
+  - id: d
+    text: The GitRepository status.
+    explanation: Not correct. Read the new image tags and changes to Deployments and
+      CRDs.
+  correct_option: b
+  explanation: Correct. Read the new image tags and changes to Deployments and CRDs.
+- id: ats099-040-q41
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Roll back an upgrade
+  source_readings:
+  - sections/section-040/module-03/course-02-upgrading-flux-through-git.md
+  prompt: How do you roll back a failed upgrade while Flux can still apply?
+  options:
+  - id: a
+    text: Revert the commit that changed `gotk-components.yaml` and push.
+    explanation: Correct. Flux applies the old manifests. A rollback does not undo
+      changes to stored objects.
+  - id: b
+    text: Delete the CRDs.
+    explanation: Not correct. Flux applies the old manifests. A rollback does not
+      undo changes to stored objects.
+  - id: c
+    text: Run `flux suspend`.
+    explanation: Not correct. Flux applies the old manifests. A rollback does not
+      undo changes to stored objects.
+  - id: d
+    text: Scale the controllers to zero.
+    explanation: Not correct. Flux applies the old manifests. A rollback does not
+      undo changes to stored objects.
+  correct_option: a
+  explanation: Correct. Flux applies the old manifests. A rollback does not undo changes
+    to stored objects.
+- id: ats099-040-q42
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Find where patches go
+  source_readings:
+  - sections/section-040/module-03/course-03-tuning-the-controllers.md
+  prompt: In which file do you put a patch for a controller Deployment?
+  options:
+  - id: a
+    text: "`gotk-components.yaml`"
+    explanation: Not correct. Bootstrap keeps your patches when it runs again.
+  - id: b
+    text: "`gotk-sync.yaml`"
+    explanation: Not correct. Bootstrap keeps your patches when it runs again.
+  - id: c
+    text: The `GitRepository` object.
+    explanation: Not correct. Bootstrap keeps your patches when it runs again.
+  - id: d
+    text: "`kustomization.yaml` in the `flux-system` folder."
+    explanation: Correct. Bootstrap keeps your patches when it runs again.
+  correct_option: d
+  explanation: Correct. Bootstrap keeps your patches when it runs again.
+- id: ats099-040-q43
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know the flag for concurrency
+  source_readings:
+  - sections/section-040/module-03/course-03-tuning-the-controllers.md
+  prompt: Which flag sets how many objects a controller reconciles at once?
+  options:
+  - id: a
+    text: "`--workers-per-node`"
+    explanation: Not correct. Raise it in steps and measure the CPU, memory and API
+      load.
+  - id: b
+    text: "`--parallel-reconciles`"
+    explanation: Not correct. Raise it in steps and measure the CPU, memory and API
+      load.
+  - id: c
+    text: "`--concurrent`"
+    explanation: Correct. Raise it in steps and measure the CPU, memory and API load.
+  - id: d
+    text: "`--interval`"
+    explanation: Not correct. Raise it in steps and measure the CPU, memory and API
+      load.
+  correct_option: c
+  explanation: Correct. Raise it in steps and measure the CPU, memory and API load.
+- id: ats099-040-q44
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Check a patch before pushing
+  source_readings:
+  - sections/section-040/module-03/course-03-tuning-the-controllers.md
+  prompt: How do you check a kustomize patch for the Flux folder before you push?
+  options:
+  - id: a
+    text: "`flux check --pre`"
+    explanation: Not correct. A bad patch can stop Flux from updating itself.
+  - id: b
+    text: "`kubectl kustomize clusters/kind/flux-system`"
+    explanation: Correct. A bad patch can stop Flux from updating itself.
+  - id: c
+    text: "`flux diff kustomization flux-system` on the empty folder"
+    explanation: Not correct. A bad patch can stop Flux from updating itself.
+  - id: d
+    text: "`kubectl apply --dry-run=server -f clusters/kind`"
+    explanation: Not correct. A bad patch can stop Flux from updating itself.
+  correct_option: b
+  explanation: Correct. A bad patch can stop Flux from updating itself.
+- id: ats099-040-q45
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Choose split over flag
+  source_readings:
+  - sections/section-040/module-03/course-03-tuning-the-controllers.md
+  prompt: One Kustomization with thousands of objects is slow. What often helps more
+    than a flag?
+  options:
+  - id: a
+    text: Splitting it into several Kustomizations that reconcile at the same time.
+    explanation: Correct. Look at what is large before you add concurrency.
+  - id: b
+    text: Raising `--log-level`.
+    explanation: Not correct. Look at what is large before you add concurrency.
+  - id: c
+    text: Lowering the interval.
+    explanation: Not correct. Look at what is large before you add concurrency.
+  - id: d
+    text: Disabling `prune`.
+    explanation: Not correct. Look at what is large before you add concurrency.
+  correct_option: a
+  explanation: Correct. Look at what is large before you add concurrency.
+- id: ats099-040-q46
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Spot an OOM kill
+  source_readings:
+  - sections/section-040/module-03/course-04-watching-the-controllers.md
+  prompt: Which value in `lastState.terminated.reason` means a container used more
+    memory than its limit?
+  options:
+  - id: a
+    text: "`Completed`"
+    explanation: Not correct. Raise the limit, or find what makes the controller use
+      so much.
+  - id: b
+    text: "`Evicted`"
+    explanation: Not correct. Raise the limit, or find what makes the controller use
+      so much.
+  - id: c
+    text: "`ImagePullBackOff`"
+    explanation: Not correct. Raise the limit, or find what makes the controller use
+      so much.
+  - id: d
+    text: "`OOMKilled`"
+    explanation: Correct. Raise the limit, or find what makes the controller use so
+      much.
+  correct_option: d
+  explanation: Correct. Raise the limit, or find what makes the controller use so
+    much.
+- id: ats099-040-q47
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the queue metric
+  source_readings:
+  - sections/section-040/module-03/course-04-watching-the-controllers.md
+  prompt: What does a `workqueue_depth` that stays above zero show?
+  options:
+  - id: a
+    text: Git is down.
+    explanation: Not correct. It counts the objects that wait for a worker.
+  - id: b
+    text: The cluster has no nodes.
+    explanation: Not correct. It counts the objects that wait for a worker.
+  - id: c
+    text: The controller cannot keep up with the work.
+    explanation: Correct. It counts the objects that wait for a worker.
+  - id: d
+    text: The metrics are broken.
+    explanation: Not correct. It counts the objects that wait for a worker.
+  correct_option: c
+  explanation: Correct. It counts the objects that wait for a worker.
+- id: ats099-040-q48
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Tune with a loop
+  source_readings:
+  - sections/section-040/module-03/course-04-watching-the-controllers.md
+  prompt: What is a safe way to tune a controller?
+  options:
+  - id: a
+    text: Change several flags at once.
+    explanation: Not correct. One change at a time keeps the result readable.
+  - id: b
+    text: Take a baseline, change one thing in Git, wait, measure again, and keep
+      or revert.
+    explanation: Correct. One change at a time keeps the result readable.
+  - id: c
+    text: Set the limits very high.
+    explanation: Not correct. One change at a time keeps the result readable.
+  - id: d
+    text: Turn on debug logs permanently.
+    explanation: Not correct. One change at a time keeps the result readable.
+  correct_option: b
+  explanation: Correct. One change at a time keeps the result readable.
+- id: ats099-040-q49
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Filter controller logs
+  source_readings:
+  - sections/section-040/module-03/course-04-watching-the-controllers.md
+  prompt: Which command shows errors from all Flux controllers in the last hour?
+  options:
+  - id: a
+    text: "`flux logs --all-namespaces --level=error --since=1h`"
+    explanation: Correct. `flux logs` reads all controllers and filters by level and
+      age.
+  - id: b
+    text: "`flux get logs -A --errors`"
+    explanation: Not correct. `flux logs` reads all controllers and filters by level
+      and age.
+  - id: c
+    text: "`kubectl logs flux`"
+    explanation: Not correct. `flux logs` reads all controllers and filters by level
+      and age.
+  - id: d
+    text: "`flux events --level=error`"
+    explanation: Not correct. `flux logs` reads all controllers and filters by level
+      and age.
+  correct_option: a
+  explanation: Correct. `flux logs` reads all controllers and filters by level and
+    age.

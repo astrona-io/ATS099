@@ -4,7 +4,7 @@ Flux applies whatever its Git repositories hold. On a cluster that one team owns
 
 The fix is not a new Flux feature but a Kubernetes one: role-based access control (RBAC). Flux can **impersonate** a ServiceAccount when it applies files, that is, act as that account so that Kubernetes checks every write against the account's permissions. Give each team, called a **tenant**, a ServiceAccount that may only change its own namespace, and tell Flux to impersonate it. Then the tenant's repository can hold anything, and Kubernetes refuses what the tenant may not do. Keep one sentence in mind: **Flux applies a tenant's files with the tenant's rights, never with its own.**
 
-The module has three parts. **Platform Administrators, Tenants And Their Repositories** sets out who owns what, how the repositories are laid out, and what `flux create tenant` generates. **Impersonation With spec.serviceAccountName** onboards the tenant `team-a` and shows Kubernetes refusing a cluster-wide object. **Locking Down The Cluster For Tenants** closes the ways a tenant could step around impersonation, and is followed by a graded lab.
+The module has five parts. **Platform Administrators, Tenants And Their Repositories** sets out who owns what, how the repositories are laid out, and what `flux create tenant` generates. **Impersonation With spec.serviceAccountName** onboards the tenant `team-a` and shows Kubernetes refusing a cluster-wide object. **Locking Down The Cluster For Tenants** closes the ways a tenant could step around impersonation, and is followed by a graded lab. **Impersonation In HelmReleases And Other Objects** shows which controllers need the same rule and why the default ServiceAccount flag must be set on two controllers. **Reading And Fixing A Refused Tenant** gives a routine for finding the cause of a refusal and the owner of the fix.
 
 ## Learning objectives
 
@@ -16,6 +16,8 @@ After this module you can:
 - Read a refusal from Kubernetes RBAC in a Flux object's status.
 - Add the lockdown flags to the controllers through the `flux-system` Kustomize file in Git.
 - Explain why the platform's own Flux `Kustomization` objects need `serviceAccountName: kustomize-controller` under the lockdown.
+- Make a `HelmRelease` impersonate a tenant ServiceAccount and name the controllers that need the default ServiceAccount flag.
+- Find the cause of a refused tenant object with `flux get`, `kubectl describe`, `flux events` and `kubectl auth can-i --as`.
 
 ## Before you start
 
