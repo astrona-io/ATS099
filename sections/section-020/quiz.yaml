@@ -5,7 +5,7 @@ kind: question_bank
 id: ats099-020
 course_id: ATS099
 exam_code: FLUX
-status: draft
+status: alpha
 provenance: Original practice material written for this course; not official exam
   questions.
 scope:

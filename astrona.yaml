@@ -13,7 +13,7 @@
 training:
   id: ATS099
   title: "FluxCD: Multi-Tenancy, Enterprise Operations & Cluster Management"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Multi-Tenancy, Enterprise Operations &
     Cluster Management domain of the FluxCD training path: tenants with their
