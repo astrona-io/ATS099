@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://astrona.io/courses/fluxcd">
+    <img src="https://astrona.io/courses/fluxcd/domains/ATS099.svg" alt="ATS099: Multi-Tenancy, Enterprise Operations & Cluster Management, part of the FluxCD course on Astrona" width="100%">
+  </a>
+</p>
+
 # ATS099 — Multi-Tenancy, Enterprise Operations & Cluster Management (FluxCD)
 
 Course material for the **Multi-Tenancy, Enterprise Operations & Cluster
